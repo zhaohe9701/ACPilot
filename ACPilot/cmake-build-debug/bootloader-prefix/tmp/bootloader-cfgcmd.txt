@@ -1,1 +1,0 @@
-cmd='E:/CLion 2023.1.1/bin/cmake/win/x64/bin/cmake.exe;-DSDKCONFIG=F:/ACPilot_ESP/ACPilot/sdkconfig;-DIDF_PATH=E:/Espressif/frameworks/esp-idf-v5.1.1;-DIDF_TARGET=esp32s3;-DPYTHON_DEPS_CHECKED=1;-DPYTHON=python;-DEXTRA_COMPONENT_DIRS=E:/Espressif/frameworks/esp-idf-v5.1.1/components/bootloader;-DPROJECT_SOURCE_DIR=F:/ACPilot_ESP/ACPilot;-GNinja;<SOURCE_DIR><SOURCE_SUBDIR>'
