@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "esp-idf/esp_netif",
+		"source" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/esp_netif"
+	}
+}

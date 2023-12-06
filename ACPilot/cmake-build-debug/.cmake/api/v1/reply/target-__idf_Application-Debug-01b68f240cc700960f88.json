@@ -1,0 +1,924 @@
+{
+	"archive" : {},
+	"artifacts" : 
+	[
+		{
+			"path" : "esp-idf/Application/libApplication.a"
+		}
+	],
+	"backtrace" : 2,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"idf_component_register",
+			"set_property",
+			"__component_set_dependencies",
+			"__component_set_all_dependencies",
+			"add_compile_options",
+			"add_cxx_compile_options",
+			"add_compile_definitions",
+			"include_directories",
+			"target_include_directories",
+			"__component_add_include_dirs"
+		],
+		"files" : 
+		[
+			"E:/Espressif/frameworks/esp-idf-v5.1.1/tools/cmake/component.cmake",
+			"Application/CMakeLists.txt",
+			"E:/Espressif/frameworks/esp-idf-v5.1.1/tools/cmake/utilities.cmake",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 57,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 479,
+				"parent" : 1
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 513,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 354,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 339,
+				"parent" : 4
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 339,
+				"parent" : 4
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 339,
+				"parent" : 4
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 464,
+				"parent" : 1
+			},
+			{
+				"command" : 6,
+				"file" : 0,
+				"line" : 467,
+				"parent" : 1
+			},
+			{
+				"command" : 5,
+				"file" : 2,
+				"line" : 270,
+				"parent" : 9
+			},
+			{
+				"file" : 3
+			},
+			{
+				"command" : 7,
+				"file" : 3,
+				"line" : 4,
+				"parent" : 11
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 465,
+				"parent" : 1
+			},
+			{
+				"command" : 8,
+				"file" : 0,
+				"line" : 463,
+				"parent" : 1
+			},
+			{
+				"command" : 10,
+				"file" : 0,
+				"line" : 481,
+				"parent" : 1
+			},
+			{
+				"command" : 9,
+				"file" : 0,
+				"line" : 315,
+				"parent" : 15
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 339,
+				"parent" : 4
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-mlongcalls  -g -fdiagnostics-color=always"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-ffunction-sections"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-fdata-sections"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-Wall"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-Werror=all"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-Wno-error=unused-function"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-Wno-error=unused-variable"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-Wno-error=unused-but-set-variable"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-Wno-error=deprecated-declarations"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-Wextra"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-Wno-unused-parameter"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-Wno-sign-compare"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-Wno-enum-conversion"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-gdwarf-4"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-ggdb"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-Og"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-fmacro-prefix-map=F:/ACPilot_ESP/ACPilot=."
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-fmacro-prefix-map=E:/Espressif/frameworks/esp-idf-v5.1.1=/IDF"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-fstrict-volatile-bitfields"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-fno-jump-tables"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-fno-tree-switch-conversion"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-DconfigENABLE_FREERTOS_DEBUG_OCDAWARE=1"
+				},
+				{
+					"backtrace" : 10,
+					"fragment" : "-std=gnu++2b"
+				},
+				{
+					"backtrace" : 10,
+					"fragment" : "-fno-exceptions"
+				},
+				{
+					"backtrace" : 10,
+					"fragment" : "-fno-rtti"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 12,
+					"define" : "C_ESP32"
+				},
+				{
+					"backtrace" : 13,
+					"define" : "ESP_PLATFORM"
+				},
+				{
+					"backtrace" : 13,
+					"define" : "IDF_VER=\"HEAD-HASH-NOTFOUND\""
+				},
+				{
+					"backtrace" : 2,
+					"define" : "SOC_MMU_PAGE_SIZE=CONFIG_MMU_PAGE_SIZE"
+				},
+				{
+					"backtrace" : 13,
+					"define" : "_GNU_SOURCE"
+				},
+				{
+					"backtrace" : 13,
+					"define" : "_POSIX_READER_WRITER_LOCKS"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 14,
+					"path" : "F:/ACPilot_ESP/ACPilot/cmake-build-debug/config"
+				},
+				{
+					"backtrace" : 16,
+					"path" : "F:/ACPilot_ESP/ACPilot/Application"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/newlib/platform_include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/freertos/FreeRTOS-Kernel/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/freertos/FreeRTOS-Kernel/portable/xtensa/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/freertos/esp_additions/include/freertos"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/freertos/esp_additions/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/freertos/esp_additions/arch/xtensa/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/esp_hw_support/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/esp_hw_support/include/soc"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/esp_hw_support/include/soc/esp32s3"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/esp_hw_support/port/esp32s3/."
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/esp_hw_support/port/esp32s3/private_include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/heap/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/log/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/soc/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/soc/esp32s3"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/soc/esp32s3/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/hal/esp32s3/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/hal/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/hal/platform_port/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/esp_rom/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/esp_rom/include/esp32s3"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/esp_rom/esp32s3"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/esp_common/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/esp_system/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/esp_system/port/soc"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/esp_system/port/include/private"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/xtensa/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/xtensa/esp32s3/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/lwip/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/lwip/include/apps"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/lwip/include/apps/sntp"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/lwip/lwip/src/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/lwip/port/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/lwip/port/freertos/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/lwip/port/esp32xx/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/lwip/port/esp32xx/include/arch"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "F:/ACPilot_ESP/ACPilot/Common"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "F:/ACPilot_ESP/ACPilot/Osal"
+				},
+				{
+					"backtrace" : 17,
+					"path" : "F:/ACPilot_ESP/ACPilot/Libs"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "F:/ACPilot_ESP/ACPilot/Drivers"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/deprecated"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/analog_comparator/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/dac/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/gpio/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/gptimer/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/i2c/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/i2s/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/ledc/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/mcpwm/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/parlio/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/pcnt/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/rmt/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/sdio_slave/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/sdmmc/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/sigma_delta/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/spi/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/temperature_sensor/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/touch_sensor/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/twai/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/uart/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/usb_serial_jtag/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/driver/touch_sensor/esp32s3/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/esp_pm/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/esp_ringbuf/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/usb/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/esp_adc/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/esp_adc/interface"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/esp_adc/esp32s3/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/esp_adc/deprecated/include"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 5,
+			"id" : "__idf_usb::@4a2418067d0bb57af462"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "__idf_Common::@d476855061903676ce3c"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "__idf_Drivers::@c4f630d0977f26a56aa6"
+		},
+		{
+			"backtrace" : 7,
+			"id" : "__idf_Osal::@76d685b4135af393b3da"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "__idf_xtensa::@1daaaad7abe597e030f9"
+		}
+	],
+	"id" : "__idf_Application::@0729de3fd28d3e9d7016",
+	"name" : "__idf_Application",
+	"nameOnDisk" : "libApplication.a",
+	"paths" : 
+	{
+		"build" : "esp-idf/Application",
+		"source" : "Application"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/AircraftState/aircraft_state.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Actuator/Motor/motor.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/AdvancedThread/advanced_thread.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/AHRS/mahony.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Board/board.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Control/AttitudeControl/default_attitude_controller.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Control/pid_core.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Command/command.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Command/SysCommand/command_config.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Command/command_parser.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Command/command_server.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Debug/ac_debug.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Message/receive_server.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Message/transmit_server.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Protocol/Ibus/ibus.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Protocol/Crsf/crsf.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Remote/remote_channel.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Sensor/sensor.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Sensor/Imu/icm20602.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Sensor/Imu/icm20689.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Sensor/Imu/icm20948.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Sensor/Imu/icm42688.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Sensor/Baro/ms5611.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Sensor/Baro/dps310.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Sensor/Mag/ak09916.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Sensor/Imu/imu.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Sensor/Baro/baro.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/StateMachine/state_machine.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/SysTask/task_init.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/SysTask/sys_init.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/SysTask/test_task.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Light/light.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Filter/filter.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Json/json_tree.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Device/device.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Device/accelerometer.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Device/gyroscope.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Device/magnetometer.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Application/Device/thermometer.cpp",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "STATIC_LIBRARY"
+}

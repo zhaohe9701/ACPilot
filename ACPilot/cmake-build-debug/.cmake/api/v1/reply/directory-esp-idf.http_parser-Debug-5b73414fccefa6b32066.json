@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "esp-idf/http_parser",
+		"source" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/http_parser"
+	}
+}

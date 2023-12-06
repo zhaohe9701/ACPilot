@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "esp-idf/perfmon",
+		"source" : "E:/Espressif/frameworks/esp-idf-v5.1.1/components/perfmon"
+	}
+}
