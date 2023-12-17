@@ -26,14 +26,6 @@
 #include "freertos/task.h"
 #endif
 
-inline int is_isr()
-{
-    // uint32_t ipsr;
-    // __asm volatile ("mrs %0, IPSR" : "=r" (ipsr) );
-    // return (ipsr != 0);
-    return 0;
-}
-
 typedef TaskHandle_t ThreadHandle;
 typedef SemaphoreHandle_t SemaphoreHandle;
 typedef UBaseType_t AcPriority;
@@ -41,9 +33,10 @@ typedef TickType_t Tick;
 #define AC_FOREVER      0xFFFFFFFF
 #define AC_IMMEDIATELY  0x0
 
-#define IS_IN_IRQ() (is_isr() != 0)
+#define IS_IN_IRQ() (true == xPortInIsrContext())
 
 #define tickSleep(tick) vTaskDelay((tick))
+#define tickSleepUntil(tick, increment) vTaskDelayUntil((tick, increment))
 #define getTick() xTaskGetTickCount()
 #define msToTick(ms) (pdMS_TO_TICKS(ms))
 #endif

@@ -3,9 +3,8 @@
 //
 
 #include "memory_pool.h"
-#include "ac_memory.h"
+#include "Memory/ac_memory.h"
 #include "string.h"
-#include "Debug/print.h"
 
 BufPool::BufPool(const char *name, uint32_t buf_len, uint32_t buf_num, bool allowed_dynamic)
 {

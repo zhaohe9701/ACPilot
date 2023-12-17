@@ -24,5 +24,6 @@ set(INCLUDES
         )
 
 idf_component_register(SRCS ${MAIN_SOURCES}
-        INCLUDE_DIRS ${INCLUDES})
+        INCLUDE_DIRS ${INCLUDES}
+        REQUIRES "Application")
 endif()

@@ -2,8 +2,8 @@
 // Created by zhaohe on 2023/8/4.
 //
 
-#ifndef __AC_CRITICAL_H__
-#define __AC_CRITICAL_H__
+#ifndef AC_CRITICAL_H_
+#define AC_CRITICAL_H_
 #include "os.h"
 
 class Critical
@@ -11,5 +11,9 @@ class Critical
 public:
     static void enter();
     static void exit();
+private:
+#ifdef C_ESP32
+    static portMUX_TYPE _spinlock;
+#endif
 };
-#endif //__AC_CRITICAL_H__
+#endif //AC_CRITICAL_H_

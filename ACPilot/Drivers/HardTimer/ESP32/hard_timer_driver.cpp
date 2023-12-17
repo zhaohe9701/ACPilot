@@ -3,6 +3,11 @@
 //
 #include "HardTimer/hard_timer_driver.h"
 
+HardClockHandle::HardClockHandle()
+{
+    memset(&config, 0, sizeof(gptimer_config_t));
+}
+
 static bool clockCallback(gptimer_handle_t arg, const gptimer_alarm_event_data_t *ptr, void *pVoid)
 {
     HardClock *clock = (HardClock *)pVoid;

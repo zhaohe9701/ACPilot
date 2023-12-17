@@ -21,11 +21,6 @@ struct IicBusHandle
     i2c_port_t host = I2C_NUM_0;
 };
 
-IicBusHandle::IicBusHandle()
-{
-    memset(&config, 0, sizeof(i2c_config_t));
-}
-
 struct IicHandle
 {
     uint8_t addr = 0x0;

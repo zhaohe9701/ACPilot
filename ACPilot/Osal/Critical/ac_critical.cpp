@@ -3,14 +3,20 @@
 //
 #include "ac_critical.h"
 
+portMUX_TYPE Critical::_spinlock = portMUX_INITIALIZER_UNLOCKED;
+
 void Critical::enter()
 {
     if (IS_IN_IRQ())
     {
-        // taskENTER_CRITICAL_FROM_ISR();
+         taskENTER_CRITICAL_FROM_ISR();
     } else
     {
-        // taskENTER_CRITICAL();
+#ifdef C_ESP32
+        portENTER_CRITICAL(&_spinlock);
+#else
+        taskENTER_CRITICAL();
+#endif
     }
 }
 

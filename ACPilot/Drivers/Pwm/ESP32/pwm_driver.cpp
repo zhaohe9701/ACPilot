@@ -3,6 +3,12 @@
 //
 #include "Pwm/pwm_driver.h"
 
+PwmHandle::PwmHandle()
+{
+    memset(&timer_config, 0, sizeof(ledc_timer_config_t));
+    memset(&channel_config, 0, sizeof(ledc_channel_config_t));
+}
+
 Pwm::Pwm(PwmHandle *handle)
 {
     _handle = handle;

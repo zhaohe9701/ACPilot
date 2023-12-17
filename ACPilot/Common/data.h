@@ -11,17 +11,10 @@
 #ifndef DATA_H_
 #define DATA_H_
 
-#include "config.h"
-#include <stdint.h>
-
-class MessagePackage
+class DataBase
 {
-public:
-    uint8_t src_port = 0x00;                /* 源地址 */
-    uint8_t dec_port = 0x00;                /* 目的地址 */
-    uint8_t end_flag = 0x01;                /* 是否为最后一包 */
-    uint8_t data[MAX_MESSAGE_PACKAGE_LENGTH] = {0}; /* 消息体 */
-    uint16_t length = 0;                    /* 消息体长度 */
+private:
+
 };
 
 #endif

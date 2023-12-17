@@ -10,6 +10,11 @@
  */
 #include "Iic/iic_driver.h"
 
+IicBusHandle::IicBusHandle()
+{
+    memset(&config, 0, sizeof(i2c_config_t));
+}
+
 IicBus::IicBus(IicBusHandle* handle)
 {
     this->handle = handle;

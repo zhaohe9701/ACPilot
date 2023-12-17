@@ -32,7 +32,7 @@ public:
     static Dps310 *baro;
 };
 
-void boardInit();
-void deviceInit();
+extern "C" void boardInit();
+extern "C" void deviceInit();
 
 #endif //BOARD_H_

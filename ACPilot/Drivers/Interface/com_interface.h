@@ -24,6 +24,9 @@ class ComInterface
 {
 public:
     explicit ComInterface(uint8_t port_num);
+
+    ComInterface();
+
     virtual AC_RET send(uint8_t *buf, uint16_t length, uint32_t timeout) = 0;
     virtual AC_RET open() = 0;
     AC_RET receive(uint32_t len);

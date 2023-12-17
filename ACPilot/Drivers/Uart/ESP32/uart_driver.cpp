@@ -14,6 +14,11 @@
 
 #define UART_TASK_INTERVAL 1
 
+UartHandle::UartHandle()
+{
+    memset(&config, 0, sizeof(uart_config_t));
+}
+
 Uart::Uart(UartHandle *handle, uint8_t port_num) : ComInterface(port_num)
 {
     _port = port_num;
@@ -147,6 +152,7 @@ void UartManager::managerTask(void *pvParameters)
             (**it)->check();
         }
         _mutex.unlock();
+        tickSleep(1);
     }
     AcThread::killSelf();
 }

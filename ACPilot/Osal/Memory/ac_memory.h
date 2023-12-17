@@ -7,10 +7,10 @@
 
 #include <stddef.h>  // for size_t
 
-void* operator new(size_t size);
-void operator delete(void* p) noexcept;
-
-void* operator new[](size_t size);
-void operator delete[](void* p) noexcept;
+//void* operator new(size_t size);
+//void operator delete(void* p) noexcept;
+//
+//void* operator new[](size_t size);
+//void operator delete[](void* p) noexcept;
 
 #endif //MEMORY_H_

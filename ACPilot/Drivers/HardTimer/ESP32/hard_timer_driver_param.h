@@ -16,9 +16,4 @@ struct HardClockHandle
     uint64_t tick = 0;
 };
 
-HardClockHandle::HardClockHandle()
-{
-    memset(&config, 0, sizeof(gptimer_config_t));
-}
-
 #endif //HARD_TIMER_DRIVER_PARAM_H_

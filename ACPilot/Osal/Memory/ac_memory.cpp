@@ -4,30 +4,30 @@
 #include "ac_memory.h"
 #include "os.h"  // assuming this includes the definitions for pvPortMalloc and vPortFree
 
-void* operator new(size_t size)
-{
-    return pvPortMalloc(size);
-}
-
-void operator delete(void* p) noexcept
-{
-    if (nullptr == p)
-    {
-        return;
-    }
-    vPortFree(p);
-}
-
-void* operator new[](size_t size)
-{
-    return pvPortMalloc(size);
-}
-
-void operator delete[](void* p) noexcept
-{
-    if (nullptr == p)
-    {
-        return;
-    }
-    vPortFree(p);
-}
+//void* operator new(size_t size)
+//{
+//    return pvPortMalloc(size);
+//}
+//
+//void operator delete(void* p) noexcept
+//{
+//    if (nullptr == p)
+//    {
+//        return;
+//    }
+//    vPortFree(p);
+//}
+//
+//void* operator new[](size_t size)
+//{
+//    return pvPortMalloc(size);
+//}
+//
+//void operator delete[](void* p) noexcept
+//{
+//    if (nullptr == p)
+//    {
+//        return;
+//    }
+//    vPortFree(p);
+//}

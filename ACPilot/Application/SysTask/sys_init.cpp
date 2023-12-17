@@ -30,21 +30,6 @@ void sysInit()
     new CrsfParser();
     /*创建cli消息接收实例*/
     new CommandParser();
-    /*创建命令服务器*/
-    new CommandServer();
     /*初始化debug*/
     Debug::init();
-}
-
-void taskInit()
-{
-
-}
-
-/* 入口 */
-void StartDefaultTask(void *argument)
-{
-    boardInit();
-    deviceInit();
-    sysInit();
 }

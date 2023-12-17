@@ -27,10 +27,7 @@ struct SpiBusHandle
     spi_common_dma_t dma = SPI_DMA_DISABLED;
 };
 
-SpiBusHandle::SpiBusHandle()
-{
-    memset(&config, 0, sizeof(spi_bus_config_t));
-}
+
 
 struct SpiHandle
 {
@@ -38,11 +35,5 @@ struct SpiHandle
     spi_device_interface_config_t config{};
     spi_device_handle_t handle{};
 };
-
-SpiHandle::SpiHandle()
-{
-    memset(&config, 0, sizeof(spi_device_interface_config_t));
-    memset(&handle, 0, sizeof(spi_device_handle_t));
-}
 
 #endif

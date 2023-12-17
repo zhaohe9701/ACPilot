@@ -11,7 +11,9 @@
 #include "Usb/usb_driver.h"
 #include "driver/usb_serial_jtag.h"
 
-Usb::Usb(uint8_t mark) : ComInterface(mark)
+AcThread Usb::_task("usbTask", 512, USB_EVENT_TASK_PRIO);
+
+Usb::Usb(uint8_t port_num): ComInterface(port_num)
 {
     UsbManager::add(this);
 }
@@ -37,8 +39,22 @@ AC_RET Usb::send(uint8_t* buf, uint16_t length, uint32_t timeout)
 
 AC_RET Usb::open()
 {
-    _task.run(UsbManager::usbReceiveHandle, this);
+    if (!_isOpen)
+    {
+        _isOpen = true;
+        _task.run(UsbManager::usbReceiveHandle, nullptr);
+    }
     return AC_OK;
+}
+
+void Usb::test()
+{
+    while(1)
+    {
+        printf("test\n");
+        tickSleep(1000);
+    }
+
 }
 
 
@@ -51,20 +67,19 @@ void UsbManager::add(Usb *usb)
 
 void UsbManager::usbReceiveHandle(void *param)
 {
-    Usb *usb = (Usb *)param;
     for(;;)
     {
-        usb->_receive_buffer = usb->_buffer_pool->alloc();
+        _usb->_receive_buffer = _usb->_buffer_pool->alloc();
         int total_len = 0;
         int len = 0;
-        uint8_t *buf = usb->_receive_buffer;
+        uint8_t *buf = _usb->_receive_buffer;
         do
         {
             len = usb_serial_jtag_read_bytes(buf, MAX_MESSAGE_BUF_LEN - total_len - 1, AC_FOREVER);
             total_len += len;
             buf += len;
-        } while (usb->_receive_buffer[total_len - 1] != '\n' && total_len < MAX_MESSAGE_BUF_LEN - 1);
-        usb->receive(total_len);
+        } while (_usb->_receive_buffer[total_len - 1] != '\n' && total_len < MAX_MESSAGE_BUF_LEN - 1);
+        _usb->receive(total_len);
     }
     AcThread::killSelf();
 }

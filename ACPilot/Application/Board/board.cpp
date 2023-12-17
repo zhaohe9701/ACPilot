@@ -1,12 +1,26 @@
 //
 // Created by zhaohe on 2023/8/16.
 //
-#include "config.h"
 #include "board.h"
 #include "Uart/uart_driver.h"
 #include "Sensor/Imu/icm42688.h"
-
-
+#include "Gpio/gpio_driver.h"
+#include "Usb/usb_driver.h"
+#include "DataModule/data_module.h"
+//UartHandle uart1_handle;
+//
+//void handleInit()
+//{
+//    uart1_handle.index = UART_NUM_1;
+//    uart1_handle.config.baud_rate = 115200;
+//    uart1_handle.config.data_bits = UART_DATA_8_BITS;
+//    uart1_handle.config.parity = UART_PARITY_DISABLE;
+//    uart1_handle.config.stop_bits = UART_STOP_BITS_1;
+//    uart1_handle.config.flow_ctrl = UART_HW_FLOWCTRL_DISABLE;
+//    uart1_handle.config.source_clk = UART_SCLK_DEFAULT;
+//    uart1_handle.tx = GPIO_NUM_4;
+//    uart1_handle.rx = GPIO_NUM_5;
+//}
 
 Gpio *Board::imu_cs_pin = nullptr;
 Gpio *Board::baro_cs_pin = nullptr;
@@ -17,6 +31,8 @@ SpiBus *Board::spi1_bus = nullptr;
 Uart *Board::uart1 = nullptr;
 Usb *Board::usb = nullptr;
 ExtInterrupt *Board::imu_interrupt = nullptr;
+
+void test();
 
 void boardInit()
 {
@@ -42,9 +58,11 @@ void boardInit()
 //    Board::spi1_bus = new SpiBus();
 //    Board::spi1_bus->init(SPI1, SPI_PRESCALER_16, SPI_CPOL_HIGH, SPI_CPHA_2);
 //
-//    Board::usb = new Usb(0x01);
-//    Usb::init();
-//
+//    Usb::test();
+    Board::usb = new Usb(0x01);
+    Board::usb->init();
+    Board::usb->send((uint8_t*)"helloUSB\n", 9, 1000);
+    test();
 //    Board::uart1 = new Uart(&huart1, 0x02);
 //    Board::uart1->init(USART1, 420000, UART_WORDLEN_8, UART_STOPBIT_10, UART_PARITY_N, UART_HW_CTRL_DISABLE);
 //
@@ -69,5 +87,18 @@ void deviceInit()
 //    Spi *flash_spi = new Spi(Board::spi1_bus, Board::flash_cs_pin);
 }
 
+#include "DataModule/data_module.h"
+#include "DataModule/data_node.h"
+#include "DataModule/json.h"
+void test()
+{
+    printf("test\n");
+    char buf[200] = R"({"aircraft":{"weight":"uint32","size":[{"l":"int8","w":"int8"}],"max_speed":"uint32"},"remote":"uint8"})";
+    DataModule::init(2048);
+    DataNode *root = Json::createDm(buf);
+    char json[200] = {0};
+    Json::printDm(root, json, 200);
+    printf("RESULT:%s\n", json);
+}
 
 

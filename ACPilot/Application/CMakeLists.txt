@@ -34,6 +34,9 @@ set(APP_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/Light/light.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Filter/filter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Json/json_tree.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/DataModule/data_module.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/DataModule/data_node.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/DataModule/json.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Device/device.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Device/accelerometer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Device/gyroscope.cpp

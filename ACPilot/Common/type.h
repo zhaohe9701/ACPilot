@@ -81,7 +81,7 @@ class Type
 public:
     static AC_RET transTypeToStr(char *type_buf, AC_DATA_TYPE type);
     static AC_RET transDataToStr(char *data_buf, void *data, AC_DATA_TYPE type);
-    static AC_RET transStrToType(char *type_buf, AC_DATA_TYPE &type);
+    static uint16_t transStrToType(char *type_buf, AC_DATA_TYPE &type);
     static AC_RET transStrToData(char *data_buf, void *data, AC_DATA_TYPE type);
 };
 

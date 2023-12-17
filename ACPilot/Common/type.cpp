@@ -130,48 +130,57 @@ AC_RET Type::transDataToStr(char *data_buf, void *data, AC_DATA_TYPE type)
     return AC_OK;
 }
 
-AC_RET Type::transStrToType(char *type_buf, AC_DATA_TYPE &type)
+uint16_t Type::transStrToType(char *type_buf, AC_DATA_TYPE &type)
 {
     if (0 == strncmp("uint8", type_buf, TYPE_BUF_LEN))
     {
         type = AC_UINT8;
+        return sizeof(uint8_t);
     } else if (0 == strncmp("uint16", type_buf, TYPE_BUF_LEN))
     {
         type = AC_UINT16;
+        return sizeof(uint16_t);
     } else if (0 == strncmp("uint32", type_buf, TYPE_BUF_LEN))
     {
         type = AC_UINT32;
+        return sizeof(uint32_t);
     } else if (0 == strncmp("int8", type_buf, TYPE_BUF_LEN))
     {
         type = AC_INT8;
+        return sizeof(int8_t);
     } else if (0 == strncmp("int16", type_buf, TYPE_BUF_LEN))
     {
         type = AC_INT16;
+        return sizeof(int16_t);
     } else if (0 == strncmp("int32", type_buf, TYPE_BUF_LEN))
     {
         type = AC_INT32;
+        return sizeof(int32_t);
     } else if (0 == strncmp("float", type_buf, TYPE_BUF_LEN))
     {
         type = AC_FLOAT;
+        return sizeof(float);
     } else if (0 == strncmp("double", type_buf, TYPE_BUF_LEN))
     {
         type = AC_DOUBLE;
-    } else if (0 == strncmp("string", type_buf, TYPE_BUF_LEN))
+        return sizeof(double);
+    } else if (0 == strncmp("string", type_buf, 6))
     {
         type = AC_STRING;
+        return strtoul(type_buf + 8, nullptr, 10);
     } else if (0 == strncmp("switch", type_buf, TYPE_BUF_LEN))
     {
         type = AC_SWITCH;
+        return sizeof(uint8_t);
     } else if (0 == strncmp("enum", type_buf, TYPE_BUF_LEN))
     {
         type = AC_ENUM;
+        return sizeof(uint16_t);
     }
     else
     {
-        return AC_ERROR;
+        return 0;
     }
-
-    return AC_OK;
 }
 
 AC_RET Type::transStrToData(char *data_buf, void *data, AC_DATA_TYPE type)

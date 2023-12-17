@@ -30,4 +30,6 @@ AC_RET ComInterface::receive(uint32_t len)
     return _recv_mail_box->push(&message);
 }
 
+ComInterface::ComInterface() {}
+
 

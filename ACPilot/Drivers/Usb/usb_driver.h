@@ -22,15 +22,17 @@ class Usb : virtual public ComInterface
 {
     friend class UsbManager;
 public:
-    explicit Usb(uint8_t mark);
+    explicit Usb(uint8_t port_num);
     AC_RET init();
     AC_RET send(uint8_t* buf, uint16_t length, uint32_t timeout) override;
     AC_RET open() override;
+    static void test();
 private:
     uint32_t _ptr = 0;
+    bool _isOpen = false;
 #ifdef C_ESP32
     QueueHandle _queue_handle = nullptr;
-    AcThread _task{nullptr, 256, USB_EVENT_TASK_PRIO};
+    static AcThread _task;
 #endif
 };
 
@@ -47,6 +49,11 @@ public:
 #endif
 private:
     static Usb *_usb;
+};
+
+class Test
+{
+    int a[100] = {0};
 };
 
 #endif //USB_DRIVER_H_

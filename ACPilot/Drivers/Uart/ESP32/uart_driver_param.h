@@ -26,9 +26,4 @@ struct UartHandle
     gpio_num_t rts = GPIO_NUM_NC;
 };
 
-UartHandle::UartHandle()
-{
-    memset(&config, 0, sizeof(uart_config_t));
-}
-
 #endif

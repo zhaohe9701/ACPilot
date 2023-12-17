@@ -21,10 +21,4 @@ struct PwmHandle
     ledc_channel_config_t channel_config{};
 };
 
-PwmHandle::PwmHandle()
-{
-    memset(&timer_config, 0, sizeof(ledc_timer_config_t));
-    memset(&channel_config, 0, sizeof(ledc_channel_config_t));
-}
-
 #endif
