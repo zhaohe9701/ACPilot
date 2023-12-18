@@ -19,6 +19,7 @@ public:
     static void reset();
     static DataNode *alloc(const char *name, AC_DATA_TYPE type, uint16_t size);
     static void *alloc(uint16_t size);
+    static DataNode *copyWithoutData(DataNode *node);
     static void syncDataAddr();
     template<typename T>
     static AC_RET read(const char *path, T *data);

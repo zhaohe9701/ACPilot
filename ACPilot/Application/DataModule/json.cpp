@@ -1011,3 +1011,56 @@ AC_RET Json::printDm(DataNode *dm, char *json, uint32_t max_len)
     }
     return AC_OK;
 }
+
+AC_RET Json::addToDm(DataNode *dm, char *json)
+{
+    DataNode *new_node = nullptr;
+    if (nullptr == dm || nullptr == json)
+    {
+        return AC_ERROR;
+    }
+    if (AC_ARRAY != dm->getType())
+    {
+        printf("json format error:dm is not array\n");
+        return AC_ERROR;
+    }
+    char *ptr = json;
+    ptr = gotoNextSymbol(ptr);
+    if ('[' != *ptr)
+    {
+        printf("json format error:miss '['\n");
+        return AC_ERROR;
+    }
+    ptr = gotoNextSymbol(++ptr);
+    if (']' == *ptr)
+    {
+        return AC_OK;
+    }
+    do
+    {
+        new_node = DataModule::copyWithoutData(dm->getFirstChild());
+        if (nullptr == new_node)
+        {
+            printf("json format error:alloc failed\n");
+            return AC_ERROR;
+        }
+        if (AC_OK != allocDataRecursive(new_node))
+        {
+            printf("json format error:alloc failed\n");
+            return AC_ERROR;
+        }
+        if (nullptr == (ptr = new_node->setDataFromStr(ptr)))
+        {
+            return AC_ERROR;
+        }
+        dm->addChild(new_node);
+        ptr = gotoNextSymbol(++ptr);
+    } while (*ptr == ',');
+    if (']' != *ptr)
+    {
+        printf("json format error:miss ']'\n");
+        return AC_ERROR;
+    }
+    return AC_OK;
+}
+

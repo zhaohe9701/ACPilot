@@ -68,6 +68,31 @@ void DataModule::syncDataAddr()
     _data_addr = _cb_addr + _cb_offset;
 }
 
+DataNode *DataModule::copyWithoutData(DataNode *node)
+{
+    if (nullptr == node)
+    {
+        return nullptr;
+    }
+    DataNode *new_node = alloc(node->_name, node->_type, node->_size);
+    if (nullptr == new_node)
+    {
+        return nullptr;
+    }
+    DataNode *child = node->getFirstChild();
+    while (nullptr != child)
+    {
+        DataNode *new_child = copyWithoutData(child);
+        if (nullptr == new_child)
+        {
+            return nullptr;
+        }
+        new_node->addChild(new_child);
+        child = child->getNeighbour();
+    }
+    return new_node;
+}
+
 
 
 
