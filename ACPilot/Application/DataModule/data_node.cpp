@@ -60,9 +60,14 @@ AC_RET DataNode::getData(void *data, int16_t size)
     return AC_OK;
 }
 
-AC_RET DataNode::setData(void *data, int16_t size)
+void *DataNode::getData()
 {
-    if (nullptr == data || size != _size)
+    return _data;
+}
+
+AC_RET DataNode::setData(void *data)
+{
+    if (nullptr == data)
     {
         return AC_ERROR;
     }
@@ -195,6 +200,61 @@ AC_RET DataNode::allocData(void *data)
     }
     _data = data;
     return AC_OK;
+}
+
+DataNode *DataNode::findChild(const char *name)
+{
+    if (nullptr == name)
+    {
+        return nullptr;
+    }
+    DataNode *node = _firstChild;
+    while (nullptr != node)
+    {
+        if (0 == strncmp(node->_name, name, PARAM_NAME_LEN - 1))
+        {
+            return node;
+        }
+        node = node->_neighbour;
+    }
+    return nullptr;
+}
+
+bool DataNode::isEnable()
+{
+    if (_type != AC_STRUCT || _parent == nullptr || _parent->_type != AC_ARRAY || _data == nullptr)
+    {
+        return false;
+    }
+    if (*(int8_t*)_data == FREE_ENTRY)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+DataNode *DataNode::findFreeChild()
+{
+    if (_type != AC_ARRAY)
+    {
+        return nullptr;
+    }
+    DataNode *node = _firstChild;
+    while (nullptr != node)
+    {
+        if (node->isEnable())
+        {
+            node = node->_neighbour;
+        }
+        else
+        {
+            return node;
+        }
+    }
+    return nullptr;
 }
 
 

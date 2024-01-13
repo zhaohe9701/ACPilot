@@ -99,6 +99,12 @@ void test()
     char json[200] = {0};
     Json::printDm(root, json, 200);
     printf("RESULT:%s\n", json);
+    memset(json, 0, 200);
+    memset(buf, 0, 200);
+    strcpy(buf, R"({"aircraft":{"weight":"100","max_speed":"100"},"remote":"1"})");
+    Json::setToDm(root, buf);
+    Json::fromDm(root, json, 200);
+    printf("RESULT:%s\n", json);
 }
 
 

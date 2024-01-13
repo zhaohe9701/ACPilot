@@ -3,43 +3,11 @@
 #include "type.h"
 #include "json.h"
 #include "data_module.h"
-#include "os.h"
 
-#define STACK_SIZE 10
 #define GET_FREE_SPACE(head, tail, max) ((max) - (uint32_t)((tail) - (head)))
-class Stack
-{
-public:
-    AC_RET push(char data)
-    {
-        if (_top >= STACK_SIZE)
-        {
-            return AC_ERROR;
-        }
-        _stack[_top++] = data;
-        return AC_OK;
-    }
-    char pop()
-    {
+#define PRINT_MODE 0x01
+#define READ_MODE 0x02
 
-        if (0 == _top)
-        {
-            return 0;
-        }
-        return _stack[--_top];
-    }
-    char top()
-    {
-        if (0 == _top)
-        {
-            return 0;
-        }
-        return _stack[_top - 1];
-    }
-private:
-    uint8_t _top = 0;
-    char _stack[STACK_SIZE] = {0};
-};
 static char *gotoNextSymbol(char *json)
 {
     if (nullptr == json)
@@ -91,7 +59,44 @@ static char *pushStr(char *json, const char *str, uint32_t max_len)
     strncpy(json, str, max_len - 1);
     return json + len;
 }
+
 #if 0
+#define STACK_SIZE 10
+
+class Stack
+{
+public:
+    AC_RET push(char data)
+    {
+        if (_top >= STACK_SIZE)
+        {
+            return AC_ERROR;
+        }
+        _stack[_top++] = data;
+        return AC_OK;
+    }
+    char pop()
+    {
+
+        if (0 == _top)
+        {
+            return 0;
+        }
+        return _stack[--_top];
+    }
+    char top()
+    {
+        if (0 == _top)
+        {
+            return 0;
+        }
+        return _stack[_top - 1];
+    }
+private:
+    uint8_t _top = 0;
+    char _stack[STACK_SIZE] = {0};
+};
+
 AC_RET Json::toDm(DataNode *dm, char *json)
 {
     if (nullptr == dm || nullptr == json)
@@ -703,7 +708,6 @@ static char *createStructRecursive(DataNode *node, char *json);
 
 static char *createArrayRecursive(DataNode *node, char *json)
 {
-    char buf[PARAM_NAME_LEN] = {0};
     char *ptr = json;
     DataNode *tmp_node = nullptr;
     do
@@ -717,7 +721,7 @@ static char *createArrayRecursive(DataNode *node, char *json)
 
         if ('{' == *ptr)
         {
-            tmp_node = DataModule::alloc(buf, AC_STRUCT, 0);
+            tmp_node = DataModule::allocNode("", AC_STRUCT, sizeof(uint8_t));
             if (nullptr == tmp_node)
             {
                 printf("json format error:alloc failed\n");
@@ -773,7 +777,7 @@ static char *createStructRecursive(DataNode *node, char *json)
         ptr = gotoNextSymbol(++ptr);
         if ('{' == *ptr)
         {
-            tmp_node = DataModule::alloc(buf, AC_STRUCT, 0);
+            tmp_node = DataModule::allocNode(buf, AC_STRUCT, 0);
             if (nullptr == tmp_node)
             {
                 printf("json format error:alloc failed\n");
@@ -787,7 +791,7 @@ static char *createStructRecursive(DataNode *node, char *json)
         }
         else if ('[' == *ptr)
         {
-            tmp_node = DataModule::alloc(buf, AC_ARRAY, 0);
+            tmp_node = DataModule::allocNode(buf, AC_ARRAY, 0);
             if (nullptr == tmp_node)
             {
                 printf("json format error:alloc failed\n");
@@ -801,7 +805,7 @@ static char *createStructRecursive(DataNode *node, char *json)
         }
         else if ('\"' == *ptr)
         {
-            tmp_node = DataModule::alloc(buf, AC_NULL, 0);
+            tmp_node = DataModule::allocNode(buf, AC_NULL, 0);
             if (nullptr == tmp_node)
             {
                 printf("json format error:alloc failed\n");
@@ -834,70 +838,63 @@ static char *createStructRecursive(DataNode *node, char *json)
     return ptr;
 }
 
-static AC_RET allocDataRecursive(DataNode *node)
+static bool isDataStruct(DataNode *node)
 {
     if (nullptr == node)
     {
-        return AC_OK;
+        return false;
+    }
+    if (AC_STRUCT == node->getType() || AC_ARRAY == node->getType() || AC_NULL == node->getType())
+    {
+        return false;
+    }
+    return true;
+}
+
+static int32_t allocDataRecursive(DataNode *node, DM_REGION reg)
+{
+    int32_t total_size = 0;
+    int32_t size = 0;
+    DataNode *child = nullptr;
+    if (nullptr == node)
+    {
+        return 0;
+    }
+    if (isDataStruct(node))
+    {
+        if (AC_OK != node->allocData(DataModule::allocData(node->getSize(), reg)))
+        {
+            return -1;
+        }
+        total_size = (int16_t)node->getSize();
+        printf("malloc addr:%p\tsize:%d\tname:%s\n", node->getData(), node->getSize(), node->getName());
     }
     if (AC_ARRAY == node->getType())
     {
-        if (AC_OK != node->allocData(DataModule::alloc(sizeof(uint8_t))))
+        return total_size;
+    }
+    child = node->getFirstChild();
+    while (nullptr != child)
+    {
+        size = allocDataRecursive(child, reg);
+        if (size < 0)
         {
-            return AC_ERROR;
+            return -1;
         }
-        return AC_OK;
+        total_size += size;
+        child = child->getNeighbour();
     }
-    if (AC_STRUCT == node->getType() || AC_NULL == node->getType())
-    {
-        return allocDataRecursive(node->getFirstChild());
-    }
-    if (AC_OK != node->allocData(DataModule::alloc(node->getSize())))
-    {
-        return AC_ERROR;
-    }
-    return allocDataRecursive(node->getNeighbour());
+    node->setSize(total_size);
+    return total_size;
 }
 
-DataNode *Json::createDm(char *json)
-{
-    if (nullptr == json)
-    {
-        return nullptr;
-    }
-    DataNode *root = DataModule::alloc("/", AC_NULL, 0);
-    char *ptr = json;
-    ptr = gotoNextSymbol(ptr);
-    if ('{' != *ptr)
-    {
-        printf("json format error:miss '{'\n");
-        goto error;
-    }
-    if (nullptr == (ptr = createStructRecursive(root, ptr)))
-    {
-        goto error;
-    }
-
-    DataModule::syncDataAddr();
-
-    if (AC_OK != allocDataRecursive(root))
-    {
-        goto error;
-    }
-    return root;
-    error:
-    DataModule::reset();
-    return nullptr;
-}
-
-
-static char *printRecursive(DataNode *node, char *json, char *ptr, uint32_t max_len)
+static char *printRecursive(DataNode *node, char *json, char *ptr, uint32_t max_len, uint8_t mode)
 {
     if (nullptr == node)
     {
         return ptr;
     }
-    char buf[PARAM_NAME_LEN] = {0};
+    char buf[DATA_BUF_LEN] = {0};
     do
     {
         if (AC_ARRAY != node->getParent()->getType())
@@ -918,6 +915,21 @@ static char *printRecursive(DataNode *node, char *json, char *ptr, uint32_t max_
                 return nullptr;
             }
         }
+        else
+        {
+            if (mode == READ_MODE && (node->getData() == nullptr || *(uint8_t*)node->getData() == FREE_ENTRY))
+            {
+                node = node->getNeighbour();
+                if (nullptr == node)
+                {
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
         if (AC_STRUCT == node->getType())
         {
             ptr = pushStr(ptr, "{", GET_FREE_SPACE(json, ptr, max_len));
@@ -925,7 +937,7 @@ static char *printRecursive(DataNode *node, char *json, char *ptr, uint32_t max_
             {
                 return nullptr;
             }
-            if (nullptr == (ptr = printRecursive(node->getFirstChild(), json, ptr, max_len)))
+            if (nullptr == (ptr = printRecursive(node->getFirstChild(), json, ptr, max_len, mode)))
             {
                 return nullptr;
             }
@@ -942,7 +954,7 @@ static char *printRecursive(DataNode *node, char *json, char *ptr, uint32_t max_
             {
                 return nullptr;
             }
-            if (nullptr == (ptr = printRecursive(node->getFirstChild(), json, ptr, max_len)))
+            if (nullptr == (ptr = printRecursive(node->getFirstChild(), json, ptr, max_len, mode)))
             {
                 return nullptr;
             }
@@ -954,9 +966,19 @@ static char *printRecursive(DataNode *node, char *json, char *ptr, uint32_t max_
         }
         else
         {
-            if (AC_OK != Type::transTypeToStr(buf, node->getType()))
+            if (mode == PRINT_MODE)
             {
-                return nullptr;
+                if (AC_OK != Type::transTypeToStr(buf, node->getType()))
+                {
+                    return nullptr;
+                }
+            }
+            else if (mode == READ_MODE)
+            {
+                if (AC_OK != Type::transDataToStr(buf, node->getData(), node->getType()))
+                {
+                    return nullptr;
+                }
             }
             ptr = pushStr(ptr, "\"", GET_FREE_SPACE(json, ptr, max_len));
             if (nullptr == ptr)
@@ -973,8 +995,16 @@ static char *printRecursive(DataNode *node, char *json, char *ptr, uint32_t max_
             {
                 return nullptr;
             }
+            memset(buf, 0, sizeof(buf));
         }
-        node = node->getNeighbour();
+        if (AC_ARRAY == node->getParent()->getType() && mode == PRINT_MODE)
+        {
+            node = nullptr;
+        }
+        else
+        {
+            node = node->getNeighbour();
+        }
         if (nullptr != node)
         {
             ptr = pushStr(ptr, ",", GET_FREE_SPACE(json, ptr, max_len));
@@ -988,6 +1018,121 @@ static char *printRecursive(DataNode *node, char *json, char *ptr, uint32_t max_
     return ptr;
 }
 
+char *setRecursive(DataNode *parent, char *json)
+{
+    char buf[DATA_BUF_LEN] = {0};
+    char *ptr = json;
+    DataNode *node = nullptr;
+    do
+    {
+        ptr = gotoNextSymbol(++ptr);
+        if ('\"' != *ptr)
+        {
+            printf("json format error:miss '\"'\n");
+            return nullptr;
+        }
+        ptr = copyKey(ptr, buf, PARAM_NAME_LEN - 1);
+        if (nullptr == ptr)
+        {
+            return nullptr;
+        }
+
+        ptr = gotoNextSymbol(++ptr);
+        if (':' != *ptr)
+        {
+            printf("json format error:miss ':'\n");
+            return nullptr;
+        }
+        ptr = gotoNextSymbol(++ptr);
+
+        node = parent->findChild(buf);
+        if (nullptr == node)
+        {
+            printf("json format error:can't find node: %s\n", buf);
+            return nullptr;
+        }
+        memset(buf, 0, sizeof(buf));
+        if ('{' == *ptr && AC_STRUCT == node->getType())
+        {
+            ptr = setRecursive(node, ptr);
+            if (nullptr == ptr)
+            {
+                return nullptr;
+            }
+        }
+        else if ('[' == *ptr)
+        {
+            printf("json format error:not support array\n");
+            return nullptr;
+        }
+        else if ('\"' == *ptr)
+        {
+            if (AC_STRUCT == node->getType() || AC_ARRAY == node->getType() || AC_NULL == node->getType())
+            {
+                printf("json format error:invalid type\n");
+                return nullptr;
+            }
+            ptr = copyKey(ptr, buf, DATA_BUF_LEN - 1);
+            if (nullptr == ptr)
+            {
+                return nullptr;
+            }
+            if (AC_OK != Type::transStrToData(buf, node->getData(), node->getType()))
+            {
+                return nullptr;
+            }
+            memset(buf, 0, sizeof(buf));
+        }
+        else
+        {
+            printf("json format error:invalid value\n");
+            return nullptr;
+        }
+        ptr = gotoNextSymbol(++ptr);
+    }
+    while (',' == *ptr);
+    if ('}' != *ptr)
+    {
+        printf("json format error:miss '}'\n");
+        return nullptr;
+    }
+    return ptr;
+}
+
+DataNode *Json::createDm(char *json)
+{
+    if (nullptr == json)
+    {
+        return nullptr;
+    }
+    DataNode *root = DataModule::allocNode("/", AC_NULL, 0);
+    char *ptr = json;
+    ptr = gotoNextSymbol(ptr);
+    if ('{' != *ptr)
+    {
+        printf("json format error:miss '{'\n");
+        goto error;
+    }
+    if (nullptr == createStructRecursive(root, ptr))
+    {
+        goto error;
+    }
+
+    DataModule::syncAddr();
+
+    if (0 > allocDataRecursive(root, DM_DATA_REGION))
+    {
+        goto error;
+    }
+    DataModule::syncAddr();
+    return root;
+    error:
+    DataModule::reset();
+    return nullptr;
+}
+
+
+
 AC_RET Json::printDm(DataNode *dm, char *json, uint32_t max_len)
 {
     if (nullptr == dm || nullptr == json)
@@ -1000,7 +1145,7 @@ AC_RET Json::printDm(DataNode *dm, char *json, uint32_t max_len)
     {
         return AC_ERROR;
     }
-    if (nullptr == (ptr = printRecursive(dm->getFirstChild(), json, ptr, max_len)))
+    if (nullptr == (ptr = printRecursive(dm->getFirstChild(), json, ptr, max_len, PRINT_MODE)))
     {
         return AC_ERROR;
     }
@@ -1012,14 +1157,14 @@ AC_RET Json::printDm(DataNode *dm, char *json, uint32_t max_len)
     return AC_OK;
 }
 
-AC_RET Json::addToDm(DataNode *dm, char *json)
+AC_RET Json::addToDm(DataNode *array, char *json)
 {
     DataNode *new_node = nullptr;
-    if (nullptr == dm || nullptr == json)
+    if (nullptr == array || nullptr == json)
     {
         return AC_ERROR;
     }
-    if (AC_ARRAY != dm->getType())
+    if (AC_ARRAY != array->getType())
     {
         printf("json format error:dm is not array\n");
         return AC_ERROR;
@@ -1036,29 +1181,88 @@ AC_RET Json::addToDm(DataNode *dm, char *json)
     {
         return AC_OK;
     }
+
     do
     {
-        new_node = DataModule::copyWithoutData(dm->getFirstChild());
+        ptr = gotoNextSymbol(++ptr);
+        if ('{' != *ptr)
+        {
+            printf("json format error:miss '{'\n");
+            return AC_ERROR;
+        }
+        new_node = array->findFreeChild();
+        if (nullptr == new_node)
+        {
+            new_node = DataModule::copyWithoutData(array->getFirstChild());
+            array->addChild(new_node);
+        }
         if (nullptr == new_node)
         {
             printf("json format error:alloc failed\n");
             return AC_ERROR;
         }
-        if (AC_OK != allocDataRecursive(new_node))
+
+        if (0 > allocDataRecursive(new_node, DM_ARRAY_REGION))
         {
             printf("json format error:alloc failed\n");
             return AC_ERROR;
         }
-        if (nullptr == (ptr = new_node->setDataFromStr(ptr)))
+        ptr = setRecursive(new_node, ptr);
+        if (nullptr == ptr)
         {
+            printf("json format error:set failed\n");
             return AC_ERROR;
         }
-        dm->addChild(new_node);
         ptr = gotoNextSymbol(++ptr);
     } while (*ptr == ',');
     if (']' != *ptr)
     {
         printf("json format error:miss ']'\n");
+        return AC_ERROR;
+    }
+    return AC_OK;
+}
+
+AC_RET Json::fromDm(DataNode *dm, char *json, uint32_t max_len)
+{
+    if (nullptr == dm || nullptr == json)
+    {
+        return AC_ERROR;
+    }
+    char *ptr = json;
+    ptr = pushStr(ptr, "{", GET_FREE_SPACE(json, ptr, max_len));
+    if (nullptr == ptr)
+    {
+        return AC_ERROR;
+    }
+    if (nullptr == (ptr = printRecursive(dm->getFirstChild(), json, ptr, max_len, READ_MODE)))
+    {
+        return AC_ERROR;
+    }
+    ptr = pushStr(ptr, "}", GET_FREE_SPACE(json, ptr, max_len));
+    if (nullptr == ptr)
+    {
+        return AC_ERROR;
+    }
+    return AC_OK;
+}
+
+AC_RET Json::setToDm(DataNode *dm, char *json)
+{
+    if (nullptr == json)
+    {
+        return AC_ERROR;
+    }
+
+    char *ptr = json;
+    ptr = gotoNextSymbol(ptr);
+    if ('{' != *ptr)
+    {
+        printf("json format error:miss '{'\n");
+        return AC_ERROR;
+    }
+    if (nullptr == setRecursive(dm, ptr))
+    {
         return AC_ERROR;
     }
     return AC_OK;

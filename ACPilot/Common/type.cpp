@@ -89,6 +89,16 @@ AC_RET Type::transTypeToStr(char *type_buf, AC_DATA_TYPE type)
 
 AC_RET Type::transDataToStr(char *data_buf, void *data, AC_DATA_TYPE type)
 {
+    if (nullptr == data_buf)
+    {
+        return AC_ERROR;
+    }
+    if (nullptr == data)
+    {
+        snprintf(data_buf, DATA_BUF_LEN, "loss");
+        return AC_OK;
+    }
+
     switch (type)
     {
         case AC_UINT8:

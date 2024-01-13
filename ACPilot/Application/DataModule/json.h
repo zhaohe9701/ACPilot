@@ -10,7 +10,7 @@ public:
     static AC_RET fromDm(DataNode *dm, char *json, uint32_t max_len);
     static DataNode *createDm(char *json);
     static AC_RET printDm(DataNode *dm, char *json, uint32_t max_len);
-    static AC_RET addToDm(DataNode *dm, char *json);
+    static AC_RET addToDm(DataNode *array, char *json);
     static AC_RET setToDm(DataNode *dm, char *json);
 };
 
