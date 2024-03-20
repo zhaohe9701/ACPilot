@@ -87,7 +87,7 @@ AC_RET Type::transTypeToStr(char *type_buf, AC_DATA_TYPE type)
     return AC_OK;
 }
 
-AC_RET Type::transDataToStr(char *data_buf, void *data, AC_DATA_TYPE type)
+AC_RET Type::transDataToStr(char *data_buf, void *data, uint16_t size, AC_DATA_TYPE type)
 {
     if (nullptr == data_buf)
     {
@@ -95,44 +95,44 @@ AC_RET Type::transDataToStr(char *data_buf, void *data, AC_DATA_TYPE type)
     }
     if (nullptr == data)
     {
-        snprintf(data_buf, DATA_BUF_LEN, "loss");
+        snprintf(data_buf, size, "loss");
         return AC_OK;
     }
 
     switch (type)
     {
         case AC_UINT8:
-            snprintf(data_buf, DATA_BUF_LEN, "%u", (*(uint8_t *)data));
+            snprintf(data_buf, size, "%u", (*(uint8_t *)data));
             break;
         case AC_UINT16:
-            snprintf(data_buf, DATA_BUF_LEN, "%u", (*(uint16_t *) data));
+            snprintf(data_buf, size, "%u", (*(uint16_t *) data));
             break;
         case AC_UINT32:
-            snprintf(data_buf, DATA_BUF_LEN, "%lu", (*(uint32_t *) data));
+            snprintf(data_buf, size, "%lu", (*(uint32_t *) data));
             break;
         case AC_INT8:
-            snprintf(data_buf, DATA_BUF_LEN, "%d", (*(int8_t *) data));
+            snprintf(data_buf, size, "%d", (*(int8_t *) data));
             break;
         case AC_INT16:
-            snprintf(data_buf, DATA_BUF_LEN, "%d", (*(int16_t *) data));
+            snprintf(data_buf, size, "%d", (*(int16_t *) data));
             break;
         case AC_INT32:
-            snprintf(data_buf, DATA_BUF_LEN, "%ld", (*(int32_t *) data));
+            snprintf(data_buf, size, "%ld", (*(int32_t *) data));
             break;
         case AC_FLOAT:
-            snprintf(data_buf, DATA_BUF_LEN, "%f", (*(float *) data));
+            snprintf(data_buf, size, "%f", (*(float *) data));
             break;
         case AC_DOUBLE:
-            snprintf(data_buf, DATA_BUF_LEN, "%f", (*(double *)data));
+            snprintf(data_buf, size, "%f", (*(double *)data));
             break;
         case AC_SWITCH:
-            snprintf(data_buf, DATA_BUF_LEN, "0x%x", (*(uint8_t *) data));
+            snprintf(data_buf, size, "0x%x", (*(uint8_t *) data));
             break;
         case AC_STRING:
-            snprintf(data_buf, DATA_BUF_LEN, "%s", (char*)data);
+            snprintf(data_buf, size, "%s", (char*)data);
             break;
         case AC_ENUM:
-            snprintf(data_buf, DATA_BUF_LEN, "%u", (*(uint16_t *) data));
+            snprintf(data_buf, size, "%u", (*(uint16_t *) data));
             break;
         default:
             return AC_ERROR;
@@ -236,3 +236,9 @@ AC_RET Type::transStrToData(char *data_buf, void *data, AC_DATA_TYPE type)
     }
     return AC_OK;
 }
+
+uint16_t Type::getAlignSize(uint16_t raw)
+{
+    return (raw + sizeof(int) - 1) &~ (sizeof(int) - 1);
+}
+

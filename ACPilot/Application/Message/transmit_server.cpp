@@ -6,11 +6,11 @@
 
 List<ComInterface*> MessageTransmitServer::_interface_list;
 Mailbox<ComMessage>* MessageTransmitServer::_mailbox = nullptr;
-BufPool *MessageTransmitServer::_buffer_pool = nullptr;
+MemoryPool *MessageTransmitServer::_buffer_pool = nullptr;
 
 AC_RET MessageTransmitServer::init()
 {
-    _buffer_pool = BufPoolManager::find("message");
+    _buffer_pool = MemoryPoolManager::find("message");
     _mailbox = MailboxManager::find<ComMessage>("send");
     if (nullptr == _buffer_pool || nullptr == _mailbox)
     {

@@ -7,15 +7,19 @@
 #include "Protocol/Crsf/crsf.h"
 #include "Memory/ac_memory.h"
 #include "Debug/ac_debug.h"
+#include "Json/ac_json.h"
+#include "DataModule/data_module.h"
 
 /******************对外暴露接口*****************/
 extern "C" void sysInit();
+
 /*********************************************/
 
 void sysInit()
 {
     /* 创建内存资源实例 */
-    new BufPool("message", MAX_MESSAGE_BUF_LEN, 30, true);
+    new MemoryPool("message", MAX_MESSAGE_BUF_LEN, 30, true);
+    new MemoryPool("json", sizeof(JsonTree), 50, true);
     /* 创建接收信箱实例 */
     new Mailbox<ComMessage>("receive", 10);
     /* 创建发送信箱实例 */
@@ -32,4 +36,6 @@ void sysInit()
     new CommandParser();
     /*初始化debug*/
     Debug::init();
+
+    DataModule::init(1024);
 }

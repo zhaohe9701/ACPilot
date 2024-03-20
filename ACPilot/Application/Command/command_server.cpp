@@ -3,13 +3,13 @@
 #include "Debug/print.h"
 #include "type.h"
 
-BufPool *CommandServer::_buffer_pool = nullptr;
+MemoryPool *CommandServer::_buffer_pool = nullptr;
 Mailbox<CommandMessage> *CommandServer::_mailbox = nullptr;
 List<Command*> CommandServer::_list;
 
 AC_RET CommandServer::init()
 {
-    _buffer_pool = BufPoolManager::find("message");
+    _buffer_pool = MemoryPoolManager::find("message");
     _mailbox = MailboxManager::find<CommandMessage>("command");
     if (nullptr == _buffer_pool || nullptr == _mailbox)
     {

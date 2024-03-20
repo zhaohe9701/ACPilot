@@ -9,6 +9,7 @@
  * Copyright (C) 2022 zhaohe. All rights reserved.
  */
 #include "ms5611.h"
+#include "os.h"
 #include <math.h>
 
 #define RESET 0x1E       // cmd 复位

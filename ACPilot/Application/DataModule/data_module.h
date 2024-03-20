@@ -1,46 +1,66 @@
 //
-// Created by zhaohe on 2023/12/10.
+// Created by zhaohe on 2024/1/22.
 //
 
 #ifndef DATA_MODULE_H_
 #define DATA_MODULE_H_
 
-#include "type.h"
-#include "data.h"
-#include "json.h"
 
-enum DM_REGION
+#include "Json/ac_json.h"
+#include "data_tree.h"
+
+enum DATA_MODULE_REG
 {
-    DM_CB_REGION = 0,
-    DM_DATA_REGION = 1,
-    DM_ARRAY_REGION = 2,
+    DATA_MODULE_NODE_STATIC,
+    DATA_MODULE_DATA_STATIC,
+    DATA_MODULE_NODE_DYNAMIC,
+    DATA_MODULE_DATA_DYNAMIC,
 };
 
 class DataModule
 {
 public:
-    static AC_RET load();
-    static AC_RET save();
     static AC_RET init(uint32_t size);
-    static uint32_t getFreeSize();
-    static void reset();
-    static DataNode *allocNode(const char *name, AC_DATA_TYPE type, uint16_t size);
-    static void *allocData(uint16_t size, DM_REGION reg = DM_DATA_REGION);
-    static DataNode *allocArray(const char *name, AC_DATA_TYPE type, uint16_t size);
-    static DataNode *copyWithoutData(DataNode *node);
-    static void syncAddr();
-    template<typename T>
-    static AC_RET read(const char *path, T *data);
-    template<typename T>
-    static AC_RET write(const char *path, T *data);
+
+    static AC_RET deInit();
+
+    static void clear();
+
+    static AC_RET load();
+
+    static AC_RET save();
+
+    static AC_RET create(JsonTree *data);
+
+    static AC_RET dump(char *buf, uint32_t len);
+
+    static AC_RET set(char *url, JsonTree *data);
+
+    static AC_RET get(char *url, JsonTree *data);
+
+    static AC_RET add(char *url, JsonTree *data);
+
+    static AC_RET del(char *url);
+
+    static AC_RET read(char *url, void *data, uint16_t size, AC_DATA_TYPE type);
+
+    static AC_RET write(char *url, void *data, uint16_t size, AC_DATA_TYPE type);
+
+    static DataTree *allocNode();
+
+    static void *alloc(uint16_t size);
+
+    static DataTree *copyTree(DataTree *src);
 private:
-    static uint8_t *_cb_addr;
-    static uint8_t *_data_addr;
-    static uint8_t *_array_addr;
-    static uint32_t _cb_offset;
-    static uint32_t _data_offset;
-    static uint32_t _array_offset;
-    static uint32_t _dm_size;
+    static uint8_t *_node_head;
+    static uint8_t *_data_head;
+    static uint8_t *_ptr;
+    static uint32_t _size;
+    static DataTree *_root;
+    static void _sync();
+    static DataTree *_findNode(char *url);
+
 };
+
 
 #endif //DATA_MODULE_H_

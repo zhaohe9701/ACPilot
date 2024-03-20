@@ -6,7 +6,6 @@
 #include "Sensor/Imu/icm42688.h"
 #include "Gpio/gpio_driver.h"
 #include "Usb/usb_driver.h"
-#include "DataModule/data_module.h"
 //UartHandle uart1_handle;
 //
 //void handleInit()
@@ -61,7 +60,7 @@ void boardInit()
 //    Usb::test();
     Board::usb = new Usb(0x01);
     Board::usb->init();
-    Board::usb->send((uint8_t*)"helloUSB\n", 9, 1000);
+    Board::usb->send((uint8_t *) "helloUSB\n", 9, 1000);
     test();
 //    Board::uart1 = new Uart(&huart1, 0x02);
 //    Board::uart1->init(USART1, 420000, UART_WORDLEN_8, UART_STOPBIT_10, UART_PARITY_N, UART_HW_CTRL_DISABLE);
@@ -87,24 +86,51 @@ void deviceInit()
 //    Spi *flash_spi = new Spi(Board::spi1_bus, Board::flash_cs_pin);
 }
 
+#include "Json/ac_json.h"
 #include "DataModule/data_module.h"
-#include "DataModule/data_node.h"
-#include "DataModule/json.h"
+
 void test()
 {
     printf("test\n");
-    char buf[200] = R"({"aircraft":{"weight":"uint32","size":[{"l":"int8","w":"int8"}],"max_speed":"uint32"},"remote":"uint8"})";
-    DataModule::init(2048);
-    DataNode *root = Json::createDm(buf);
-    char json[200] = {0};
-    Json::printDm(root, json, 200);
-    printf("RESULT:%s\n", json);
-    memset(json, 0, 200);
+    char buf[200] = R"({"aircraft":{"weight":"uint32","size[2]":[{"l":"int8","w":"int8"}],"max_speed":"uint32"},"remote":"uint8"})";
+    JsonTree *tree = Json::deserialize(buf);
+    if (nullptr == tree)
+    {
+        printf("deserialize error\n");
+    } else
+    {
+        printf("deserialize success\n");
+    }
     memset(buf, 0, 200);
-    strcpy(buf, R"({"aircraft":{"weight":"100","max_speed":"100"},"remote":"1"})");
-    Json::setToDm(root, buf);
-    Json::fromDm(root, json, 200);
-    printf("RESULT:%s\n", json);
+    Json::serialize(tree, buf, 200);
+    printf("serialize: %s\n", buf);
+
+    DataModule::create(tree);
+
+    printf("create finish\n");
+
+    memset(buf, 0, 200);
+
+    DataModule::dump(buf, 200);
+
+    printf("dataModule: %s\n", buf);
+
+    printf("int:%d\n", __alignof__(1));
+
+    typedef struct
+    {
+        uint64_t x;
+        uint8_t y;
+    } A;
+
+    printf("A:%d\n", sizeof(A));
+    printf("uint8 %d %d\n", alignof(uint8_t), Type::getAlignSize(sizeof(uint8_t)));
+    printf("uint16 %d %d\n", alignof(uint16_t), Type::getAlignSize(sizeof(uint16_t)));
+    printf("uint32 %d %d\n", alignof(uint32_t), Type::getAlignSize(sizeof(uint32_t)));
+    printf("uint64 %d %d\n", alignof(uint64_t), Type::getAlignSize(sizeof(uint64_t)));
+    printf("float %d %d\n", alignof(float), Type::getAlignSize(sizeof(float)));
+    printf("double %d %d\n", alignof(double), Type::getAlignSize(sizeof(double)));
+
 }
 
 

@@ -16,7 +16,7 @@ public:
 private:
     static Mailbox<CommandMessage> *_mailbox;
     static List<Command*> _list;
-    static BufPool *_buffer_pool;
+    static MemoryPool *_buffer_pool;
 };
 
 #endif

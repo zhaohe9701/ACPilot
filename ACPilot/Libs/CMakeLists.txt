@@ -1,6 +1,8 @@
 set(LIBS_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/Mail/mailbox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/MemoryPool/memory_pool.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Tree/ac_tree.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Json/ac_json.cpp
         )
 if(STM32)
         set(INCLUDES

@@ -6,7 +6,6 @@
 #define LIGHT_H_
 
 #include <stdint.h>
-#include "Json/json_tree.h"
 #include "Gpio/gpio_driver.h"
 
 enum LightPattern
@@ -33,7 +32,6 @@ public:
     explicit Led(Gpio* led, LightActiveLevel level = LowActive);
     void setPattern(LightPattern pattern);
     void run();
-    JsonTree *createIndex();
 private:
     void _breathe();
     void _slowFlashing();

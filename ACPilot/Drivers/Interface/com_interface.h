@@ -37,7 +37,7 @@ protected:
     uint8_t _port = 0x0;
     uint8_t *_receive_buffer = nullptr;
     uint8_t *_transmit_buffer = nullptr;
-    BufPool *_buffer_pool = nullptr;
+    MemoryPool *_buffer_pool = nullptr;
     Mailbox<ComMessage> *_recv_mail_box = nullptr;
 };
 

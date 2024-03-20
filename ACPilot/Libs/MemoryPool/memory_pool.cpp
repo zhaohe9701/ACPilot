@@ -6,9 +6,9 @@
 #include "Memory/ac_memory.h"
 #include "string.h"
 
-BufPool::BufPool(const char *name, uint32_t buf_len, uint32_t buf_num, bool allowed_dynamic)
+MemoryPool::MemoryPool(const char *name, uint32_t buf_len, uint32_t buf_num, bool allowed_dynamic)
 {
-    _queue = new AcQueue<uint8_t*>(MAX_BUF_NUM);
+    _queue = new AcQueue<uint8_t *>(MAX_BUF_NUM);
     strncpy(_name, name, BUF_POOL_NAME_LEN);
     uint8_t *buf = nullptr;
 
@@ -30,10 +30,10 @@ BufPool::BufPool(const char *name, uint32_t buf_len, uint32_t buf_num, bool allo
         memset(buf, 0, _buf_len);
         _queue->push(&buf, AC_IMMEDIATELY);
     }
-    BufPoolManager::add(this);
+    MemoryPoolManager::add(this);
 }
 
-bool BufPool::match(const char *name)
+bool MemoryPool::match(const char *name)
 {
     if (0 == strncmp(_name, name, BUF_POOL_NAME_LEN))
     {
@@ -42,7 +42,12 @@ bool BufPool::match(const char *name)
     return false;
 }
 
-uint8_t *BufPool::alloc()
+char *MemoryPool::getName()
+{
+    return _name;
+}
+
+uint8_t *MemoryPool::alloc()
 {
     uint8_t *buf = nullptr;
 
@@ -66,23 +71,23 @@ uint8_t *BufPool::alloc()
     }
 }
 
-void BufPool::free(uint8_t *buf)
+void MemoryPool::free(uint8_t *buf)
 {
     memset(buf, 0, _buf_len);
 //    debugPrintf("free:%p\n", buf);
     _queue->push(&buf, AC_IMMEDIATELY);
 }
 
-List<BufPool*> BufPoolManager::_list;
+List<MemoryPool *> MemoryPoolManager::_list;
 
-void BufPoolManager::add(BufPool *buf_pool)
+void MemoryPoolManager::add(MemoryPool *buf_pool)
 {
     _list.pushBack(buf_pool);
 }
 
-BufPool *BufPoolManager::find(const char *name)
+MemoryPool *MemoryPoolManager::find(const char *name)
 {
-    for (ListNode<BufPool*> *it = _list.begin(); it != _list.end(); it = it->getNext())
+    for (ListNode<MemoryPool *> *it = _list.begin(); it != _list.end(); it = it->getNext())
     {
         if ((**it)->match(name))
         {

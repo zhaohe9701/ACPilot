@@ -23,6 +23,7 @@
 #include <stdint.h>
 /*------------------------配置区------------------------*/
 
+#define BASE_DEBUG
 /*系统*/
 #define SEMAPHORE_NUM       5
 #define QUEUE_NUM           2
@@ -81,6 +82,7 @@
 #define MAX_MESSAGE_BUF_LEN         1024
 #define USB_PORT_NUMBER             0x01
 #define UART_PORT_NUMBER            0x02
+
 /*遥控*/
 #define MAX_CHANNEL_NUM             8
 

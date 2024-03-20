@@ -12,12 +12,12 @@
 #define MAX_DEBUG_BUF_LENGTH MAX_MESSAGE_BUF_LEN
 uint8_t Debug::_port = DEBUG_PORT;
 Mailbox<ComMessage> *Debug::_mail;
-BufPool *Debug::_buffer_pool;
+MemoryPool *Debug::_buffer_pool;
 
 AC_RET Debug::init()
 {
     _mail = MailboxManager::find<ComMessage>("send");
-    _buffer_pool = BufPoolManager::find("message");
+    _buffer_pool = MemoryPoolManager::find("message");
     return AC_OK;
 }
 

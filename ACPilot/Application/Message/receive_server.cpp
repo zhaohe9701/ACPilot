@@ -15,13 +15,13 @@
 #include "receive_server.h"
 #include "sys.h"
 
-BufPool *MessageReceiveServer::_buffer_pool = nullptr;
+MemoryPool *MessageReceiveServer::_buffer_pool = nullptr;
 Mailbox<ComMessage> *MessageReceiveServer::_mailbox = nullptr;
 List<MessageReceiveParser*> MessageReceiveServer::_parser_list;
 
 AC_RET MessageReceiveServer::init()
 {
-    _buffer_pool = BufPoolManager::find("message");
+    _buffer_pool = MemoryPoolManager::find("message");
     _mailbox = MailboxManager::find<ComMessage>("receive");
     if (nullptr == _buffer_pool || nullptr == _mailbox)
     {

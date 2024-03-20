@@ -52,24 +52,6 @@ AC_RET Imu::updateMag()
     return AC_NOT_SUPPORT;
 }
 
-JsonTree *Imu::CreateIndex()
-{
-    JsonTree *root = new JsonTree();
-    JsonTree *node = nullptr;
-
-    root->addData(nullptr, AC_STRUCT, "IMU");
-
-    node = new JsonTree();
-    node->addData((void *) &_name, AC_STRING, "type");
-    root->addChild(node);
-
-    node = new JsonTree();
-    node->addData((void *) &_id, AC_UINT8, "id");
-    root->addChild(node);
-
-    return root;
-}
-
 void Imu::_imuWriteRag(uint8_t address, uint8_t value)
 {
     _interface->writeReg(address & _WRITE, value);

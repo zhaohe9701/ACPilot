@@ -21,7 +21,7 @@ public:
 private:
     static List<ComInterface*> _interface_list;
     static Mailbox<ComMessage>* _mailbox;
-    static BufPool *_buffer_pool;
+    static MemoryPool *_buffer_pool;
 };
 
 #endif //TRANSMIT_SERVER_H_
