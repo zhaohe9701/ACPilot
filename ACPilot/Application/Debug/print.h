@@ -32,7 +32,7 @@ public:
 private:
     uint8_t _port = 0x00;
     Mailbox<ComMessage> *_mail = nullptr;
-    BufPool *_buffer_pool = nullptr;
+    MemoryPool *_buffer_pool = nullptr;
 };
 
 #endif

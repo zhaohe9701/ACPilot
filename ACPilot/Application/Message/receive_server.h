@@ -29,7 +29,7 @@ public:
 private:
     static AC_RET _select(ComMessage *message, uint32_t timeout = AC_FOREVER);
     static List<MessageReceiveParser*> _parser_list;
-    static BufPool *_buffer_pool;
+    static MemoryPool *_buffer_pool;
     static Mailbox<ComMessage> *_mailbox;
 };
 

@@ -6,7 +6,7 @@
 ComInterface::ComInterface(uint8_t port_num)
 {
     _port = port_num;
-    _buffer_pool = BufPoolManager::find("message");
+    _buffer_pool = MemoryPoolManager::find("message");
     _recv_mail_box = MailboxManager::find<ComMessage>("receive");
 }
 

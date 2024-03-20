@@ -11,7 +11,6 @@
 #ifndef REMOTE_CHANNEL_H_
 #define REMOTE_CHANNEL_H_
 
-#include "Json/json_tree.h"
 #include "config.h"
 #include "type.h"
 #include "remote_data.h"
@@ -37,7 +36,6 @@ public:
     void init(const char *name, ChannelType type, uint8_t channel, uint16_t thr1 = 0, uint16_t thr2 = 0);
     uint16_t map(uint16_t v);
     uint8_t getChannel();
-    JsonTree* createIndex();
 };
 
 class RemoteChannelMapper
@@ -46,7 +44,6 @@ private:
     RemoteChannel _map[CHANNEL_MAP_LEN];
 public:
     RemoteChannelMapper();
-    JsonTree* createIndex();
     AC_RET map(RemoteData &remote_data, UsualState &usual_state);
     AC_RET map(RemoteData &remote_data, ExpectAttitudeState &attitude_state);
     AC_RET map(RemoteData &remote_data, Altitude &altitude);

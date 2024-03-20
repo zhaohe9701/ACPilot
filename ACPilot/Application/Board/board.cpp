@@ -6,7 +6,6 @@
 #include "Sensor/Imu/icm42688.h"
 #include "Gpio/gpio_driver.h"
 #include "Usb/usb_driver.h"
-#include "DataModule/data_module.h"
 //UartHandle uart1_handle;
 //
 //void handleInit()
@@ -32,7 +31,7 @@ Uart *Board::uart1 = nullptr;
 Usb *Board::usb = nullptr;
 ExtInterrupt *Board::imu_interrupt = nullptr;
 
-void test();
+void test(void *param);
 
 void boardInit()
 {
@@ -61,8 +60,10 @@ void boardInit()
 //    Usb::test();
     Board::usb = new Usb(0x01);
     Board::usb->init();
-    Board::usb->send((uint8_t*)"helloUSB\n", 9, 1000);
-    test();
+    Board::usb->send((uint8_t *) "helloUSB\n", 9, 1000);
+
+    AcThread *test_thread = new AcThread("test", 4096, 24);
+    test_thread->run(test, nullptr);
 //    Board::uart1 = new Uart(&huart1, 0x02);
 //    Board::uart1->init(USART1, 420000, UART_WORDLEN_8, UART_STOPBIT_10, UART_PARITY_N, UART_HW_CTRL_DISABLE);
 //
@@ -87,24 +88,84 @@ void deviceInit()
 //    Spi *flash_spi = new Spi(Board::spi1_bus, Board::flash_cs_pin);
 }
 
+#include "Json/ac_json.h"
 #include "DataModule/data_module.h"
-#include "DataModule/data_node.h"
-#include "DataModule/json.h"
-void test()
+
+void test(void *param)
 {
     printf("test\n");
-    char buf[200] = R"({"aircraft":{"weight":"uint32","size":[{"l":"int8","w":"int8"}],"max_speed":"uint32"},"remote":"uint8"})";
-    DataModule::init(2048);
-    DataNode *root = Json::createDm(buf);
-    char json[200] = {0};
-    Json::printDm(root, json, 200);
-    printf("RESULT:%s\n", json);
-    memset(json, 0, 200);
-    memset(buf, 0, 200);
-    strcpy(buf, R"({"aircraft":{"weight":"100","max_speed":"100"},"remote":"1"})");
-    Json::setToDm(root, buf);
-    Json::fromDm(root, json, 200);
-    printf("RESULT:%s\n", json);
+    char buf[300] = R"({"aircraft":{"name":"string[10]","weight":"int8","size":{"l":"int8"},"max_speed":"uint32","remote":"uint8"}})";
+    JsonTree *tree = Json::deserialize(buf);
+    if (nullptr == tree)
+    {
+        printf("deserialize error\n");
+    } else
+    {
+        printf("deserialize success\n");
+    }
+    memset(buf, 0, 300);
+    Json::serialize(tree, buf, 300);
+    printf("serialize: %s\n", buf);
+
+    DataModule::create(tree);
+
+    printf("create finish\n");
+
+    Json::free(tree);
+
+    memset(buf, 0, 300);
+
+    if (AC_OK != DataModule::dumpStruct(buf, 300))
+    {
+        printf("dumpStruct error\n");
+    }
+
+    printf("dataModule Struct: %s\n", buf);
+
+    memset(buf, 0, 300);
+
+    tree = Json::alloc();
+
+    tree->setType(JSON_TYPE_ROOT);
+
+    DataModule::get("/aircraft", tree);
+
+    Json::serialize(tree, buf, 300);
+
+    Json::free(tree);
+
+    printf("get: %s\n", buf);
+
+    memset(buf, 0, 300);
+
+    strcpy(buf, R"({"aircraft":{"name":"111111","weight":"10","size":{"l":"20"}}})");
+
+    tree = Json::deserialize(buf);
+    if (nullptr == tree)
+    {
+        printf("set deserialize error\n");
+    }
+    DataModule::set("/aircraft", tree);
+
+    Json::free(tree);
+
+    memset(buf, 0, 300);
+
+    DataModule::dumpData(buf, 300);
+
+    printf("dataModule Data: %s\n", buf);
+
+    memset(buf, 0, 300);
+
+    DataModule::info(buf, 300);
+
+    printf("info: %s\n", buf);
+
+    printf("size: %d\n", sizeof(DataTree));
+    while (1)
+    {
+        tickSleep(1);
+    }
 }
 
 

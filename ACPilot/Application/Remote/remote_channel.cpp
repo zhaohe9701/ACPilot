@@ -1,6 +1,5 @@
 #include <string.h>
 #include "remote_channel.h"
-#include "Json/json_tree.h"
 #include "config.h"
 #include "type.h"
 #include "Memory/ac_memory.h"
@@ -49,55 +48,6 @@ uint8_t RemoteChannel::getChannel()
     return _channel;
 }
 
-JsonTree* RemoteChannel::createIndex()
-{
-    JsonTree* root = new JsonTree();
-    root->addData(nullptr, AC_STRUCT, _name);
-    JsonTree* node = nullptr;
-
-    node = new JsonTree();
-    node->addData(&_type, AC_UINT8, "channel");
-    root->addChild(node);
-
-    node = new JsonTree();
-    node->addData(&_type, AC_UINT8, "type");
-    root->addChild(node);
-
-    if (ANALOG == _type)
-    {
-        return root;
-    }
-
-    node = new JsonTree();
-    node->addData(&_thr1, AC_UINT16, "thr1");
-    root->addChild(node);
-
-    if (SWITCH2 == _type)
-    {
-        node = new JsonTree();
-        node->addData(&_thr2, AC_UINT16, "thr2");
-        root->addChild(node);
-    }
-
-    JsonTree* array = new JsonTree();
-    array->addData(nullptr, AC_ARRAY, "switch_map");
-    root->addChild(array);
-
-    node = new JsonTree();
-    node->addData(&_switch_map[0], AC_UINT8, "0");
-    array->addChild(node);
-    node = new JsonTree();
-    node->addData(&_switch_map[1], AC_UINT8, "1");
-    array->addChild(node);
-    if (SWITCH2 == _type)
-    {
-        node = new JsonTree();
-        node->addData(&_switch_map[2], AC_UINT8, "2");
-        array->addChild(node);
-    }
-    return root;
-}
-
 RemoteChannelMapper::RemoteChannelMapper()
 {
     _map[MODE_CHANNEL].init("mode", SWITCH2, 5, 3333, 6666);
@@ -109,19 +59,6 @@ RemoteChannelMapper::RemoteChannelMapper()
     _map[X_CHANNEL].init("x", ANALOG, 2);
     _map[Y_CHANNEL].init("y", ANALOG, 1);
     _map[Z_CHANNEL].init("z", ANALOG, 0);
-}
-
-JsonTree* RemoteChannelMapper::createIndex()
-{
-    JsonTree *root = new JsonTree();
-    root->addData(nullptr, AC_STRUCT, "channel_map");
-    JsonTree *node = nullptr;
-    for (int i = 0; i < CHANNEL_MAP_LEN; ++i)
-    {
-        node = _map[i].createIndex();
-        root->addChild(node);
-    }
-    return root;
 }
 
 AC_RET RemoteChannelMapper::map(RemoteData &remote_data, UsualState &usual_state)

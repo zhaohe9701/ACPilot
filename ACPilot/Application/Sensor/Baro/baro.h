@@ -12,7 +12,7 @@
 #define BARO_H_
 
 #include <stdint.h>
-#include "Json/json_tree.h"
+#include "type.h"
 
 class BaroData
 {
@@ -29,7 +29,6 @@ public:
     virtual AC_RET getTemperature(BaroData& data) = 0;
     virtual AC_RET getPressure(BaroData& data) = 0;
     virtual AC_RET getAltitude(BaroData& data) = 0;
-    JsonTree *createIndex();
 protected:
     char _name[PARAM_NAME_LEN] = "baro";
     AcSwitch _get_altitude_mark = AC_OFF;

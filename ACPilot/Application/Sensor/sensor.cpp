@@ -34,18 +34,3 @@ void Sensor::init()
     }
 }
 
-JsonTree *Sensor::createIndex()
-{
-    JsonTree *root = new JsonTree();
-    JsonTree *node = nullptr;
-
-    root->addData(nullptr, AC_STRUCT, "sensor");
-
-    node = imu->CreateIndex();
-    root->addChild(node);
-
-//    node = baro->createIndex();
-//    root->addChild(node);
-
-    return root;
-}

@@ -12,6 +12,7 @@
 #define TYPE_H_
 
 #include <stdint.h>
+#include <stdio.h>
 
 enum AC_RET
 {
@@ -23,6 +24,7 @@ enum AC_RET
 
 enum AC_DATA_TYPE
 {
+    AC_UNKNOWN = 0,
     AC_ROOT,
     AC_STRUCT,
     AC_ARRAY,
@@ -37,8 +39,8 @@ enum AC_DATA_TYPE
     AC_DOUBLE,
     AC_STRING,
     AC_NULL,
-    AC_SWITCH
-
+    AC_SWITCH,
+    AC_DATA,
 };
 
 enum AC_RELATION
@@ -80,10 +82,15 @@ class Type
 {
 public:
     static AC_RET transTypeToStr(char *type_buf, AC_DATA_TYPE type);
-    static AC_RET transDataToStr(char *data_buf, void *data, AC_DATA_TYPE type);
+
+    static AC_RET transDataToStr(char *data_buf, uint16_t len, void *data, AC_DATA_TYPE type);
+
     static uint16_t transStrToType(char *type_buf, AC_DATA_TYPE &type);
-    static AC_RET transStrToData(char *data_buf, void *data, AC_DATA_TYPE type);
+
+    static AC_RET transStrToData(char *data_buf, uint16_t len, void *data, AC_DATA_TYPE type);
 };
+
+void TypeTest(char *data_buf, void *data, AC_DATA_TYPE type);
 
 typedef uint32_t Condition;
 typedef uint8_t Byte;
@@ -92,4 +99,5 @@ typedef uint8_t AcSwitch;
 #define AC_ON 1
 #define AC_OFF 0
 
+#define ALIGN_VALUE 8
 #endif

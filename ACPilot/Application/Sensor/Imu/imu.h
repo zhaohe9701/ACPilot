@@ -12,7 +12,6 @@
 #ifndef IMU_H_
 #define IMU_H_
 
-#include "Json/json_tree.h"
 #include "Interface/device_interface.h"
 #include "type.h"
 #include "Device/accelerometer.h"
@@ -56,8 +55,6 @@ public:
     virtual AC_RET updateAcc();
 
     virtual AC_RET updateMag();
-
-    JsonTree *CreateIndex();
 
 protected:
     uint8_t _id = 0x00;

@@ -46,15 +46,12 @@ private:
     /*当前动作*/
 
     RemoteChannelMapper *_channel_maper = nullptr;
-    JsonTree *_index = nullptr;
 
     RemoteData _current_remote;
 public:
     Mailbox<RemoteData> remote_data_manager;
     Aircraft();
     AC_RET init();
-    JsonTree *createIndex();
-    JsonTree *getIndex();
     AC_RET getRemoteCommand();
     AC_RET getAccAndGyro();
     AC_RET getAltitude();
