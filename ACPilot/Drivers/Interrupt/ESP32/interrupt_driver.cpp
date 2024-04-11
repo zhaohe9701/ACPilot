@@ -13,7 +13,6 @@ void extInterruptHandle(void *arg)
 ExtInterrupt::ExtInterrupt(ExtInterruptHandle *handle)
 {
     _handle = handle;
-    ExtInterruptManager::add(this);
 }
 
 AC_RET ExtInterrupt::init()
@@ -42,23 +41,4 @@ void ExtInterrupt::notify()
 AC_RET ExtInterrupt::waitNotify(uint32_t timeout)
 {
     return sem.get(timeout);
-}
-
-List<ExtInterrupt*> ExtInterruptManager::_list;
-
-void ExtInterruptManager::add(ExtInterrupt *interrupt)
-{
-    _list.pushBack(interrupt);
-}
-
-ExtInterrupt* ExtInterruptManager::find(GpioPin pin)
-{
-    for (ListNode<ExtInterrupt*> *it = _list.begin(); it != _list.end(); it = it->getNext())
-    {
-        if ((**it)->matchPin(pin))
-        {
-            return (**it);
-        }
-    }
-    return nullptr;
 }

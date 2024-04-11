@@ -12,6 +12,7 @@
 #include "Sensor/Imu/imu.h"
 #include "Interrupt/interrupt_driver.h"
 #include "Sensor/Baro/dps310.h"
+#include "Wlan/udp.h"
 
 class Board
 {
@@ -24,7 +25,9 @@ public:
 
     static SpiBus *spi1_bus;
     static Uart *uart1;
+    static Uart *uart2;
     static Usb *usb;
+    static Udp *udp;
     static ExtInterrupt *imu_interrupt;
 
     static Led *led;

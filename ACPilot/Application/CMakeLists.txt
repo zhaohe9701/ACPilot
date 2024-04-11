@@ -1,18 +1,11 @@
 set(APP_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/AircraftState/aircraft_state.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Actuator/Motor/motor.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/AdvancedThread/advanced_thread.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/AHRS/mahony.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Board/board.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Control/AttitudeControl/default_attitude_controller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Control/pid_core.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Command/command.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Command/SysCommand/command_config.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Command/command_parser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Command/command_server.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Debug/ac_debug.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Message/receive_server.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Message/transmit_server.cpp
 #        ${CMAKE_CURRENT_SOURCE_DIR}/Protocol/Dshot/dshot.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Protocol/Ibus/ibus.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Protocol/Crsf/crsf.cpp
@@ -27,14 +20,11 @@ set(APP_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Mag/ak09916.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/imu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Baro/baro.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/StateMachine/state_machine.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/SysTask/task_init.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/SysTask/sys_init.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/SysTask/test_task.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Light/light.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Filter/filter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/DataModule/data_module.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/DataModule/data_tree.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Device/device.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Device/accelerometer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Device/gyroscope.cpp
@@ -57,6 +47,6 @@ if(STM32)
 else()
         idf_component_register(SRCS ${APP_SOURCES}
                 INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}
-                REQUIRES "Common" "Osal" "Libs" "Drivers")
+                REQUIRES "Common" "Osal" "Utils" "Drivers" "Framework" "Service" "Component")
 endif()
 

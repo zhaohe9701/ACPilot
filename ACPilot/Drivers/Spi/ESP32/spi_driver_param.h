@@ -11,10 +11,10 @@
 #ifndef SPI_DRIVER_PARAM_H_
 #define SPI_DRIVER_PARAM_H_
 
-#include "Interface/device_interface.h"
+#include "IO/device_interface.h"
 #include "driver/spi_master.h"
 #include "Gpio/gpio_driver.h"
-#include "List/ac_list.h"
+#include "ac_list.h"
 #include "Semaphore/ac_semaphore.h"
 #include "Mutex/ac_mutex.h"
 #include <string.h>

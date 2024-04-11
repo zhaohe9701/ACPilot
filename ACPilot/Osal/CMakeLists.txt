@@ -1,5 +1,4 @@
 set(OSAL_SOURCES
-        ${CMAKE_CURRENT_SOURCE_DIR}/Action/ac_action.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Critical/ac_critical.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Memory/ac_memory.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Semaphore/ac_semaphore.cpp

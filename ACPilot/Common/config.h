@@ -18,8 +18,8 @@
  * @FilePath: \ZH_FLIGHT\Sys\Config\config.h
  * Copyright (C) 2022 zhaohe. All rights reserved.
  */
-#ifndef __CONFIG_H__
-#define __CONFIG_H__
+#ifndef CONFIG_H_
+#define CONFIG_H_
 #include <stdint.h>
 /*------------------------配置区------------------------*/
 
@@ -31,8 +31,6 @@
 #define DEBUG_PORT          0x01
 
 /*状态机*/
-#define EVENT_NUM           8
-#define EVENT_QUEUE_LEN     4
 
 /*传感器*/
 #define IMU1                Icm42688
@@ -79,7 +77,10 @@
 #define MESSAGE_RECEIVE_QUEUE_LEN   5
 #define MESSAGE_QUEUE_MAX_LENGTH    10
 #define MAX_MESSAGE_PACKAGE_LENGTH  64
-#define MAX_MESSAGE_BUF_LEN         1024
+#define MAX_MESSAGE_BUF_LEN         2048
+#define MAX_UART_BUF_LEN            MAX_MESSAGE_BUF_LEN
+#define MAX_USB_BUF_LEN             MAX_MESSAGE_BUF_LEN
+#define MAX_UDP_BUF_LEN             MAX_MESSAGE_BUF_LEN
 #define USB_PORT_NUMBER             0x01
 #define UART_PORT_NUMBER            0x02
 

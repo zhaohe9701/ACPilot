@@ -38,19 +38,6 @@ private:
     AcMutex _mutex;
 };
 
-class SpiBusManager
-{
-public:
-    static void add(SpiBus *spi_bus);
-    static SpiBus* find(SpiBusHandle *handle);
-#ifdef C_STM32
-    static void writeFinishHandle(SpiBusHandle *handle);
-    static void readFinishHandle(SpiBusHandle *handle);
-#endif
-private:
-    static List<SpiBus*> _list;
-};
-
 class Spi : public DeviceInterface
 {
 public:

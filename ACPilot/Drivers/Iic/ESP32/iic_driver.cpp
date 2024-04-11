@@ -50,25 +50,6 @@ void IicBus::unlock()
     _mutex.unlock();
 }
 
-List<IicBus*> IicBusManager::_list;
-void IicBusManager::add(IicBus *iic_bus)
-{
-    _list.pushBack(iic_bus);
-}
-
-IicBus *IicBusManager::find(IicBusHandle *handle)
-{
-    for (ListNode<IicBus*> *it = _list.begin(); it != _list.end(); it = it->getNext())
-    {
-        if ((**it)->matchHandle(handle))
-        {
-            return (**it);
-        }
-    }
-    return nullptr;
-}
-
-
 Iic::Iic(IicBus *bus, IicHandle *handle)
 {
     _bus = bus;

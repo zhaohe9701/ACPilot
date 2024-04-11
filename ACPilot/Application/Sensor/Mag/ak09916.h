@@ -11,7 +11,7 @@
 #ifndef AK09916_H_
 #define AK09916_H_
 
-#include "Interface/device_interface.h"
+#include "IO/device_interface.h"
 #include "Device/magnetometer.h"
 
 class Ak09916

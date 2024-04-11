@@ -12,7 +12,9 @@
 #include "config.h"
 #include "hal/uart_ll.h"
 
-#define UART_TASK_INTERVAL 1
+#define UART_FREE_DELAY_US 300
+#define UART_RECEIVE_TASK_PRIO 25
+#define UART_RECEIVE_TASK_STACK 2000
 
 UartHandle::UartHandle()
 {
@@ -22,26 +24,44 @@ UartHandle::UartHandle()
 Uart::Uart(UartHandle *handle, uint8_t port_num) : ComInterface(port_num)
 {
     _port = port_num;
-    this->handle = handle;
-    UartManager::add(this);
+    this->_handle = handle;
 }
 
 AC_RET Uart::init()
 {
-    if (ESP_OK != uart_driver_install(handle->index, MAX_MESSAGE_BUF_LEN * 2, MAX_MESSAGE_BUF_LEN * 2, 0, nullptr, 0))
+    char name[PARAM_NAME_LEN] = {0};
+    QueueHandle queue = nullptr;
+    if (ESP_OK !=
+        uart_driver_install(_handle->index,
+                            MAX_UART_BUF_LEN * 2,
+                            MAX_UART_BUF_LEN * 2,
+                            MAX_UART_BUF_LEN / 8,
+                            &queue,
+                            0))
     {
         return AC_ERROR;
     }
-    if (ESP_OK != uart_param_config(handle->index, &handle->config))
+    _event_queue = new AcQueue<uart_event_t>(queue);
+    if (ESP_OK != uart_param_config(_handle->index, &_handle->config))
     {
         return AC_ERROR;
     }
+    if (ESP_OK != uart_set_pin(_handle->index, _handle->tx, _handle->rx, _handle->rts, _handle->cts))
+    {
+        return AC_ERROR;
+    }
+
+    snprintf(name, PARAM_NAME_LEN, "uart_%d", _handle->index);
+    _timer = new HardwareTimer(name, _timer_callback, this);
+    _timer->init();
+    _uart_task = new AcThread(name, UART_RECEIVE_TASK_STACK, UART_RECEIVE_TASK_PRIO);
+    _uart_task->run(_receive_task, this);
     return AC_OK;
 }
 
 AC_RET Uart::send(uint8_t *buf, uint16_t length, uint32_t timeout)
 {
-    if (length != uart_write_bytes_with_break(handle->index, buf, length, 10))
+    if (length != uart_write_bytes_with_break(_handle->index, buf, length, 10))
     {
         return AC_ERROR;
     }
@@ -60,11 +80,10 @@ AC_RET Uart::open()
  */
 bool Uart::match(UartHandle *handle)
 {
-    if (handle == this->handle)
+    if (handle == this->_handle)
     {
         return true;
-    }
-    else
+    } else
     {
         return false;
     }
@@ -77,82 +96,66 @@ bool Uart::match(uint8_t port_num)
 
 UartHandle *Uart::getHandle()
 {
-    return handle;
+    return _handle;
 }
 
-void Uart::check()
+void Uart::_check()
 {
-    uint32_t len = 0;
-    uart_get_buffered_data_len(handle->index, (size_t*)&len);
-    if (len != 0 && tmp_len == len)
+
+    if (!_timer->isActive())
     {
-        _receive_buffer = _buffer_pool->alloc();
-        uart_read_bytes(handle->index, _receive_buffer, MAX_MESSAGE_BUF_LEN, UART_TASK_INTERVAL);
-        receive(len);
-        tmp_len = 0;
+        _timer->start(UART_FREE_DELAY_US, TIMER_MODE_SINGLE);
     } else
     {
-        tmp_len = len;
+        _timer->stop();
+        _timer->start(UART_FREE_DELAY_US, TIMER_MODE_SINGLE);
     }
 }
 
-List<Uart*> UartManager::_list;
-bool UartManager::_is_running = false;
-AcMutex UartManager::_mutex;
-AcThread UartManager::_task{"uart_manager", 256, UART_MANAGER_TASK_PRIO};
-
-void UartManager::add(Uart *uart)
+void Uart::_receive_task(void *param)
 {
-    if (!_is_running)
-    {
-        _list.pushBack(uart);
-        _task.run(managerTask, nullptr);
-        _is_running = true;
-    } else
-    {
-        _mutex.lock();
-        _list.pushBack(uart);
-        _mutex.unlock();
-    }
-
-}
-
-Uart* UartManager::find(UartHandle *handle)
-{
-    for (ListNode<Uart*> *it = _list.begin(); it != _list.end(); it = it->getNext())
-    {
-        if ((**it)->match(handle))
-        {
-            return (**it);
-        }
-    }
-    return nullptr;
-}
-
-Uart* UartManager::find(uint8_t port_num)
-{
-    for (ListNode<Uart*> *it = _list.begin(); it != _list.end(); it = it->getNext())
-    {
-        if ((**it)->match(port_num))
-        {
-            return (**it);
-        }
-    }
-    return nullptr;
-}
-
-void UartManager::managerTask(void *pvParameters)
-{
+    Uart *uart = static_cast<Uart *>(param);
+    uart_event_t event;
     for (;;)
     {
-        Tick tick = getTick();
-        _mutex.lock();
-        for (ListNode<Uart*> *it = UartManager::_list.begin(); it != UartManager::_list.end(); it = it->getNext())
+        if (AC_OK == uart->_event_queue->pop(&event, AC_FOREVER))
         {
-            (**it)->check();
+            switch (event.type)
+            {
+                case UART_DATA:
+                    ((Uart *) param)->_check();
+                    break;
+                default:
+                    break;
+            }
         }
-        _mutex.unlock();
-        tickSleep(1);
     }
-    AcThread::killSelf();
+}
+
+void Uart::_timer_callback(void *param)
+{
+    Uart *uart = static_cast<Uart *>(param);
+    size_t len = 0;
+    uart_get_buffered_data_len(uart->_handle->index, &len);
+    uart->_recv_pool = MemoryPool::getGeneral(len);
+    uart->_recv_buffer = uart->_recv_pool->alloc();
+
+    if (nullptr == uart->_recv_buffer)
+    {
+        uart_flush_input(uart->_handle->index);
+        return;
+    }
+
+    len = uart_read_bytes(uart->_handle->index,
+                          uart->_recv_buffer,
+                          uart->_recv_pool->getSize(),
+                          AC_IMMEDIATELY);
+
+    if (len == 0 || AC_OK != uart->receive(len))
+    {
+        uart->_recv_pool->free(uart->_recv_buffer);
+        uart->_recv_buffer = nullptr;
+        uart->_recv_pool = nullptr;
+        return;
+    }
 }

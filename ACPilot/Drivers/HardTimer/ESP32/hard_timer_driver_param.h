@@ -5,15 +5,14 @@
 #ifndef HARD_TIMER_DRIVER_PARAM_H_
 #define HARD_TIMER_DRIVER_PARAM_H_
 
-#include "driver/gptimer.h"
+#include "esp_timer.h"
 #include "string.h"
 
-struct HardClockHandle
+struct HardTimerHandle
 {
-    HardClockHandle();
-    gptimer_config_t config{};
-    gptimer_handle_t handle = nullptr;
-    uint64_t tick = 0;
+    HardTimerHandle();
+    esp_timer_create_args_t config{};
+    esp_timer_handle_t handle = nullptr;
 };
 
 #endif //HARD_TIMER_DRIVER_PARAM_H_

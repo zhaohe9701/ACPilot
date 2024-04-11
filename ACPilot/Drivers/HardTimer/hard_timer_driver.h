@@ -10,11 +10,14 @@
 #endif
 
 #ifdef C_ESP32
+
 #include "ESP32/hard_timer_driver_param.h"
+
 #endif
 
 #include "type.h"
 #include "Semaphore/ac_semaphore.h"
+#include "Thread/ac_thread.h"
 
 enum TimerMode
 {
@@ -22,41 +25,23 @@ enum TimerMode
     TIMER_MODE_PERIODIC
 };
 
-class HardTimer;
-
-class HardClock
+class HardwareTimer
 {
 public:
-    explicit HardClock(HardClockHandle *handle);
+    HardwareTimer(const char *name,  TaskFunction cb, void *param);
+
     AC_RET init();
-    AC_RET start();
-    AC_RET stop();
-    void add(HardTimer *timer);
-    AC_RET remove(HardTimer *timer);
-    void tick();
-private:
-    HardClockHandle *_handle = nullptr;
-    HardTimer *_timer_list = nullptr;
-};
 
-class HardTimer
-{
-    friend class HardClock;
-public:
-    explicit HardTimer(HardClock *clock);
-    AC_RET start(uint32_t time, TimerMode mode);
+    AC_RET start(uint32_t timeout_us, TimerMode mode);
+
+    bool isActive();
+
     AC_RET stop();
-    AC_RET wait();
-    bool check();
+
+    AC_RET del();
 private:
-    HardTimer *_next = nullptr;
-    HardTimer *_prev = nullptr;
-    HardClock *_clock = nullptr;
-    TimerMode _mode = TIMER_MODE_SINGLE;
-    uint64_t _alarm_count = 0;
-    uint64_t _current_count = 0;
-    AcBinSemaphore _semaphore;
-    bool _is_running = false;
+    HardTimerHandle _handle{};
+    char  _name[PARAM_NAME_LEN] = {0};
 };
 
 #endif //HARD_TIMER_DRIVER_H_

@@ -92,9 +92,8 @@ public:
 
 void TypeTest(char *data_buf, void *data, AC_DATA_TYPE type);
 
-typedef uint32_t Condition;
-typedef uint8_t Byte;
 typedef uint8_t AcSwitch;
+typedef void (* TaskFunction)( void * );
 
 #define AC_ON 1
 #define AC_OFF 0

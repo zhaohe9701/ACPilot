@@ -13,7 +13,6 @@
 AcBinSemaphore::AcBinSemaphore()
 {
     _handle = xSemaphoreCreateBinary();
-    xSemaphoreGive (_handle);
 }
 
 AC_RET AcBinSemaphore::give()

@@ -15,8 +15,8 @@
 
 #include "type.h"
 #include "Mutex/ac_mutex.h"
-#include "List/ac_list.h"
-#include "Interface/device_interface.h"
+#include "ac_list.h"
+#include "Io/device_interface.h"
 
 class IicBus
 {
@@ -41,19 +41,6 @@ private:
     AcBinSemaphore _write_sem;
 #endif
     AcMutex _mutex;
-};
-
-class IicBusManager
-{
-public:
-    static void add(IicBus *iic_bus);
-    static IicBus* find(IicBusHandle *handle);
-#ifdef C_STM32
-    static void writeFinishHandle(IicBusHandle *handle);
-    static void readFinishHandle(IicBusHandle *handle);
-#endif
-private:
-    static List<IicBus*> _list;
 };
 
 class Iic : public DeviceInterface

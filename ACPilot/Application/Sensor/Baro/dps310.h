@@ -2,7 +2,7 @@
 // Created by zhaohe on 2023/8/28.
 //
 #include "baro.h"
-#include "Interface/device_interface.h"
+#include "IO/device_interface.h"
 
 #ifndef DPS310_H_
 #define DPS310_H_

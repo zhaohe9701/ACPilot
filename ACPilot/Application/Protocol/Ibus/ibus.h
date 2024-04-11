@@ -11,8 +11,11 @@
 #ifndef IBUS_H_
 #define IBUS_H_
 
+#include "message.h"
 #include "Mail/mailbox.h"
 #include "Remote/remote_data.h"
+#include "Receive/receive_parser.h"
+#include "AircraftState/aircraft_state.h"
 
 #define IBUS_HEAD1          0x20
 #define IBUS_HEAD2          0x40
@@ -25,15 +28,14 @@
 
 #define IBUS_TRANS_CHANNEL_FROM_INT_TO_FLOAT(x) ((float)((x) - 1500) / 1500.0f)
 
-#include "Message/message_parser.h"
-#include "AircraftState/aircraft_state.h"
+
 
 class IbusParser : virtual public MessageReceiveParser
 {
 public:
     IbusParser();
     bool match(ComMessage &message) override;
-    AC_RET parseMessage(ComMessage &message) override;
+    AC_RET parse(ComMessage &message, bool &free_message) override;
 private:
     uint16_t _channel_data[IBUS_CHANNEL_NUM] = {0};
     Mailbox<RemoteData> *_manager = nullptr;

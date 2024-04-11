@@ -14,15 +14,15 @@
 #include "config.h"
 #include "Mail/mailbox.h"
 #include "Remote/remote_data.h"
-#include "Message/receive_server.h"
+#include "Receive/receive_server.h"
+
 
 #define IBUS_HEAD1 0x20
 #define IBUS_HEAD2 0x40
 
 IbusParser::IbusParser()
 {
-    _manager = MailboxManager::find<RemoteData>("remote");
-    MessageReceiveServer::add(this);
+    _manager = Mailbox<RemoteData>::find("remote");
 }
 
 bool IbusParser::match(ComMessage &message)
@@ -34,7 +34,7 @@ bool IbusParser::match(ComMessage &message)
     return false;
 }
 
-AC_RET IbusParser::parseMessage(ComMessage &message)
+AC_RET IbusParser::parse(ComMessage &message, bool &free_message)
 {
     RemoteData data;
 

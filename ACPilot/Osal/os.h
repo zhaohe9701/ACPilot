@@ -36,7 +36,7 @@ typedef TickType_t Tick;
 #define IS_IN_IRQ() (true == xPortInIsrContext())
 
 #define tickSleep(tick) vTaskDelay((tick))
-#define tickSleepUntil(tick, increment) vTaskDelayUntil((tick, increment))
+#define tickSleepUntil(tick, increment) vTaskDelayUntil(tick, increment)
 #define getTick() xTaskGetTickCount()
 #define msToTick(ms) (pdMS_TO_TICKS(ms))
 #endif

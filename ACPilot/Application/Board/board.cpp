@@ -6,20 +6,50 @@
 #include "Sensor/Imu/icm42688.h"
 #include "Gpio/gpio_driver.h"
 #include "Usb/usb_driver.h"
-//UartHandle uart1_handle;
-//
-//void handleInit()
-//{
-//    uart1_handle.index = UART_NUM_1;
-//    uart1_handle.config.baud_rate = 115200;
-//    uart1_handle.config.data_bits = UART_DATA_8_BITS;
-//    uart1_handle.config.parity = UART_PARITY_DISABLE;
-//    uart1_handle.config.stop_bits = UART_STOP_BITS_1;
-//    uart1_handle.config.flow_ctrl = UART_HW_FLOWCTRL_DISABLE;
-//    uart1_handle.config.source_clk = UART_SCLK_DEFAULT;
-//    uart1_handle.tx = GPIO_NUM_4;
-//    uart1_handle.rx = GPIO_NUM_5;
-//}
+#include "Wlan/wlan_driver.h"
+
+/* uart */
+UartHandle esp32_mini_uart1_handle;
+UartHandle esp32_mini_uart2_handle;
+/* wlan */
+WlanHandle wlan_handle;
+/* udp */
+UdpHandle udp_handle;
+
+void uartHandleInit()
+{
+    esp32_mini_uart1_handle.index = UART_NUM_1;
+    esp32_mini_uart1_handle.config.baud_rate = 921600;
+    esp32_mini_uart1_handle.config.data_bits = UART_DATA_8_BITS;
+    esp32_mini_uart1_handle.config.parity = UART_PARITY_DISABLE;
+    esp32_mini_uart1_handle.config.stop_bits = UART_STOP_BITS_1;
+    esp32_mini_uart1_handle.config.flow_ctrl = UART_HW_FLOWCTRL_DISABLE;
+    esp32_mini_uart1_handle.config.source_clk = UART_SCLK_DEFAULT;
+    esp32_mini_uart1_handle.tx = GPIO_NUM_17;
+    esp32_mini_uart1_handle.rx = GPIO_NUM_18;
+
+    esp32_mini_uart2_handle.index = UART_NUM_2;
+    esp32_mini_uart2_handle.config.baud_rate = 921600;
+    esp32_mini_uart2_handle.config.data_bits = UART_DATA_8_BITS;
+    esp32_mini_uart2_handle.config.parity = UART_PARITY_DISABLE;
+    esp32_mini_uart2_handle.config.stop_bits = UART_STOP_BITS_1;
+    esp32_mini_uart2_handle.config.flow_ctrl = UART_HW_FLOWCTRL_DISABLE;
+    esp32_mini_uart2_handle.config.source_clk = UART_SCLK_DEFAULT;
+    esp32_mini_uart2_handle.tx = GPIO_NUM_35;
+    esp32_mini_uart2_handle.rx = GPIO_NUM_36;
+}
+
+void wlanHandleInit()
+{
+    wlan_handle.mode = WLAN_MODE_STA;
+    strcpy((char *) wlan_handle.config.sta.ssid, "ZGL_2G");
+    strcpy((char *) wlan_handle.config.sta.password, "77140019");
+}
+
+void udpHandleInit()
+{
+    udp_handle.port = 8888;
+}
 
 Gpio *Board::imu_cs_pin = nullptr;
 Gpio *Board::baro_cs_pin = nullptr;
@@ -28,47 +58,34 @@ Gpio *Board::led_pin = nullptr;
 Gpio *Board::imu_interrupt_pin = nullptr;
 SpiBus *Board::spi1_bus = nullptr;
 Uart *Board::uart1 = nullptr;
+Uart *Board::uart2 = nullptr;
 Usb *Board::usb = nullptr;
+Udp *Board::udp = nullptr;
 ExtInterrupt *Board::imu_interrupt = nullptr;
 
 void test(void *param);
 
 void boardInit()
 {
-//    /* gpio */
-//    Gpio::enable();
-//    Board::imu_cs_pin = new Gpio(IMU1_CS_GPIO_Port, IMU1_CS_Pin, GPIO_SET);
-//    Board::imu_cs_pin->init(GPIO_PUSH_PULL, GPIO_NO_PULL, GPIO_HIGH_SPEED);
-//
-//    Board::baro_cs_pin = new Gpio(BARO_CS_GPIO_Port, BARO_CS_Pin, GPIO_SET);
-//    Board::baro_cs_pin->init(GPIO_PUSH_PULL, GPIO_NO_PULL, GPIO_HIGH_SPEED);
-//
-//    Board::flash_cs_pin = new Gpio(FLASH_CS_GPIO_Port, FLASH_CS_Pin, GPIO_SET);
-//    Board::flash_cs_pin->init(GPIO_PUSH_PULL, GPIO_NO_PULL, GPIO_HIGH_SPEED);
-//
-//    Board::led_pin = new Gpio(LED_GPIO_Port, LED_Pin, GPIO_RESET);
-//    Board::led_pin->init(GPIO_OPEN_DRAIN, GPIO_NO_PULL, GPIO_LOW_SPEED);
-//
-//    Board::imu_interrupt_pin = new Gpio(SPI1_EXIT_GPIO_Port, SPI1_EXIT_Pin, GPIO_NONE);
-//    Board::imu_interrupt_pin->init(GPIO_IT_RISING, GPIO_NO_PULL, GPIO_NONE_SPEED);
-//    MX_DMA_Init();
-//    MX_TIM8_Init();
-//
-//    Board::spi1_bus = new SpiBus();
-//    Board::spi1_bus->init(SPI1, SPI_PRESCALER_16, SPI_CPOL_HIGH, SPI_CPHA_2);
-//
-//    Usb::test();
+
     Board::usb = new Usb(0x01);
     Board::usb->init();
-    Board::usb->send((uint8_t *) "helloUSB\n", 9, 1000);
+
+    uartHandleInit();
+    Board::uart1 = new Uart(&esp32_mini_uart1_handle, 0x02);
+    Board::uart1->init();
+    Board::uart2 = new Uart(&esp32_mini_uart2_handle, 0x03);
+    Board::uart2->init();
+
+    udpHandleInit();
+    Board::udp = new Udp(&udp_handle, 0x04);
+    Board::udp->init();
+
+    wlanHandleInit();
+    WlanDriver::init(&wlan_handle);
 
     AcThread *test_thread = new AcThread("test", 4096, 24);
     test_thread->run(test, nullptr);
-//    Board::uart1 = new Uart(&huart1, 0x02);
-//    Board::uart1->init(USART1, 420000, UART_WORDLEN_8, UART_STOPBIT_10, UART_PARITY_N, UART_HW_CTRL_DISABLE);
-//
-//    Board::imu_interrupt = new ExtInterrupt(Board::imu_interrupt_pin, 5);
-//    Board::imu_interrupt->init();
 }
 
 Led *Board::led = nullptr;
@@ -89,82 +106,124 @@ void deviceInit()
 }
 
 #include "Json/ac_json.h"
-#include "DataModule/data_module.h"
+#include "DataModule/data_module_framework.h"
+#include "MemoryPool/memory_pool_framework.h"
+#include "Thread/thread_framework.h"
+#include "Memory/ac_memory.h"
+
+#pragma pack(1)
+
+typedef struct
+{
+    char name[10];
+    int8_t weight;
+    struct
+    {
+        int8_t l;
+    } size[5];
+    uint32_t max_speed;
+    uint8_t remote;
+} Aircraft;
+
+#pragma pack()
 
 void test(void *param)
 {
     printf("test\n");
-    char buf[300] = R"({"aircraft":{"name":"string[10]","weight":"int8","size":{"l":"int8"},"max_speed":"uint32","remote":"uint8"}})";
-    JsonTree *tree = Json::deserialize(buf);
-    if (nullptr == tree)
-    {
-        printf("deserialize error\n");
-    } else
-    {
-        printf("deserialize success\n");
-    }
-    memset(buf, 0, 300);
-    Json::serialize(tree, buf, 300);
-    printf("serialize: %s\n", buf);
+    char buf[2048] = R"({"aircraft":{"name":"string[10]","weight":"int8","size[5]":[{"l":"int8"}],"max_speed":"uint32","remote":"uint8"}})";
+//    JsonTree *tree = Json::deserialize(buf);
+//    if (nullptr == tree)
+//    {
+//        printf("deserialize error\n");
+//    } else
+//    {
+//        printf("deserialize success\n");
+//    }
+//    memset(buf, 0, 2048);
+//    Json::serialize(tree, buf, 2048);
+//    printf("serialize: %s\n", buf);
+//
+    DataModuleFramework::create(buf);
+//
+//    printf("create finish\n");
+//
+//    Json::free(tree);
+//
+//
+//    memset(buf, 0, 2048);
+//
+//    if (AC_OK != DataModule::dumpStruct(buf, 2048))
+//    {
+//        printf("dumpStruct error\n");
+//    }
+//
+//    printf("dataModule Struct: %s\n", buf);
+//
+//    memset(buf, 0, 2048);
+//
+//    MemoryPoolManager::info(buf, 2048);
+//
+//    printf("info: %s\n", buf);
+//
+//    memset(buf, 0, 2048);
+//
+//    DataModule::get("/aircraft", buf, 2048);
+//
+//    printf("get: %s\n", buf);
+//
+//    DataModule::set(R"(/aircraft)", R"({"aircraft":{"name":"111111","weight":"10"}})");
+//
+//    DataModule::add(R"(/aircraft/size[5])", R"({"size[5]":[{"l":"10"},{"l":"20"}]})");
+//
+//    DataModule::del(R"(/aircraft/size[5]/1)");
+//
+//    memset(buf, 0, 2048);
+//    DataModule::dumpData(buf, 2048);
+//
+//    printf("dataModule Data: %s\n", buf);
+//
+//    memset(buf, 0, 2048);
+//
+//    DataModule::info(buf, 2048);
+//
+//    printf("%s\n", buf);
+//
+//    printf("size: %d\n", sizeof(DataTree));
+//
+//    Aircraft aircraft;
+//
+//    DataModule::read(R"(/aircraft)", &aircraft, sizeof(Aircraft));
+//
+//    printf("name: %s, weight: %d, size: %d, max_speed: %lu, remote: %d\n", aircraft.name, aircraft.weight, aircraft.size[0].l, aircraft.max_speed, aircraft.remote);
+//
+//    aircraft.weight = 20;
+//
+//    DataModule::write(R"(/aircraft)", &aircraft, sizeof(Aircraft));
+//
+//    memset(buf, 0, 2048);
+//    DataModule::dumpData(buf, 2048);
+//
+//    printf("dataModule Data: %s\n", buf);
+//
+    memset(buf, 0, 2048);
 
-    DataModule::create(tree);
+    MemoryPoolManager::info(buf, 2048);
 
-    printf("create finish\n");
+    printf("%s\n", buf);
+//
+//    tickSleep(1000);
+//    memset(buf, 0, 2048);
+//
+//    ThreadManager::info(buf, 2048);
+//
+//    printf("%s\n", buf);
 
-    Json::free(tree);
+    printf("Memory size:now:%lu min:%lu\n", Memory::getFreeHeapSize(), Memory::getMinimumFreeHeapSize());
+    printf("sp_get_free_internal_heap_size = %ld\n\r", esp_get_free_internal_heap_size());
 
-    memset(buf, 0, 300);
-
-    if (AC_OK != DataModule::dumpStruct(buf, 300))
-    {
-        printf("dumpStruct error\n");
-    }
-
-    printf("dataModule Struct: %s\n", buf);
-
-    memset(buf, 0, 300);
-
-    tree = Json::alloc();
-
-    tree->setType(JSON_TYPE_ROOT);
-
-    DataModule::get("/aircraft", tree);
-
-    Json::serialize(tree, buf, 300);
-
-    Json::free(tree);
-
-    printf("get: %s\n", buf);
-
-    memset(buf, 0, 300);
-
-    strcpy(buf, R"({"aircraft":{"name":"111111","weight":"10","size":{"l":"20"}}})");
-
-    tree = Json::deserialize(buf);
-    if (nullptr == tree)
-    {
-        printf("set deserialize error\n");
-    }
-    DataModule::set("/aircraft", tree);
-
-    Json::free(tree);
-
-    memset(buf, 0, 300);
-
-    DataModule::dumpData(buf, 300);
-
-    printf("dataModule Data: %s\n", buf);
-
-    memset(buf, 0, 300);
-
-    DataModule::info(buf, 300);
-
-    printf("info: %s\n", buf);
-
-    printf("size: %d\n", sizeof(DataTree));
     while (1)
     {
-        tickSleep(1);
+        tickSleep(10000);
     }
 }
 

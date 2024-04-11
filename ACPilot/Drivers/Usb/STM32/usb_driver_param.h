@@ -13,7 +13,7 @@
 #define USB_DRIVER_PARAM_H_
 
 #include <stdint.h>
-#include "Interface/com_interface.h"
+#include "Com/com_interface.h"
 #include "config.h"
 #include "type.h"
 

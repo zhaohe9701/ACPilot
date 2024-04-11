@@ -16,8 +16,8 @@ MemoryPool *Debug::_buffer_pool;
 
 AC_RET Debug::init()
 {
-    _mail = MailboxManager::find<ComMessage>("send");
-    _buffer_pool = MemoryPoolManager::find("message");
+    _mail = Mailbox<ComMessage>::find("send");
+    _buffer_pool = MemoryPool::find("message");
     return AC_OK;
 }
 

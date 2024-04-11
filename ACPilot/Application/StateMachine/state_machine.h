@@ -13,7 +13,7 @@
 
 #include <stdint.h>
 #include "type.h"
-#include "List/ac_list.h"
+#include "ac_list.h"
 #include "Action/ac_action.h"
 #include "config.h"
 #include "Mail/mailbox.h"

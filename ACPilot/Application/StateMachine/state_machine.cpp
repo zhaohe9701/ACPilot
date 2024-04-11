@@ -9,7 +9,7 @@
  * Copyright (C) 2022 zhaohe. All rights reserved.
  */
 #include "state_machine.h"
-#include "List/ac_list.h"
+#include "ac_list.h"
 #include "Memory/ac_memory.h"
 
 void EventGroup::set(const EventSet event)
@@ -86,7 +86,7 @@ ActionGroup State::getAction()
 
 StateMachine::StateMachine()
 {
-    _event_manager = MailboxManager::find<Event>("event");
+    _event_manager = Mailbox<Event>::find("event");
     _action_manager = new ActionManager();
 }
 

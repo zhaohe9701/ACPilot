@@ -25,7 +25,7 @@ public:
     AC_RET push(T *data, uint32_t timeout = AC_FOREVER);
     AC_RET pop(T *data, uint32_t timeout = AC_FOREVER);
     void reset();
-    uint32_t getWaitingNum();
+    uint32_t getNum();
     QueueHandle getHandle();
     ~AcQueue();
 private:
@@ -40,7 +40,7 @@ AcQueue<T>::AcQueue(QueueHandle handle)
 
 
 template<class T>
-uint32_t AcQueue<T>::getWaitingNum()
+uint32_t AcQueue<T>::getNum()
 {
     if (IS_IN_IRQ())
     {

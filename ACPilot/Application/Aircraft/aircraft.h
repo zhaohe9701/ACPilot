@@ -18,7 +18,6 @@
 #include "config.h"
 #include "Control/AttitudeControl/default_attitude_controller.h"
 #include "AHRS/ahrs.h"
-#include "StateMachine/state_machine.h"
 #include "Mail/mailbox.h"
 #include "Actuator/actuator_data.h"
 #include "Remote/remote_data.h"

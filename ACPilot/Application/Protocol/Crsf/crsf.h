@@ -1,7 +1,7 @@
 #ifndef CRSF_H_
 #define CRSF_H_
 
-#include "Message/message_parser.h"
+#include "Receive/receive_parser.h"
 #include "Remote/remote_data.h"
 #include "Mail/mailbox.h"
 #include "type.h"
@@ -17,7 +17,7 @@ class CrsfParser : virtual public MessageReceiveParser
 public:
     CrsfParser();
     bool match(ComMessage &message) override;
-    AC_RET parseMessage(ComMessage &message) override;
+    AC_RET parse(ComMessage &message, bool &free_message) override;
 private:
     uint16_t _channel_data[CRSF_CHANNEL_NUM] = {0};
     Mailbox<RemoteData> *_manager = nullptr;

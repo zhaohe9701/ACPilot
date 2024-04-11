@@ -13,7 +13,7 @@
 #include "type.h"
 #include <string.h>
 #include "Debug/ac_debug.h"
-#include "Message/receive_server.h"
+#include "Receive/receive_server.h"
 
 #define getBitByPosition(x, n) (((x) >> (n)) & 1)
 
@@ -34,8 +34,7 @@ AC_RET CrsfParser::_decode(const uint8_t *bin, uint16_t *axis, int bit_num, int 
 
 CrsfParser::CrsfParser()
 {
-    _manager = MailboxManager::find<RemoteData>("remote");
-    MessageReceiveServer::add(this);
+    _manager = Mailbox<RemoteData>::find("remote");
 }
 
 bool CrsfParser::match(ComMessage &message)
@@ -47,7 +46,7 @@ bool CrsfParser::match(ComMessage &message)
     return false;
 }
 
-AC_RET CrsfParser::parseMessage(ComMessage &message)
+AC_RET CrsfParser::parse(ComMessage &message, bool &free_message)
 {
     RemoteData data;
 

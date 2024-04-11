@@ -12,7 +12,7 @@
 #ifndef IMU_H_
 #define IMU_H_
 
-#include "Interface/device_interface.h"
+#include "IO/device_interface.h"
 #include "type.h"
 #include "Device/accelerometer.h"
 #include "Device/gyroscope.h"

@@ -11,7 +11,7 @@
 #ifndef MS5611_H_
 #define MS5611_H_
 
-#include "Interface/device_interface.h"
+#include "IO/device_interface.h"
 #include "Sensor/Baro/baro.h"
 
 #define MS5611_ADDR 0xEE // MS5611的地址

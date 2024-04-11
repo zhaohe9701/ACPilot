@@ -13,7 +13,7 @@
 #include "ESP32/interrupt_driver_param.h"
 #endif
 
-#include "List/ac_list.h"
+#include "ac_list.h"
 #include "Semaphore/ac_semaphore.h"
 #include "Gpio/gpio_driver.h"
 
@@ -29,15 +29,6 @@ private:
     ExtInterruptHandle *_handle = nullptr;
     AcBinSemaphore sem;
 
-};
-
-class ExtInterruptManager
-{
-public:
-    static void add(ExtInterrupt *interrupt);
-    static ExtInterrupt* find(GpioPin pin);
-private:
-    static List<ExtInterrupt*> _list;
 };
 
 #endif //INTERRUPT_DRIVER_H_

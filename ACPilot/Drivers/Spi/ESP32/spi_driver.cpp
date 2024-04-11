@@ -48,24 +48,6 @@ void SpiBus::unlock()
     _mutex.unlock();
 }
 
-List<SpiBus*> SpiBusManager::_list;
-void SpiBusManager::add(SpiBus *spi_bus)
-{
-    _list.pushBack(spi_bus);
-}
-
-SpiBus* SpiBusManager::find(SpiBusHandle *handle)
-{
-    for (ListNode<SpiBus*> *it = _list.begin(); it != _list.end(); it = it->getNext())
-    {
-        if ((**it)->matchHandle(handle))
-        {
-            return (**it);
-        }
-    }
-    return nullptr;
-}
-
 Spi::Spi(SpiBus *bus, SpiHandle *handle)
 {
     _bus = bus;

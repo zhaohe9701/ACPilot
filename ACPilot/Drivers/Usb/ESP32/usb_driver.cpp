@@ -8,80 +8,102 @@
  * @FilePath: \ZH_FLIGHT\Sys\Driver\z_usb.cpp
  * Copyright (C) 2022 zhaohe. All rights reserved.
  */
+#include <hal/usb_serial_jtag_ll.h>
 #include "Usb/usb_driver.h"
 #include "driver/usb_serial_jtag.h"
+#include "default_debug.h"
 
-AcThread Usb::_task("usbTask", 512, USB_EVENT_TASK_PRIO);
+#define USB_FREE_DELAY_US 1000
+#define USB_RECEIVE_TASK_PRIO 25
+#define USB_RECEIVE_TASK_STACK 2000
 
-Usb::Usb(uint8_t port_num): ComInterface(port_num)
+Usb::Usb(uint8_t port_num) : ComInterface(port_num)
 {
-    UsbManager::add(this);
 }
 
 AC_RET Usb::init()
 {
     usb_serial_jtag_driver_config_t usb_cdc_config = {
-            .tx_buffer_size = MAX_MESSAGE_BUF_LEN,
-            .rx_buffer_size = MAX_MESSAGE_BUF_LEN,
+            .tx_buffer_size = MAX_USB_BUF_LEN,
+            .rx_buffer_size = MAX_USB_BUF_LEN,
     };
     if (ESP_OK != usb_serial_jtag_driver_install(&usb_cdc_config))
     {
         return AC_ERROR;
     }
+
+    _timer = new HardwareTimer("usb", _timer_callback, this);
+    _timer->init();
+    _usb_task = new AcThread("usb", USB_RECEIVE_TASK_STACK, USB_RECEIVE_TASK_PRIO);
+    _usb_task->run(_receive_task, this);
     return AC_OK;
 }
 
-AC_RET Usb::send(uint8_t* buf, uint16_t length, uint32_t timeout)
+AC_RET Usb::send(uint8_t *buf, uint16_t length, uint32_t timeout)
 {
+    if (nullptr == buf)
+    {
+        return AC_ERROR;
+    }
     usb_serial_jtag_write_bytes(buf, length, AC_FOREVER);
+    usb_serial_jtag_ll_txfifo_flush();
     return AC_OK;
 }
 
 AC_RET Usb::open()
 {
-    if (!_isOpen)
-    {
-        _isOpen = true;
-        _task.run(UsbManager::usbReceiveHandle, nullptr);
-    }
     return AC_OK;
 }
 
-void Usb::test()
+#define TMP_BUF_LEN 128
+
+void Usb::_receive_task(void *param)
 {
-    while(1)
+    Usb *usb = static_cast<Usb *>(param);
+    char tmp_buf[TMP_BUF_LEN] = {0};
+    for (;;)
     {
-        printf("test\n");
-        tickSleep(1000);
-    }
-
-}
-
-
-Usb* UsbManager::_usb = nullptr;
-
-void UsbManager::add(Usb *usb)
-{
-    _usb = usb;
-}
-
-void UsbManager::usbReceiveHandle(void *param)
-{
-    for(;;)
-    {
-        _usb->_receive_buffer = _usb->_buffer_pool->alloc();
-        int total_len = 0;
-        int len = 0;
-        uint8_t *buf = _usb->_receive_buffer;
-        do
+        char *buf = nullptr;
+        uint32_t len = 0;
+        if (usb->_current_len >= MAX_USB_BUF_LEN - 1)
         {
-            len = usb_serial_jtag_read_bytes(buf, MAX_MESSAGE_BUF_LEN - total_len - 1, AC_FOREVER);
-            total_len += len;
-            buf += len;
-        } while (_usb->_receive_buffer[total_len - 1] != '\n' && total_len < MAX_MESSAGE_BUF_LEN - 1);
-        _usb->receive(total_len);
+            usb->_current_len = 0;
+            memset(usb->_buf, 0, MAX_USB_BUF_LEN);
+        }
+
+        len = usb_serial_jtag_read_bytes(tmp_buf, TMP_BUF_LEN, AC_FOREVER);
+
+        if (!usb->_timer->isActive())
+        {
+            memcpy(usb->_buf, tmp_buf, len);
+            usb->_current_len = len;
+            usb->_timer->start(USB_FREE_DELAY_US, TIMER_MODE_SINGLE);
+        } else
+        {
+            memcpy(usb->_buf + usb->_current_len, tmp_buf, len);
+            usb->_current_len += len;
+        }
     }
-    AcThread::killSelf();
 }
+
+void Usb::_timer_callback(void *param)
+{
+    Usb *usb = static_cast<Usb *>(param);
+    uint32_t len = usb->_current_len;
+
+    usb->_recv_pool = MemoryPool::getGeneral(len);
+    usb->_recv_buffer = usb->_recv_pool->alloc();
+    if (nullptr == usb->_recv_buffer)
+    {
+        return;
+    }
+
+    memcpy(usb->_recv_buffer, usb->_buf, len);
+    usb->_recv_buffer[len] = '\0';
+    usb->receive(len);
+}
+
+
+
 
 
