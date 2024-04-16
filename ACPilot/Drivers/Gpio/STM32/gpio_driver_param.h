@@ -8,8 +8,8 @@
 #include "gpio.h"
 #include "type.h"
 
-typedef GPIO_TypeDef*   GpioPort;
-typedef uint16_t        GpioPin;
+typedef GPIO_TypeDef *GpioPort;
+typedef uint16_t GpioPin;
 
 enum GpioState
 {

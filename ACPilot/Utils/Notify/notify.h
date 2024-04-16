@@ -17,6 +17,8 @@ class NotifyToken
 public:
     AC_RET wait(uint32_t timeout = AC_FOREVER);
 
+    Event getEvent();
+
 protected:
     AcBinSemaphore _semaphore;
     Event _event = EVENT_NUM;
@@ -24,6 +26,7 @@ protected:
     void *_param = nullptr;
 
     void _callback();
+
     void _give();
 };
 

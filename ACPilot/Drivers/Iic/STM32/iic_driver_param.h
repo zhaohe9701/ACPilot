@@ -28,21 +28,34 @@ typedef I2C_HandleTypeDef IicBusHandle;
 class IicBus
 {
     friend class IicBusManager;
+
 public:
     IicBus();
+
     explicit IicBus(IicBusHandle *handle);
-    IicBus(Gpio *sda, Gpio* scl);
+
+    IicBus(Gpio *sda, Gpio *scl);
+
     AC_RET init(IicBusSelect *iic_name, uint32_t frq);
+
     AC_RET initAdvanced();
+
     bool matchHandle(IicBusHandle *hdle);
+
     AC_RET waitWirteFinish(uint32_t timeout = AC_FOREVER);
+
     AC_RET waitReadFinish(uint32_t timeout = AC_FOREVER);
+
     AC_RET lock(uint32_t timeout = AC_FOREVER);
+
     void unlock();
+
     IicBusHandle *handle = nullptr;
 protected:
     void writeFinishNotify();
+
     void readFinishNotify();
+
 private:
     Gpio *_sda = nullptr;
     Gpio *_scl = nullptr;
@@ -55,13 +68,16 @@ class IicBusManager
 {
 public:
     static void add(IicBus *Iic_bus);
-    static IicBus* find(IicBusHandle *handle);
-    static void writeFinishHandle(IicBusHandle *handle);
-    static void readFinishHandle(IicBusHandle *handle);
-private:
-    static List<IicBus*> _list;
-};
 
+    static IicBus *find(IicBusHandle *handle);
+
+    static void writeFinishHandle(IicBusHandle *handle);
+
+    static void readFinishHandle(IicBusHandle *handle);
+
+private:
+    static List<IicBus *> _list;
+};
 
 
 #endif

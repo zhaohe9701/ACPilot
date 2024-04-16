@@ -42,6 +42,11 @@ void CommandServer::add(Command *command)
 
 void CommandServer::_loop(void *param)
 {
+    if (nullptr == _cmd_mailbox || nullptr == _send_mailbox)
+    {
+        BASE_ERROR("NULL ptr");
+        AcThread::killSelf();
+    }
     for (;;)
     {
         CommandMessage cmd;

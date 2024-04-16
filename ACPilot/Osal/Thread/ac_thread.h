@@ -14,7 +14,7 @@
 class AcThread
 {
 public:
-    AcThread(const char *name, uint16_t stack, AcPriority prio);
+    AcThread(const char *name, uint16_t stack, AcPriority prio, int16_t core = 0);
 
     void suspend();
 
@@ -36,6 +36,7 @@ private:
     ThreadHandle _handle = nullptr;
     char _name[THREAD_NAME_LEN] = {0};
     uint16_t _stack_size = 0;
+    int16_t _core = 0;
     AcPriority _prio = 0;
 //    static List<AcThread *> _list;
 };

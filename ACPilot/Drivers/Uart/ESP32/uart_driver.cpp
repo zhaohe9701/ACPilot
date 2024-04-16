@@ -13,7 +13,7 @@
 #include "hal/uart_ll.h"
 
 #define UART_FREE_DELAY_US 300
-#define UART_RECEIVE_TASK_PRIO 25
+#define UART_RECEIVE_TASK_PRIO 24
 #define UART_RECEIVE_TASK_STACK 2000
 
 UartHandle::UartHandle()
@@ -21,7 +21,7 @@ UartHandle::UartHandle()
     memset(&config, 0, sizeof(uart_config_t));
 }
 
-Uart::Uart(UartHandle *handle, uint8_t port_num) : ComInterface(port_num)
+Uart::Uart(UartHandle *handle, uint8_t port_num) : Com(port_num)
 {
     _port = port_num;
     this->_handle = handle;
@@ -91,7 +91,7 @@ bool Uart::match(UartHandle *handle)
 
 bool Uart::match(uint8_t port_num)
 {
-    return ComInterface::match(port_num);
+    return Com::match(port_num);
 }
 
 UartHandle *Uart::getHandle()

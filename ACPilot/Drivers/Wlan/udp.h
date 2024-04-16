@@ -17,7 +17,7 @@ public:
     int port;
 };
 
-class Udp : public ComInterface
+class Udp : public Com
 {
 public:
     Udp(UdpHandle *handle, uint8_t port_num);
@@ -25,6 +25,7 @@ public:
     AC_RET init() override;
 
     AC_RET send(uint8_t *buf, uint16_t length, uint32_t timeout) override;
+
 private:
     UdpHandle *_handle;
 

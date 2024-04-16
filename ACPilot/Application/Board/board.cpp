@@ -83,13 +83,14 @@ void boardInit()
 
     wlanHandleInit();
     WlanDriver::init(&wlan_handle);
-
+    
+    Notify::notify(INIT_FINISH_EVENT);
+    
     AcThread *test_thread = new AcThread("test", 4096, 24);
     test_thread->run(test, nullptr);
 }
 
 Led *Board::led = nullptr;
-Imu *Board::imu1 = nullptr;
 Dps310 *Board::baro = nullptr;
 
 void deviceInit()
@@ -106,9 +107,9 @@ void deviceInit()
 }
 
 #include "Json/ac_json.h"
-#include "DataModule/data_module_framework.h"
-#include "MemoryPool/memory_pool_framework.h"
-#include "Thread/thread_framework.h"
+#include "DataModule/data_module.h"
+#include "MemoryPool/memory_pool_manager.h"
+#include "Thread/thread_manager.h"
 #include "Memory/ac_memory.h"
 
 #pragma pack(1)
@@ -127,84 +128,15 @@ typedef struct
 
 #pragma pack()
 
+void eventHandle(void *param);
+
 void test(void *param)
 {
     printf("test\n");
     char buf[2048] = R"({"aircraft":{"name":"string[10]","weight":"int8","size[5]":[{"l":"int8"}],"max_speed":"uint32","remote":"uint8"}})";
-//    JsonTree *tree = Json::deserialize(buf);
-//    if (nullptr == tree)
-//    {
-//        printf("deserialize error\n");
-//    } else
-//    {
-//        printf("deserialize success\n");
-//    }
-//    memset(buf, 0, 2048);
-//    Json::serialize(tree, buf, 2048);
-//    printf("serialize: %s\n", buf);
-//
-    DataModuleFramework::create(buf);
-//
-//    printf("create finish\n");
-//
-//    Json::free(tree);
-//
-//
-//    memset(buf, 0, 2048);
-//
-//    if (AC_OK != DataModule::dumpStruct(buf, 2048))
-//    {
-//        printf("dumpStruct error\n");
-//    }
-//
-//    printf("dataModule Struct: %s\n", buf);
-//
-//    memset(buf, 0, 2048);
-//
-//    MemoryPoolManager::info(buf, 2048);
-//
-//    printf("info: %s\n", buf);
-//
-//    memset(buf, 0, 2048);
-//
-//    DataModule::get("/aircraft", buf, 2048);
-//
-//    printf("get: %s\n", buf);
-//
-//    DataModule::set(R"(/aircraft)", R"({"aircraft":{"name":"111111","weight":"10"}})");
-//
-//    DataModule::add(R"(/aircraft/size[5])", R"({"size[5]":[{"l":"10"},{"l":"20"}]})");
-//
-//    DataModule::del(R"(/aircraft/size[5]/1)");
-//
-//    memset(buf, 0, 2048);
-//    DataModule::dumpData(buf, 2048);
-//
-//    printf("dataModule Data: %s\n", buf);
-//
-//    memset(buf, 0, 2048);
-//
-//    DataModule::info(buf, 2048);
-//
-//    printf("%s\n", buf);
-//
-//    printf("size: %d\n", sizeof(DataTree));
-//
-//    Aircraft aircraft;
-//
-//    DataModule::read(R"(/aircraft)", &aircraft, sizeof(Aircraft));
-//
-//    printf("name: %s, weight: %d, size: %d, max_speed: %lu, remote: %d\n", aircraft.name, aircraft.weight, aircraft.size[0].l, aircraft.max_speed, aircraft.remote);
-//
-//    aircraft.weight = 20;
-//
-//    DataModule::write(R"(/aircraft)", &aircraft, sizeof(Aircraft));
-//
-//    memset(buf, 0, 2048);
-//    DataModule::dumpData(buf, 2048);
-//
-//    printf("dataModule Data: %s\n", buf);
-//
+
+    DataModule::create(buf);
+
     memset(buf, 0, 2048);
 
     MemoryPoolManager::info(buf, 2048);
@@ -220,6 +152,14 @@ void test(void *param)
 
     printf("Memory size:now:%lu min:%lu\n", Memory::getFreeHeapSize(), Memory::getMinimumFreeHeapSize());
     printf("sp_get_free_internal_heap_size = %ld\n\r", esp_get_free_internal_heap_size());
+    
+    Notify::sub(ENTER_INIT_EVENT, eventHandle, nullptr);
+    Notify::sub(ENTER_LOCK_EVENT, eventHandle, nullptr);
+    Notify::sub(ENTER_UNLOCKING_EVENT, eventHandle, nullptr);
+    Notify::sub(ENTER_READY_EVENT, eventHandle, nullptr);
+    Notify::sub(ENTER_MANUAL_EVENT, eventHandle, nullptr);
+    Notify::sub(ENTER_HEIGHT_EVENT, eventHandle, nullptr);
+    Notify::sub(ENTER_CALIBRATE_EVENT, eventHandle, nullptr);
 
     while (1)
     {
@@ -227,4 +167,33 @@ void test(void *param)
     }
 }
 
-
+void eventHandle(void *param)
+{
+    NotifyToken *token = (NotifyToken *) param;
+    switch (token->getEvent())
+    {
+        case ENTER_INIT_EVENT:
+            printf("init finish event\n");
+            break;
+        case ENTER_LOCK_EVENT:
+            printf("lock event\n");
+            break;
+        case ENTER_UNLOCKING_EVENT:
+            printf("unlocking event\n");
+            break;
+        case ENTER_READY_EVENT:
+            printf("ready event\n");
+            break;
+        case ENTER_MANUAL_EVENT:
+            printf("manual event\n");
+            break;
+        case ENTER_HEIGHT_EVENT:
+            printf("height event\n");
+            break;
+        case ENTER_CALIBRATE_EVENT:
+            printf("calibrate event\n");
+            break;
+        default:
+            break;
+    }
+}

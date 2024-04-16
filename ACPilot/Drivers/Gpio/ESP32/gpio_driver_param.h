@@ -8,8 +8,8 @@
 #include "driver/gpio.h"
 #include "type.h"
 
-typedef uint8_t*    GpioPort;
-typedef gpio_num_t  GpioPin;
+typedef uint8_t *GpioPort;
+typedef gpio_num_t GpioPin;
 
 enum GpioState
 {

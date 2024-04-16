@@ -7,7 +7,7 @@
 #define SEND_TASK_PRIO  24
 #define SEND_TASK_STACK_SIZE 2000
 
-List<ComInterface *> *MessageTransmitServer::_interface_list;
+List<Com *> *MessageTransmitServer::_interface_list;
 Mailbox<ComMessage> *MessageTransmitServer::_mailbox = nullptr;
 AcThread *MessageTransmitServer::_transmit_task = nullptr;
 
@@ -25,7 +25,7 @@ AC_RET MessageTransmitServer::init()
 
 AC_RET MessageTransmitServer::start()
 {
-    _interface_list = ComInterface::getList();
+    _interface_list = Com::getList();
     if (nullptr == _transmit_task)
     {
         BASE_ERROR("service not init");
@@ -37,6 +37,11 @@ AC_RET MessageTransmitServer::start()
 
 void MessageTransmitServer::_loop(void *param)
 {
+    if (nullptr == _mailbox)
+    {
+        BASE_ERROR("NULL ptr");
+        AcThread::killSelf();
+    }
     for (;;)
     {
         ComMessage message;
@@ -44,7 +49,7 @@ void MessageTransmitServer::_loop(void *param)
         {
             continue;
         }
-        for (ListNode<ComInterface *> *it = _interface_list->begin(); it != _interface_list->end(); it = it->getNext())
+        for (ListNode<Com *> *it = _interface_list->begin(); it != _interface_list->end(); it = it->getNext())
         {
             if ((*(*it))->match(message.port))
             {

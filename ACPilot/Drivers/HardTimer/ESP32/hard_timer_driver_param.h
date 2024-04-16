@@ -11,6 +11,7 @@
 struct HardTimerHandle
 {
     HardTimerHandle();
+
     esp_timer_create_args_t config{};
     esp_timer_handle_t handle = nullptr;
 };

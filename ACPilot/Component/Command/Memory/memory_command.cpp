@@ -4,7 +4,7 @@
 
 #include "memory_command.h"
 #include "default_debug.h"
-#include "MemoryPool/memory_pool_framework.h"
+#include "MemoryPool/memory_pool_manager.h"
 #include "Memory/ac_memory.h"
 
 #define MAX_MEMORY_REPLY_BUF_LEN 1024

@@ -20,12 +20,12 @@
 #include "message.h"
 #include "Semaphore/ac_semaphore.h"
 
-class ComInterface
+class Com
 {
 public:
-    explicit ComInterface(uint8_t port_num);
+    explicit Com(uint8_t port_num);
 
-    ComInterface() = default;
+    Com() = default;
 
     virtual AC_RET init();
 
@@ -37,11 +37,11 @@ public:
 
     virtual bool match(uint8_t port_num);
 
-    virtual ~ComInterface() = default;
+    virtual ~Com() = default;
 
-    static void add(ComInterface *com);
+    static void add(Com *com);
 
-    static List<ComInterface *> *getList();
+    static List<Com *> *getList();
 
 protected:
     uint8_t _port = 0x0;
@@ -49,7 +49,7 @@ protected:
     uint8_t *_transmit_buffer = nullptr;
     Mailbox<ComMessage> *_recv_mail_box = nullptr;
     MemoryPool *_recv_pool = nullptr;
-    static List<ComInterface *> _list;
+    static List<Com *> _list;
 
 };
 

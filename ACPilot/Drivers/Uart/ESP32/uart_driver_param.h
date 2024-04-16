@@ -18,6 +18,7 @@
 struct UartHandle
 {
     UartHandle();
+
     uart_config_t config{};
     uart_port_t index = UART_NUM_0;
     gpio_num_t tx = GPIO_NUM_NC;

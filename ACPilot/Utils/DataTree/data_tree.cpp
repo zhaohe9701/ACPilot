@@ -111,7 +111,9 @@ class DataTreeDataToJson : public TreeVisit
 {
 public:
     AC_RET operator()(Tree *node, TREE_VISIT_ORDER order) override;
+
     JsonTree *getRes();
+
 private:
     JsonTree *_root = nullptr;
     JsonTree *_current_node = nullptr;
@@ -269,8 +271,7 @@ AC_RET DataTree::singleNodeToJson(JsonTree *json)
     if (_type == AC_ROOT || _type == AC_STRUCT || _type == AC_ARRAY)
     {
         json->setType(static_cast<JSON_TYPE>(_type));
-    }
-    else
+    } else
     {
         json->setType(JSON_TYPE_DATA);
         RETURN_CHECK(Type::transDataToStr(json->getVal(), JSON_VAL_LEN, _data, _type));
@@ -312,8 +313,7 @@ AC_RET DataTree::singleNodeToStruct(JsonTree *json)
     if (_type == AC_ROOT || _type == AC_STRUCT || _type == AC_ARRAY)
     {
         json->setType(static_cast<JSON_TYPE>(_type));
-    }
-    else
+    } else
     {
         json->setType(JSON_TYPE_DATA);
         RETURN_CHECK(Type::transTypeToStr(json->getVal(), _type));

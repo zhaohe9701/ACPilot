@@ -4,7 +4,7 @@
 
 #include "thread_command.h"
 #include "default_debug.h"
-#include "Thread/thread_framework.h"
+#include "Thread/thread_manager.h"
 
 #define MAX_THREAD_REPLY_BUF_LEN 2048
 
@@ -34,7 +34,7 @@ int ThreadCommand::commandMain(int argc, char **argv)
 
     if (0 == strncmp(argv[1], "info", CMD_MAX_LEN))
     {
-        if (AC_OK != ThreadFramework::info(_res_buf, MAX_THREAD_REPLY_BUF_LEN))
+        if (AC_OK != ThreadManager::info(_res_buf, MAX_THREAD_REPLY_BUF_LEN))
         {
             snprintf(_res_buf, MAX_THREAD_REPLY_BUF_LEN, "info failed\n");
             return -1;

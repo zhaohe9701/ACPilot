@@ -55,6 +55,6 @@ AC_RET Gpio::flip()
     return AC_ERROR;
 }
 
-void Gpio::enable(){}
+void Gpio::enable() {}
 
 

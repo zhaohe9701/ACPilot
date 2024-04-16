@@ -14,11 +14,17 @@ class Url
 {
 public:
     explicit Url(const char *url);
+
     Url();
+
     char *get(uint16_t index);
+
     void push(char *url);
+
     void pop();
+
     void toStr(char *buf, uint16_t len);
+
 private:
     char _buf[URL_MAX_CLASS][PARAM_NAME_LEN];
     uint16_t _index = 0;

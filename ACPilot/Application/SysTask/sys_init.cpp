@@ -2,19 +2,23 @@
 // Created by zhaohe on 2023/5/21.
 //
 
-#include "sys.h"
 #include "Board/board.h"
 #include "Protocol/Crsf/crsf.h"
 #include "Memory/ac_memory.h"
 #include "Debug/ac_debug.h"
 #include "Json/ac_json.h"
-#include "DataModule/data_module_framework.h"
-#include "MemoryPool/memory_pool_framework.h"
+#include "DataModule/data_module.h"
+#include "MemoryPool/memory_pool_manager.h"
 #include "Command/DataModule/data_module_command.h"
 #include "Command/command_parser.h"
 #include "Command/Memory/memory_command.h"
 #include "Command/Mailbox/mailbox_command.h"
 #include "Command/Thread/thread_command.h"
+#include "Transmit/transmit_server.h"
+#include "Receive/receive_server.h"
+#include "Command/command_server.h"
+#include "StateMachine/state_machine.h"
+#include "Receive/test_input_parser.h"
 
 /******************对外暴露接口*****************/
 extern "C" void sysInit();
@@ -33,7 +37,7 @@ void initFramework()
     Debug::init();
     BASE_INFO("DEBUG SERVICE INIT");
     /* 初始化数据模型服务 */
-    DataModuleFramework::init();
+    DataModule::init();
     BASE_INFO("DATA MODULE SERVICE INIT");
 }
 
@@ -42,6 +46,7 @@ void initService()
     MessageTransmitServer::init();
     MessageReceiveServer::init();
     CommandServer::init();
+    StateMachine::init();
 }
 
 void startService()
@@ -49,6 +54,7 @@ void startService()
     MessageTransmitServer::start();
     MessageReceiveServer::start();
     CommandServer::start();
+    StateMachine::start();
 }
 
 void addFrameworkInstance()
@@ -76,6 +82,8 @@ void createComponent()
     /*创建cli消息接收实例*/
     new CommandParser();
 
+    new TestInputParser();
+
     new DataModuleCommand();
 
     new MemoryCommand();
@@ -83,6 +91,53 @@ void createComponent()
     new MailboxCommand();
 
     new ThreadCommand();
+
+    State *state_init       = new State("init", ENTER_INIT_EVENT);
+    State *state_lock       = new State("lock", ENTER_LOCK_EVENT);
+    State *state_unlocking  = new State("unlocking", ENTER_UNLOCKING_EVENT);
+    State *state_ready      = new State("ready", ENTER_READY_EVENT);
+    State *state_manual     = new State("manual", ENTER_MANUAL_EVENT);
+    State *state_height     = new State("height", ENTER_HEIGHT_EVENT);
+    State *state_calibrate  = new State("calibrate", ENTER_CALIBRATE_EVENT);
+
+    //                                          状态转换表
+    //--------------------------------------------------------------------------------------------------------------------
+    //|         |init       |lock         |unlocking        |ready         |manual         |height        |calibrate     |
+    //--------------------------------------------------------------------------------------------------------------------
+    //|init     | *         |INIT_FINISH  | -               | -            | -             | -            | -            |
+    //--------------------------------------------------------------------------------------------------------------------
+    //|lock     | -         | *           |UNLOCK_COMMAND   | -            | -             | -            | CALI_COMMAND |
+    //--------------------------------------------------------------------------------------------------------------------
+    //|unlocking| -         | -           | *               |ROCK_BACK     | -             | -            | -            |
+    //--------------------------------------------------------------------------------------------------------------------
+    //|ready    | -         |MOVE_ROCK    | -               | *            |MANUAL_COMMAND |HEIGHT_COMMAND| -            |
+    //--------------------------------------------------------------------------------------------------------------------
+    //|manual   | -         |LOCK_COMMAND | HEIGHT_COMMAND  | -            | *             | -            | -            |
+    //--------------------------------------------------------------------------------------------------------------------
+    //|height   | -         |LOCK_COMMAND | -               | -            | -             | *            | -            |
+    //--------------------------------------------------------------------------------------------------------------------
+    //|calibrate| -         |CALI_FINISH  | -               | -            | -             | -            | *            |
+    //--------------------------------------------------------------------------------------------------------------------
+
+    state_init->addNextState(state_lock, INIT_FINISH_EVENT);
+
+    state_lock->addNextState(state_unlocking, UNLOCK_COMMAND_EVENT);
+    state_lock->addNextState(state_calibrate, CALI_COMMAND_EVENT);
+
+    state_unlocking->addNextState(state_ready, ROCK_BACK_EVENT);
+
+    state_ready->addNextState(state_manual, MANUAL_COMMAND_EVENT);
+    state_ready->addNextState(state_height, HEIGHT_COMMAND_EVENT);
+    state_ready->addNextState(state_lock, MOVE_ROCK_EVENT);
+
+    state_manual->addNextState(state_lock, LOCK_COMMAND_EVENT);
+    state_manual->addNextState(state_height, HEIGHT_COMMAND_EVENT);
+
+    state_height->addNextState(state_lock, LOCK_COMMAND_EVENT);
+
+    state_calibrate->addNextState(state_lock, CALI_FINISH_EVENT);
+
+    StateMachine::setStartState(state_init);
 
     BASE_INFO("MESSAGE PARSER INSTANCE CREATE");
 }

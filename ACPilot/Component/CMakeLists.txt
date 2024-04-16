@@ -3,6 +3,15 @@ set(APP_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/Command/Memory/memory_command.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Command/Thread/thread_command.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Command/Mailbox/mailbox_command.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Receive/test_input_parser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/tdk_imu.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/mpu6X00.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/icm20602.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/icm20689.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/icm20948.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/icm42688.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Baro/ms5611.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Baro/dps310.cpp
         )
 
 if(STM32)

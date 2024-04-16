@@ -1,8 +1,16 @@
 set(APP_SOURCES
-        ${CMAKE_CURRENT_SOURCE_DIR}/DataModule/data_module_framework.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/MemoryPool/memory_pool_framework.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Thread/thread_framework.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Mailbox/mailbox_framework.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/DataModule/data_module.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/MemoryPool/memory_pool_manager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Thread/thread_manager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Mailbox/mailbox_manager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Device/Virtual/virtual_device.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Device/Virtual/Accelerometer/accelerometer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Device/Virtual/Gyroscope/gyroscope.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Device/Virtual/Magnetometer/magnetometer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Device/Virtual/Thermometer/thermometer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Device/Physical/physical_device.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Device/Physical/Imu/imu.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Device/Physical/Baro/baro.cpp
         )
 
 if(STM32)

@@ -8,7 +8,7 @@
 #define UDP_RECEIVE_TASK_PRIO 10
 #define UDP_RECEIVE_TASK_STACK 3000
 
-Udp::Udp(UdpHandle *handle, uint8_t port_num) : ComInterface(port_num)
+Udp::Udp(UdpHandle *handle, uint8_t port_num) : Com(port_num)
 {
     _handle = handle;
 }

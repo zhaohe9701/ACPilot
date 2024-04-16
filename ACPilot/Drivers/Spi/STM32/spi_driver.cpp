@@ -15,20 +15,20 @@
 
 extern "C"
 {
-    /* SPI发送完成中断处理 */
-    void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi)
-    {
-        SpiBusManager::writeFinishHandle(hspi);
-    }
+/* SPI发送完成中断处理 */
+void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi)
+{
+    SpiBusManager::writeFinishHandle(hspi);
+}
 }
 
 extern "C"
 {
-    /* SPI接收完成中断处理 */
-    void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
-    {
-        SpiBusManager::readFinishHandle(hspi);
-    }
+/* SPI接收完成中断处理 */
+void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
+{
+    SpiBusManager::readFinishHandle(hspi);
+}
 }
 
 SpiBus::SpiBus(SpiBusHandle *handle)
@@ -87,15 +87,16 @@ void SpiBus::unlock()
     _mutex.unlock();
 }
 
-List<SpiBus*> SpiBusManager::_list;
+List<SpiBus *> SpiBusManager::_list;
+
 void SpiBusManager::add(SpiBus *spi_bus)
 {
     _list.pushBack(spi_bus);
 }
 
-SpiBus* SpiBusManager::find(SpiBusHandle *handle)
+SpiBus *SpiBusManager::find(SpiBusHandle *handle)
 {
-    for (ListNode<SpiBus*> *it = _list.begin(); it != _list.end(); it = it->getNext())
+    for (ListNode < SpiBus * > *it = _list.begin(); it != _list.end(); it = it->getNext())
     {
         if ((**it)->matchHandle(handle))
         {
@@ -114,6 +115,7 @@ void SpiBusManager::writeFinishHandle(SpiBusHandle *handle)
     }
     bus->writeFinishNotify();
 }
+
 void SpiBusManager::readFinishHandle(SpiBusHandle *handle)
 {
     SpiBus *bus = find(handle);

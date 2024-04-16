@@ -1,7 +1,7 @@
 set(APP_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/AircraftState/aircraft_state.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Actuator/Motor/motor.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/AHRS/mahony.cpp
+#        ${CMAKE_CURRENT_SOURCE_DIR}/AHRS/mahony.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Board/board.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Control/AttitudeControl/default_attitude_controller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Control/pid_core.cpp
@@ -10,26 +10,11 @@ set(APP_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/Protocol/Ibus/ibus.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Protocol/Crsf/crsf.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Remote/remote_channel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/sensor.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/icm20602.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/icm20689.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/icm20948.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/icm42688.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Baro/ms5611.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Baro/dps310.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Mag/ak09916.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/imu.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Baro/baro.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/SysTask/task_init.cpp
+#        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Mag/ak09916.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/SysTask/sys_init.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/SysTask/test_task.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Light/light.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Filter/filter.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Device/device.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Device/accelerometer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Device/gyroscope.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Device/magnetometer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Device/thermometer.cpp
         )
 
 if(STM32)

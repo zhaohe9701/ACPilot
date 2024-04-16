@@ -20,7 +20,7 @@
 #include "Mutex/ac_mutex.h"
 #include "HardTimer/hard_timer_driver.h"
 
-class Uart : virtual public ComInterface
+class Uart : virtual public Com
 {
 public:
 

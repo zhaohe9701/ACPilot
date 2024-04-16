@@ -3,16 +3,16 @@
 //
 #include "com_interface.h"
 
-List<ComInterface *> ComInterface::_list;
+List<Com *> Com::_list;
 
-ComInterface::ComInterface(uint8_t port_num)
+Com::Com(uint8_t port_num)
 {
     _port = port_num;
     _recv_mail_box = Mailbox<ComMessage>::find("receive");
     add(this);
 }
 
-bool ComInterface::match(uint8_t port_num)
+bool Com::match(uint8_t port_num)
 {
     if (_port == port_num)
     {
@@ -21,7 +21,7 @@ bool ComInterface::match(uint8_t port_num)
     return false;
 }
 
-AC_RET ComInterface::receive(uint32_t len)
+AC_RET Com::receive(uint32_t len)
 {
     ComMessage message;
 
@@ -33,22 +33,22 @@ AC_RET ComInterface::receive(uint32_t len)
     return _recv_mail_box->push(&message, AC_IMMEDIATELY);
 }
 
-void ComInterface::add(ComInterface *com)
+void Com::add(Com *com)
 {
     _list.pushBack(com);
 }
 
-List<ComInterface *> * ComInterface::getList()
+List<Com *> * Com::getList()
 {
     return &_list;
 }
 
-AC_RET ComInterface::init()
+AC_RET Com::init()
 {
     return AC_OK;
 }
 
-AC_RET ComInterface::open()
+AC_RET Com::open()
 {
     return AC_OK;
 }
