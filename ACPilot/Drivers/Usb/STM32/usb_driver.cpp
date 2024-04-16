@@ -16,10 +16,10 @@
 
 extern "C"
 {
-    void UsbCallback(uint8_t *buf, uint32_t len)
-    {
-        UsbManager::usbCallbackHandle(buf, len);
-    }
+void UsbCallback(uint8_t *buf, uint32_t len)
+{
+    UsbManager::usbCallbackHandle(buf, len);
+}
 };
 
 Usb::Usb(uint8_t mark) : ComInterface(mark)
@@ -34,7 +34,7 @@ AC_RET Usb::init()
     return AC_OK;
 }
 
-AC_RET Usb::send(uint8_t* buf, uint16_t length, uint32_t timeout)
+AC_RET Usb::send(uint8_t *buf, uint16_t length, uint32_t timeout)
 {
     for (uint32_t i = 0; i < 10000; ++i)
     {
@@ -59,7 +59,7 @@ AC_RET Usb::open()
 }
 
 
-Usb* UsbManager::_usb = nullptr;
+Usb *UsbManager::_usb = nullptr;
 
 void UsbManager::add(Usb *usb)
 {

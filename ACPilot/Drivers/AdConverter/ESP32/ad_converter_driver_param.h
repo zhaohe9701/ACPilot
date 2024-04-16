@@ -12,6 +12,7 @@
 struct AdConverterUnitHandle
 {
     AdConverterUnitHandle();
+
     adc_oneshot_unit_handle_t handle = nullptr;
     adc_oneshot_unit_init_cfg_t cfg{};
 };
@@ -24,6 +25,7 @@ AdConverterUnitHandle::AdConverterUnitHandle()
 struct AdConverterChannelHandle
 {
     AdConverterChannelHandle();
+
     adc_oneshot_chan_cfg_t cfg{};
     adc_cali_handle_t cali = nullptr;
     adc_channel_t channel = ADC_CHANNEL_0;

@@ -58,7 +58,7 @@ AC_RET AdConverterChannel::read(int32_t &value)
     {
         return AC_ERROR;
     }
-    if (ESP_OK != adc_cali_raw_to_voltage(_handle->cali, raw, (int *)&value))
+    if (ESP_OK != adc_cali_raw_to_voltage(_handle->cali, raw, (int *) &value))
     {
         return AC_ERROR;
     }

@@ -11,7 +11,7 @@
 #ifndef SPI_DRIVER_PARAM_H_
 #define SPI_DRIVER_PARAM_H_
 
-#include "IO/device_interface.h"
+#include "IO/io_interface.h"
 #include "driver/spi_master.h"
 #include "Gpio/gpio_driver.h"
 #include "ac_list.h"
@@ -22,16 +22,17 @@
 struct SpiBusHandle
 {
     SpiBusHandle();
+
     spi_bus_config_t config{};
     spi_host_device_t host = SPI1_HOST;
     spi_common_dma_t dma = SPI_DMA_DISABLED;
 };
 
 
-
 struct SpiHandle
 {
     SpiHandle();
+
     spi_device_interface_config_t config{};
     spi_device_handle_t handle{};
 };

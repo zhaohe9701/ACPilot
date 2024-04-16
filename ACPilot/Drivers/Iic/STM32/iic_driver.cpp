@@ -12,26 +12,26 @@
 
 extern "C"
 {
-    void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
-    {
-        IicBusManager::readFinishHandle(hi2c);
-    }
+void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+    IicBusManager::readFinishHandle(hi2c);
+}
 }
 
 extern "C"
 {
-    void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c)
-    {
-        IicBusManager::writeFinishHandle(hi2c);
-    }
+void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+    IicBusManager::writeFinishHandle(hi2c);
+}
 }
 
 extern "C"
 {
-    void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
-    {
-        IicBusManager::writeFinishHandle(hi2c);
-    }
+void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+    IicBusManager::writeFinishHandle(hi2c);
+}
 }
 
 
@@ -47,7 +47,7 @@ IicBus::IicBus(IicBusHandle *handle)
     IicBusManager::add(this);
 }
 
-IicBus::IicBus(Gpio *sda, Gpio* scl)
+IicBus::IicBus(Gpio *sda, Gpio *scl)
 {
     handle = new IicBusHandle();
     _sda = sda;
@@ -139,15 +139,16 @@ void IicBus::unlock()
     _mutex.unlock();
 }
 
-List<IicBus*> IicBusManager::_list;
+List<IicBus *> IicBusManager::_list;
+
 void IicBusManager::add(IicBus *Iic_bus)
 {
     _list.pushBack(Iic_bus);
 }
 
-IicBus* IicBusManager::find(IicBusHandle *handle)
+IicBus *IicBusManager::find(IicBusHandle *handle)
 {
-    for (ListNode<IicBus*> *it = _list.begin(); it != _list.end(); it = it->getNext())
+    for (ListNode < IicBus * > *it = _list.begin(); it != _list.end(); it = it->getNext())
     {
         if ((**it)->matchHandle(handle))
         {
@@ -166,6 +167,7 @@ void IicBusManager::writeFinishHandle(IicBusHandle *handle)
     }
     bus->writeFinishNotify();
 }
+
 void IicBusManager::readFinishHandle(IicBusHandle *handle)
 {
     IicBus *bus = find(handle);
@@ -223,7 +225,7 @@ AC_RET Iic::writeBytes(uint8_t address, uint8_t len, uint8_t *value, uint32_t ti
         HAL_I2C_Master_Transmit(_bus->handle, _device_addr, &address, 1, timeout);
     } else
     {
-        HAL_I2C_Mem_Write(_bus->handle, _device_addr, address, I2C_MEMADD_SIZE_8BIT,value, len, timeout);
+        HAL_I2C_Mem_Write(_bus->handle, _device_addr, address, I2C_MEMADD_SIZE_8BIT, value, len, timeout);
     }
     _bus->unlock();
     return AC_OK;
@@ -237,7 +239,7 @@ AC_RET Iic::writeBytesDMA(uint8_t address, uint8_t len, uint8_t *value, uint32_t
         HAL_I2C_Master_Transmit_DMA(_bus->handle, _device_addr, &address, 1);
     } else
     {
-        HAL_I2C_Mem_Write_DMA(_bus->handle, _device_addr, address, I2C_MEMADD_SIZE_8BIT,value, len);
+        HAL_I2C_Mem_Write_DMA(_bus->handle, _device_addr, address, I2C_MEMADD_SIZE_8BIT, value, len);
     }
     _bus->waitWirteFinish(timeout);
     _bus->unlock();

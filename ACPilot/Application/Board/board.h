@@ -9,7 +9,6 @@
 #include "Uart/uart_driver.h"
 #include "Usb/usb_driver.h"
 #include "Light/light.h"
-#include "Sensor/Imu/imu.h"
 #include "Interrupt/interrupt_driver.h"
 #include "Sensor/Baro/dps310.h"
 #include "Wlan/udp.h"
@@ -31,7 +30,6 @@ public:
     static ExtInterrupt *imu_interrupt;
 
     static Led *led;
-    static Imu *imu1;
     static Dps310 *baro;
 };
 

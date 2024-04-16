@@ -10,7 +10,9 @@
 #endif
 
 #ifdef C_ESP32
+
 #include "ESP32/pwm_driver_param.h"
+
 #endif
 
 #include "type.h"
@@ -19,8 +21,11 @@ class Pwm
 {
 public:
     explicit Pwm(PwmHandle *handle);
+
     AC_RET init();
+
     AC_RET set(float duty);
+
 private:
     PwmHandle *_handle = nullptr;
     uint32_t _resolution = 0;

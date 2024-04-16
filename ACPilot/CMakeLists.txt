@@ -17,7 +17,7 @@ set(EXTRA_COMPONENT_DIRS
         )
 
 if (STM32)
-        include(${CMAKE_CURRENT_SOURCE_DIR}/sdk/project.cmake)
+        include(${CMAKE_CURRENT_SOURCE_DIR}/Sdk/project.cmake)
 endif()
 
 if (ESP32)

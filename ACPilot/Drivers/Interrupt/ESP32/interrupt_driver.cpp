@@ -6,7 +6,7 @@
 
 void extInterruptHandle(void *arg)
 {
-    ExtInterrupt *interrupt = (ExtInterrupt*)arg;
+    ExtInterrupt *interrupt = (ExtInterrupt *) arg;
     interrupt->notify();
 }
 

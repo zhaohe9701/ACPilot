@@ -23,18 +23,28 @@ void NotifyToken::_give()
     _semaphore.give();
 }
 
+Event NotifyToken::getEvent()
+{
+    return _event;
+}
+
 NotifyToken *Notify::sub(Event event, TaskFunction func, void *param)
 {
     if (event >= EVENT_NUM)
     {
         return nullptr;
     }
-
     NotifyToken *token = new NotifyToken();
 
     token->_func = func;
-    token->_param = param;
     token->_event = event;
+    if (param == nullptr)
+    {
+        token->_param = token;
+    } else
+    {
+        token->_param = param;
+    }
     _list[event].pushBack(token);
 
     return token;

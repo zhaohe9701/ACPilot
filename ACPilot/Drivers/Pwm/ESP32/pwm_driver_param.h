@@ -17,6 +17,7 @@
 struct PwmHandle
 {
     PwmHandle();
+
     ledc_timer_config_t timer_config{};
     ledc_channel_config_t channel_config{};
 };

@@ -6,15 +6,15 @@
 
 extern "C"
 {
-    void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+    ExtInterrupt *interrupt = ExtInterruptManager::find(GPIO_Pin);
+    if (nullptr == interrupt)
     {
-        ExtInterrupt* interrupt = ExtInterruptManager::find(GPIO_Pin);
-        if (nullptr == interrupt)
-        {
-            return;
-        }
-        interrupt->notify();
+        return;
     }
+    interrupt->notify();
+}
 }
 
 
@@ -24,6 +24,7 @@ ExtInterrupt::ExtInterrupt(Gpio *gpio, uint32_t priority)
     _priority = priority;
     ExtInterruptManager::add(this);
 }
+
 AC_RET ExtInterrupt::init()
 {
     switch (_gpio->getPin())
@@ -86,16 +87,16 @@ AC_RET ExtInterrupt::waitNotify(uint32_t timeout)
     return sem.get(timeout);
 }
 
-List<ExtInterrupt*> ExtInterruptManager::_list;
+List<ExtInterrupt *> ExtInterruptManager::_list;
 
 void ExtInterruptManager::add(ExtInterrupt *interrupt)
 {
     _list.pushBack(interrupt);
 }
 
-ExtInterrupt* ExtInterruptManager::find(GpioPin pin)
+ExtInterrupt *ExtInterruptManager::find(GpioPin pin)
 {
-    for (ListNode<ExtInterrupt*> *it = _list.begin(); it != _list.end(); it = it->getNext())
+    for (ListNode < ExtInterrupt * > *it = _list.begin(); it != _list.end(); it = it->getNext())
     {
         if ((**it)->matchPin(pin))
         {

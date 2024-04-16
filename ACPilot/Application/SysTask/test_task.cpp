@@ -2,7 +2,6 @@
 // Created by zhaohe on 2023/5/20.
 //
 
-#include "sys.h"
 #include "Spi/spi_driver.h"
 #include "Memory/ac_memory.h"
 #include "Board/board.h"

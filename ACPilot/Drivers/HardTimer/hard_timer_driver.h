@@ -28,7 +28,7 @@ enum TimerMode
 class HardwareTimer
 {
 public:
-    HardwareTimer(const char *name,  TaskFunction cb, void *param);
+    HardwareTimer(const char *name, TaskFunction cb, void *param);
 
     AC_RET init();
 
@@ -39,9 +39,10 @@ public:
     AC_RET stop();
 
     AC_RET del();
+
 private:
     HardTimerHandle _handle{};
-    char  _name[PARAM_NAME_LEN] = {0};
+    char _name[PARAM_NAME_LEN] = {0};
 };
 
 #endif //HARD_TIMER_DRIVER_H_

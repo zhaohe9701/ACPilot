@@ -13,6 +13,29 @@
 #include <cstdlib>
 #include "type.h"
 
+
+void Vec1::Set(float xi)
+{
+    x = xi;
+}
+
+void Vec1::Clear()
+{
+    x = 0;
+}
+
+void Vec2::Set(float xi, float yi)
+{
+    x = xi;
+    y = yi;
+}
+
+void Vec2::Clear()
+{
+    x = 0;
+    y = 0;
+}
+
 void Vec3::Set(float xi, float yi, float zi)
 {
     x = xi;
@@ -237,4 +260,5 @@ AC_RET Type::transStrToData(char *data_buf, uint16_t len, void *data, AC_DATA_TY
     }
     return AC_OK;
 }
+
 

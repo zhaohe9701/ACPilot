@@ -26,20 +26,20 @@ static uint16_t HalAchiveMarkToChannel(uint16_t mark)
     uint16_t channel = 0x00U;
     switch (mark)
     {
-    case 0x01U:
-        channel = 0x00U;
-        break;
-    case 0x02U:
-        channel = 0x04U;
-        break;
-    case 0x04U:
-        channel = 0x08U;
-        break;
-    case 0x08U:
-        channel = 0x0CU;
-        break;
-    default:
-        break;
+        case 0x01U:
+            channel = 0x00U;
+            break;
+        case 0x02U:
+            channel = 0x04U;
+            break;
+        case 0x04U:
+            channel = 0x08U;
+            break;
+        case 0x08U:
+            channel = 0x0CU;
+            break;
+        default:
+            break;
     }
     return channel;
 }
@@ -50,26 +50,25 @@ void PwmCallbackHandle(TIM_HandleTypeDef *htim)
 }
 
 
-
 uint16_t Pwm::_pwmChannelToMark(uint16_t channel)
 {
     uint16_t mark = 0x00U;
     switch (channel)
     {
-    case 0x00U:
-        mark = 0x01U;
-        break;
-    case 0x04U:
-        mark = 0x02U;
-        break;
-    case 0x08U:
-        mark = 0x04U;
-        break;
-    case 0x0CU:
-        mark = 0x08U;
-        break;
-    default:
-        break;
+        case 0x00U:
+            mark = 0x01U;
+            break;
+        case 0x04U:
+            mark = 0x02U;
+            break;
+        case 0x08U:
+            mark = 0x04U;
+            break;
+        case 0x0CU:
+            mark = 0x08U;
+            break;
+        default:
+            break;
     }
     return mark;
 }
@@ -81,10 +80,9 @@ Pwm::Pwm(TIM_HandleTypeDef *htim, uint16_t channel)
 }
 
 
-
 void Pwm::output(uint16_t *data, uint16_t length)
 {
-    HAL_TIM_PWM_Start_DMA(_htim, _channel, (uint32_t *)data, length);
+    HAL_TIM_PWM_Start_DMA(_htim, _channel, (uint32_t *) data, length);
 }
 
 void Pwm::stop()
@@ -97,8 +95,7 @@ bool Pwm::_isMe(TIM_HandleTypeDef *htim)
     if (htim == _htim && htim->Channel == _pwmChannelToMark(_channel))
     {
         return true;
-    }
-    else
+    } else
     {
         return false;
     }

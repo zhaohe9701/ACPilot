@@ -10,7 +10,9 @@
 #endif
 
 #ifdef C_ESP32
+
 #include "ESP32/interrupt_driver_param.h"
+
 #endif
 
 #include "ac_list.h"
@@ -21,10 +23,15 @@ class ExtInterrupt
 {
 public:
     explicit ExtInterrupt(ExtInterruptHandle *handle);
+
     AC_RET init();
+
     bool matchPin(GpioPin pin);
+
     void notify();
+
     AC_RET waitNotify(uint32_t timeout = AC_FOREVER);
+
 private:
     ExtInterruptHandle *_handle = nullptr;
     AcBinSemaphore sem;

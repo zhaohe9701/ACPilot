@@ -3,7 +3,7 @@
 //
 #include "mailbox.h"
 
-List<MailboxCore*> MailboxCore::_list;
+List<MailboxCore *> MailboxCore::_list;
 
 MailboxCore::MailboxCore(const char *name, uint32_t len)
 {

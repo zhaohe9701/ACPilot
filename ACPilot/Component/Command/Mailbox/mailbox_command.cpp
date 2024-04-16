@@ -5,7 +5,7 @@
 #include "mailbox_command.h"
 
 #include "default_debug.h"
-#include "Mailbox/mailbox_framework.h"
+#include "Mailbox/mailbox_manager.h"
 
 #define MAX_MAILBOX_REPLY_BUF_LEN 1024
 
@@ -35,7 +35,7 @@ int MailboxCommand::commandMain(int argc, char **argv)
 
     if (0 == strncmp(argv[1], "info", CMD_MAX_LEN))
     {
-        if (AC_OK != MailboxFramework::info(_res_buf, MAX_MAILBOX_REPLY_BUF_LEN))
+        if (AC_OK != MailboxManager::info(_res_buf, MAX_MAILBOX_REPLY_BUF_LEN))
         {
             snprintf(_res_buf, MAX_MAILBOX_REPLY_BUF_LEN, "info failed\n");
             return -1;

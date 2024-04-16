@@ -17,6 +17,7 @@
 struct IicBusHandle
 {
     IicBusHandle();
+
     i2c_config_t config{};
     i2c_port_t host = I2C_NUM_0;
 };

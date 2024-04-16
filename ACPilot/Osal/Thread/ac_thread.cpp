@@ -5,7 +5,7 @@
 #include <string.h>
 #include "ac_thread.h"
 
-AcThread::AcThread(const char *name, uint16_t stack, AcPriority prio)
+AcThread::AcThread(const char *name, uint16_t stack, AcPriority prio, int16_t core)
 {
     strncpy(_name, name, PARAM_NAME_LEN - 1);
     _stack_size = stack;
@@ -52,10 +52,17 @@ AC_RET AcThread::resume()
 
 AC_RET AcThread::run(TaskFunction func, void *param)
 {
+#ifdef C_ESP32
+    if (pdPASS != xTaskCreatePinnedToCore(func, _name, _stack_size, param, _prio, &_handle, _core))
+    {
+        return AC_ERROR;
+    }
+#else
     if (pdPASS != xTaskCreate(func, _name, _stack_size, param, _prio, &_handle))
     {
         return AC_ERROR;
     }
+#endif
     return AC_OK;
 }
 
@@ -80,6 +87,7 @@ uint32_t AcThread::getInfo(char *buf, uint32_t len)
     uint32_t total_run_time = 0;
     uint32_t stats_as_percentage = 0;
     uint32_t ptr = 0;
+    char core[2] = {0};
 
     array_size = uxTaskGetNumberOfTasks();
 
@@ -91,7 +99,6 @@ uint32_t AcThread::getInfo(char *buf, uint32_t len)
 
         total_run_time /= 100UL;
 
-
         for (int i = 0; i < array_size; i++)
         {
 
@@ -102,11 +109,23 @@ uint32_t AcThread::getInfo(char *buf, uint32_t len)
             {
                 stats_as_percentage = 0;
             }
-            ptr += snprintf(buf + ptr, len - ptr, "\t%-12s%-12u%-12lu%-12lu\n",
+            if (status_array[i].xCoreID == 0)
+            {
+                core[0] = '0';
+            } else if (status_array[i].xCoreID == 1)
+            {
+                core[0] = '1';
+            } else
+            {
+                core[0] = '?';
+            }
+
+            ptr += snprintf(buf + ptr, len - ptr, "\t%-12s%-6u%-8lu%-6lu%-6s\n",
                             status_array[i].pcTaskName,
                             status_array[i].uxCurrentPriority,
                             status_array[i].usStackHighWaterMark,
-                            stats_as_percentage);
+                            stats_as_percentage,
+                            core);
         }
 
         delete[] status_array;

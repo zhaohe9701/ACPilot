@@ -20,7 +20,7 @@ public:
     static AC_RET start();
 
 private:
-    static List<ComInterface *> *_interface_list;
+    static List<Com *> *_interface_list;
     static Mailbox<ComMessage> *_mailbox;
     static AcThread *_transmit_task;
 

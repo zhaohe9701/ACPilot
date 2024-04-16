@@ -5,6 +5,7 @@ set(APP_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/Receive/receive_parser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Receive/receive_server.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Transmit/transmit_server.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/StateMachine/state_machine.cpp
         )
 
 if(STM32)

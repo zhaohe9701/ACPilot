@@ -13,7 +13,8 @@ SpiHandle::SpiHandle()
     memset(&config, 0, sizeof(spi_device_interface_config_t));
     memset(&handle, 0, sizeof(spi_device_handle_t));
 }
-SpiBus::SpiBus(SpiBusHandle* handle)
+
+SpiBus::SpiBus(SpiBusHandle *handle)
 {
     this->handle = handle;
 }

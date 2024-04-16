@@ -13,6 +13,7 @@
 #include "type.h"
 #include "ac_list.h"
 #include "Memory/ac_memory.h"
+
 extern "C"
 {
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
@@ -69,11 +70,10 @@ AC_RET Uart::send(uint8_t *buf, uint16_t length, uint32_t timeout)
 {
     waitSendFinish(timeout);
     _transmit_buffer = buf;
-    if(HAL_OK == HAL_UART_Transmit_DMA(handle, _transmit_buffer, length))
+    if (HAL_OK == HAL_UART_Transmit_DMA(handle, _transmit_buffer, length))
     {
         return AC_OK;
-    }
-    else
+    } else
     {
         return AC_ERROR;
     }
@@ -118,8 +118,7 @@ bool Uart::match(UartHandle *handle)
     if (handle == this->handle)
     {
         return true;
-    }
-    else
+    } else
     {
         return false;
     }
@@ -135,16 +134,16 @@ UartHandle *Uart::getHandle()
     return handle;
 }
 
-List<Uart*> UartManager::_list;
+List<Uart *> UartManager::_list;
 
 void UartManager::add(Uart *uart)
 {
     _list.pushBack(uart);
 }
 
-Uart* UartManager::find(UartHandle *handle)
+Uart *UartManager::find(UartHandle *handle)
 {
-    for (ListNode<Uart*> *it = _list.begin(); it != _list.end(); it = it->getNext())
+    for (ListNode < Uart * > *it = _list.begin(); it != _list.end(); it = it->getNext())
     {
         if ((**it)->match(handle))
         {
@@ -154,9 +153,9 @@ Uart* UartManager::find(UartHandle *handle)
     return nullptr;
 }
 
-Uart* UartManager::find(uint8_t port_num)
+Uart *UartManager::find(uint8_t port_num)
 {
-    for (ListNode<Uart*> *it = _list.begin(); it != _list.end(); it = it->getNext())
+    for (ListNode < Uart * > *it = _list.begin(); it != _list.end(); it = it->getNext())
     {
         if ((**it)->match(port_num))
         {

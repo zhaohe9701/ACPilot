@@ -22,7 +22,7 @@
 
 #define USB_EVENT_TASK_PRIO 12
 
-class Usb : virtual public ComInterface
+class Usb : virtual public Com
 {
 public:
     explicit Usb(uint8_t port_num);

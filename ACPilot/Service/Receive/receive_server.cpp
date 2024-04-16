@@ -53,6 +53,11 @@ void MessageReceiveServer::add(MessageReceiveParser *parser)
 
 void MessageReceiveServer::_loop(void *param)
 {
+    if (nullptr == _mailbox)
+    {
+        BASE_ERROR("NULL ptr");
+        AcThread::killSelf();
+    }
     for (;;)
     {
         ComMessage message;

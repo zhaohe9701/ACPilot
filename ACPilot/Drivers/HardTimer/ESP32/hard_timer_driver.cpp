@@ -8,7 +8,7 @@ HardTimerHandle::HardTimerHandle()
     memset(&config, 0, sizeof(esp_timer_create_args_t));
 }
 
-HardwareTimer::HardwareTimer(const char *name,  TaskFunction cb, void *param)
+HardwareTimer::HardwareTimer(const char *name, TaskFunction cb, void *param)
 {
     if (nullptr == name)
     {

@@ -52,6 +52,27 @@ enum AC_RELATION
 #define TYPE_BUF_LEN 16
 #define DATA_BUF_LEN 64
 
+class Vec1
+{
+public:
+    float x = 0.0f;
+
+    void Set(float xi);
+
+    void Clear();
+};
+
+class Vec2
+{
+public:
+    float x = 0.0f;
+    float y = 0.0f;
+
+    void Set(float xi, float yi);
+
+    void Clear();
+};
+
 class Vec3
 {
 public:

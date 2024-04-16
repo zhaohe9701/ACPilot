@@ -14,10 +14,10 @@
 #include "default_debug.h"
 
 #define USB_FREE_DELAY_US 1000
-#define USB_RECEIVE_TASK_PRIO 25
+#define USB_RECEIVE_TASK_PRIO 24
 #define USB_RECEIVE_TASK_STACK 2000
 
-Usb::Usb(uint8_t port_num) : ComInterface(port_num)
+Usb::Usb(uint8_t port_num) : Com(port_num)
 {
 }
 
@@ -63,7 +63,6 @@ void Usb::_receive_task(void *param)
     char tmp_buf[TMP_BUF_LEN] = {0};
     for (;;)
     {
-        char *buf = nullptr;
         uint32_t len = 0;
         if (usb->_current_len >= MAX_USB_BUF_LEN - 1)
         {
