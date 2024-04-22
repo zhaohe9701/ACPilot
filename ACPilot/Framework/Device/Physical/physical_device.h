@@ -6,11 +6,16 @@
 #define PHYSICAL_DEVICE_H_
 
 #include "Device/device_data.h"
+#include "ac_list.h"
+#include "error_handing.h"
+#include "default_debug.h"
 
 class PhysicalDevice
 {
 public:
-    PhysicalDevice() = default;
+    PhysicalDevice();
+
+    bool match(const char *name);
 
     virtual AC_RET readAccelerometer(AccData &data);
 
@@ -24,12 +29,22 @@ public:
 
     virtual AC_RET readBarometer(AtaData &data);
 
+    virtual AC_RET readLocator(PosData &data);
+
     bool haveAbility(VirtualDeviceType type);
+
+    static void add(PhysicalDevice *device);
+
+    static PhysicalDevice *find(const char *name);
 
     ~PhysicalDevice() = default;
 
-private:
+protected:
     DeviceAbility _ability = 0x0;
+    char _name[PARAM_NAME_LEN] = "unknown";
+private:
+    static List<PhysicalDevice *> _list;
+
 };
 
 #endif //PHYSICAL_DEVICE_H_

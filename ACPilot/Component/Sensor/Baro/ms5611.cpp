@@ -12,6 +12,7 @@
 #include "os.h"
 #include "default_debug.h"
 #include <math.h>
+#include <string.h>
 
 #define RESET           0x1E       // cmd 复位
 
@@ -32,16 +33,20 @@
 Ms5611::Ms5611(IoInterface *interface)
 {
     _interface = interface;
+    strncpy(_name, "MS5611", sizeof(_name));
+    _ability = (1U << BAROMETER_DEV) |
+               (1U << ALTIMETER_DEV) |
+               (1U << THERMOMETER_DEV);
 }
 
 AC_RET Ms5611::init()
 {
-    _baroWriteRag(RESET, 0, nullptr);
+    _baroWriteReg(RESET, 0, nullptr);
     tickSleep(500);
     for (int i = 0; i < 8; ++i)
     {
         uint8_t buf[2] = {0};
-        _baroReadRag(PROM_READ + i * 2, 2, buf);
+        _baroReadReg(PROM_READ + i * 2, 2, buf);
         _calculation[i] = buf[0] << 8 | buf[1];
     }
     if (!_checkCRC())
@@ -77,9 +82,9 @@ AC_RET Ms5611::updateTemp()
     uint32_t temperature_raw = 0;
     int64_t temperature = 0;
 
-    _baroWriteRag(OSR_4096_D2, 0, nullptr);
+    _baroWriteReg(OSR_4096_D2, 0, nullptr);
     tickSleep(10);
-    _baroReadRag(ADC_READ, 3, buf);
+    _baroReadReg(ADC_READ, 3, buf);
     temperature_raw = buf[0] << 16 | buf[1] << 8 | buf[2];
 
     _dt = (int64_t) temperature_raw - ((uint64_t) _calculation[5] * 256);
@@ -99,9 +104,9 @@ AC_RET Ms5611::updatePressure()
     int64_t off = ((int64_t) _calculation[2] << 16) + (((int64_t) _calculation[4] * _dt) >> 7);
     int64_t sens = ((int64_t) _calculation[1] << 15) + (((int64_t) _calculation[3] * _dt) >> 8);
 
-    _baroWriteRag(OSR_4096_D1, 0, nullptr);
+    _baroWriteReg(OSR_4096_D1, 0, nullptr);
     tickSleep(10);
-    _baroReadRag(ADC_READ, 3, buf);
+    _baroReadReg(ADC_READ, 3, buf);
     pressure_raw = buf[0] << 16 | buf[1] << 8 | buf[2];
 
     if (temperature < 2000)
@@ -168,12 +173,12 @@ bool Ms5611::_checkCRC()
     }
 }
 
-void Ms5611::_baroWriteRag(uint8_t address, uint8_t length, uint8_t *value)
+void Ms5611::_baroWriteReg(uint8_t address, uint8_t length, uint8_t *value)
 {
     _interface->writeBytes(address, length, value, IO_DEFAULT_TIMEOUT);
 }
 
-void Ms5611::_baroReadRag(uint8_t address, uint8_t length, uint8_t *buf)
+void Ms5611::_baroReadReg(uint8_t address, uint8_t length, uint8_t *buf)
 {
     _interface->readBytes(address, length, buf, IO_DEFAULT_TIMEOUT);
 }

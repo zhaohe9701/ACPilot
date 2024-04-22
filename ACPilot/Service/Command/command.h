@@ -23,9 +23,10 @@ public:
 
     AC_RET getReplay(ComMessage &replay);
 
+    void setPort(uint8_t port);
 protected:
     AC_RET _alloc_result_buf();
-
+    uint8_t _port = 0x0;
     char _cmd[CMD_MAX_LEN] = {0};
     MemoryPool *_pool = nullptr;
     char *_res_buf = nullptr;

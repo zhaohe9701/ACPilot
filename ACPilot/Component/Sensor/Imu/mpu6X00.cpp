@@ -8,6 +8,8 @@
  * @FilePath: \ZH_FLIGHT\Sys\Sensor\Imu\mpu6X00.cpp
  * Copyright (C) 2022 zhaohe. All rights reserved.
  */
+
+#include <string.h>
 #include "mpu6X00.h"
 
 #define SELF_TESTX_REG          0X0D    //自检寄存器X
@@ -80,6 +82,10 @@
 Mpu6X00::Mpu6X00(IoInterface *interface)
 {
     _interface = interface;
+    strncpy(_name, "MPU6X00", sizeof(_name));
+    _ability = (1U << ACCELEROMETER_DEV) |
+               (1U << THERMOMETER_DEV) |
+               (1U << GYROSCOPE_DEV);
 }
 
 AC_RET Mpu6X00::init()
@@ -119,7 +125,7 @@ AC_RET Mpu6X00::updateTemp()
 {
     uint8_t buf[2];
     short raw;
-    float temp;
+
     _imuReadRag(TEMP_OUTH_REG, 2, buf);
     raw = ((int16_t) buf[0] << 8) | buf[1];
 
@@ -139,9 +145,9 @@ AC_RET Mpu6X00::updateGyro()
     gy_raw = ((uint16_t) buf[2] << 8) | buf[3];
     gz_raw = ((uint16_t) buf[4] << 8) | buf[5];
 
-    _gyro_data.x = (float) ((int16_t) (gx_raw) - _bias_gyro_x) * _gyro_sensitivity;
-    _gyro_data.y = (float) ((int16_t) (gy_raw) - _bias_gyro_y) * _gyro_sensitivity;
-    _gyro_data.z = (float) ((int16_t) (gz_raw) - _bias_gyro_z) * _gyro_sensitivity;
+    _gyro_data.x = (float) ((int16_t) (gx_raw)) * _gyro_sensitivity;
+    _gyro_data.y = (float) ((int16_t) (gy_raw)) * _gyro_sensitivity;
+    _gyro_data.z = (float) ((int16_t) (gz_raw)) * _gyro_sensitivity;
 
     return AC_OK;
 }
@@ -157,9 +163,9 @@ AC_RET Mpu6X00::updateAcc()
     ay_raw = ((uint16_t) buf[2] << 8) | buf[3];
     az_raw = ((uint16_t) buf[4] << 8) | buf[5];
 
-    _acc_data.x = (float) ((int16_t) (ax_raw) - _bias_acc_x) * _acc_sensitivity;
-    _acc_data.y = (float) ((int16_t) (ay_raw) - _bias_acc_y) * _acc_sensitivity;
-    _acc_data.z = (float) ((int16_t) (az_raw) - _bias_acc_z) * _acc_sensitivity;
+    _acc_data.x = (float) ((int16_t) (ax_raw)) * _acc_sensitivity;
+    _acc_data.y = (float) ((int16_t) (ay_raw)) * _acc_sensitivity;
+    _acc_data.z = (float) ((int16_t) (az_raw)) * _acc_sensitivity;
 
     return AC_OK;
 }

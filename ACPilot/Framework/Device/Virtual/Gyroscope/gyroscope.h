@@ -15,7 +15,15 @@ public:
 
     AC_RET read(GyroData &data);
 
+    AC_RET cali(Vec3 *data, uint16_t num, DeviceCali *cali) override;
+
+    AC_RET copyRot(DeviceCaliData *cali);
+
+    AC_RET clearCali() override;
+
     ~Gyroscope() = default;
+private:
+    DeviceCaliData _cali_data;
 };
 
 

@@ -48,55 +48,77 @@ enum AC_RELATION
     AC_AND,
     AC_OR
 };
-#define PARAM_NAME_LEN  32
+#define PARAM_NAME_LEN  16
 #define TYPE_BUF_LEN 16
 #define DATA_BUF_LEN 64
 
 class Vec1
 {
 public:
+    Vec1() = default;
+    explicit Vec1(float xi);
     float x = 0.0f;
 
-    void Set(float xi);
+    void set(float xi);
 
-    void Clear();
+    void clear();
 };
 
 class Vec2
 {
 public:
+    Vec2() = default;
+    Vec2(float xi, float yi);
     float x = 0.0f;
     float y = 0.0f;
 
-    void Set(float xi, float yi);
+    void set(float xi, float yi);
 
-    void Clear();
+    void clear();
 };
 
 class Vec3
 {
 public:
+    Vec3() = default;
+    Vec3(float xi, float yi, float zi);
     float x = 0.0f;
     float y = 0.0f;
     float z = 0.0f;
 
-    void Set(float xi, float yi, float zi);
+    void set(float xi, float yi, float zi);
 
-    void Clear();
+    void clear();
 };
 
+class Euler
+{
+public:
+    Euler() = default;
+    Euler(float pitchi, float rolli, float yawi);
+
+    float roll = 0.0f;
+    float pitch = 0.0f;
+    float yaw = 0.0f;
+
+    void set(float pitchi, float rolli, float yawi);
+
+    void clear();
+};
 
 class Vec4
 {
 public:
+    Vec4() = default;
+    Vec4(float wi, float xi, float yi, float zi);
     float x = 0;
     float y = 0;
     float z = 0;
     float w = 0;
 
-    void Set(float xi, float yi, float zi, float wi);
+    void set(float wi, float xi, float yi, float zi);
 
-    void Clear();
+    void clear();
 };
 
 class Type
@@ -114,10 +136,7 @@ public:
 void TypeTest(char *data_buf, void *data, AC_DATA_TYPE type);
 
 typedef uint8_t AcSwitch;
-typedef void (* TaskFunction)( void * );
 
-#define AC_ON 1
-#define AC_OFF 0
+typedef void (*TaskFunction)(void *);
 
-#define ALIGN_VALUE 8
 #endif

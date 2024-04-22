@@ -66,7 +66,6 @@ void MessageReceiveServer::_loop(void *param)
         {
             continue;
         }
-        printf("recv:%s\n", message.buf);
         for (ListNode<MessageReceiveParser *> *it = _parser_list.begin(); it != _parser_list.end(); it = it->getNext())
         {
             if ((*(*it))->match(message))

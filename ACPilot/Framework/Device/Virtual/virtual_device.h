@@ -6,8 +6,10 @@
 #define DEVICE_H_
 
 #include "Device/device_data.h"
+#include "Device/device_cali.h"
 #include "Device/Physical/physical_device.h"
 #include "ac_list.h"
+#include "error_handing.h"
 
 #define DEVICE_NAME_LEN PARAM_NAME_LEN
 
@@ -20,12 +22,20 @@ public:
 
     bool isMatch(const char *name, VirtualDeviceType type);
 
+    virtual AC_RET cali(Vec3 *data, uint16_t num, DeviceCali *cali);
+
+    virtual AC_RET clearCali();
+
+    virtual DeviceCaliData *getCali();
+
     ~VirtualDevice() = default;
+
+    static void add(VirtualDevice *device);
 
     static VirtualDevice *find(const char *name, VirtualDeviceType type);
 
 protected:
-    char _name[DEVICE_NAME_LEN] = {0};
+    char _name[DEVICE_NAME_LEN] = "unknown";
     VirtualDeviceType _type = DEFAULT_DEV;
     PhysicalDevice *_physical_device = nullptr;
 

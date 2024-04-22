@@ -85,9 +85,12 @@
 Icm20689::Icm20689(IoInterface *interface)
 {
     _interface = interface;
-    strncpy(_name, "ICM20689", PARAM_NAME_LEN);
+    strncpy(_name, "ICM20689", sizeof(_name));
     _READ = READ;
     _WRITE = WRITE;
+    _ability = (1U << ACCELEROMETER_DEV) |
+               (1U << THERMOMETER_DEV) |
+               (1U << GYROSCOPE_DEV);
 }
 
 AC_RET Icm20689::init()
@@ -156,9 +159,9 @@ AC_RET Icm20689::updateGyro()
     gy_raw = ((uint16_t) buf[2] << 8) | buf[3];
     gz_raw = ((uint16_t) buf[4] << 8) | buf[5];
 
-    _gyro_data.x = (float) ((int16_t) (gx_raw) - _bias_gyro_x) * _gyro_sensitivity;
-    _gyro_data.y = (float) ((int16_t) (gy_raw) - _bias_gyro_y) * _gyro_sensitivity;
-    _gyro_data.z = (float) ((int16_t) (gz_raw) - _bias_gyro_z) * _gyro_sensitivity;
+    _gyro_data.x = (float) ((int16_t) (gx_raw)) * _gyro_sensitivity;
+    _gyro_data.y = (float) ((int16_t) (gy_raw)) * _gyro_sensitivity;
+    _gyro_data.z = (float) ((int16_t) (gz_raw)) * _gyro_sensitivity;
 
     return AC_OK;
 }
@@ -174,9 +177,9 @@ AC_RET Icm20689::updateAcc()
     ay_raw = ((uint16_t) buf[2] << 8) | buf[3];
     az_raw = ((uint16_t) buf[4] << 8) | buf[5];
 
-    _acc_data.x = (float) ((int16_t) (ax_raw) - _bias_acc_x) * _acc_sensitivity;
-    _acc_data.y = (float) ((int16_t) (ay_raw) - _bias_acc_y) * _acc_sensitivity;
-    _acc_data.z = (float) ((int16_t) (az_raw) - _bias_acc_z) * _acc_sensitivity;
+    _acc_data.x = (float) ((int16_t) (ax_raw)) * _acc_sensitivity;
+    _acc_data.y = (float) ((int16_t) (ay_raw)) * _acc_sensitivity;
+    _acc_data.z = (float) ((int16_t) (az_raw)) * _acc_sensitivity;
 
     return AC_OK;
 }

@@ -15,6 +15,14 @@ enum Event
     ENTER_HEIGHT_EVENT,             // 进入定高模式
     ENTER_CALIBRATE_EVENT,          // 进入校准状态
 
+    LEAVE_INIT_EVENT,               // 进入初始化状态
+    LEAVE_LOCK_EVENT,               // 进入锁定状态
+    LEAVE_UNLOCKING_EVENT,          // 进入正在解锁状态
+    LEAVE_READY_EVENT,              // 进入就绪状态
+    LEAVE_MANUAL_EVENT,             // 进入手动模式
+    LEAVE_HEIGHT_EVENT,             // 进入定高模式
+    LEAVE_CALIBRATE_EVENT,          // 进入校准状态
+
     UNLOCK_COMMAND_EVENT,           // 解锁命令
     LOCK_COMMAND_EVENT,             // 锁定命令
     CALI_COMMAND_EVENT,             // 校准命令

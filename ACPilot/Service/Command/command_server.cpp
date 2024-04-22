@@ -58,10 +58,19 @@ void CommandServer::_loop(void *param)
         {
             if ((*(*it))->match(cmd))
             {
+                (*(*it))->setPort(cmd.message.port);
                 (*(*it))->commandMain(cmd.argc, cmd.argv);
                 (*(*it))->getReplay(replay_msg);
-                replay_msg.port = cmd.message.port;
-                _send_mailbox->push(&replay_msg);
+                if (0 != replay_msg.len)
+                {
+                    _send_mailbox->push(&replay_msg);
+                } else
+                {
+                    if (nullptr != replay_msg.pool)
+                    {
+                        static_cast<MemoryPool *>(replay_msg.pool)->free(replay_msg.buf);
+                    }
+                }
             }
         }
         if (nullptr != cmd.message.pool)

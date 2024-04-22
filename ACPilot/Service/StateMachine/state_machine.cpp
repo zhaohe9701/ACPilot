@@ -5,6 +5,13 @@
 #include "state_machine.h"
 #include "default_debug.h"
 
+State::State(const char *name, Event enter_action, Event leave_action)
+{
+    strncpy(_name, name, sizeof(_name));
+    _enter_action = enter_action;
+    _leave_action = leave_action;
+    StateMachine::add(this);
+}
 
 AC_RET State::addNextState(State *state, Event event)
 {
@@ -16,21 +23,19 @@ AC_RET State::addNextState(State *state, Event event)
     return AC_OK;
 }
 
-State::State(const char *name, Event action)
-{
-    strncpy(_name, name, sizeof(_name));
-    _action = action;
-    StateMachine::add(this);
-}
-
 State *State::trans(Event event)
 {
     return _next_state[event];
 }
 
-void State::action()
+void State::enterAction()
 {
-    Notify::notify(_action);
+    Notify::notify(_enter_action);
+}
+
+void State::leaveAction()
+{
+    Notify::notify(_leave_action);
 }
 
 #define FSM_TASK_PRIO  25
@@ -116,8 +121,9 @@ void StateMachine::_loop(void *param)
         {
             continue;
         }
+        _current_state->leaveAction();
         _current_state = next_state;
-        _current_state->action();
+        _current_state->enterAction();
     }
 }
 

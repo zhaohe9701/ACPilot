@@ -2,20 +2,21 @@ set(APP_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/AircraftState/aircraft_state.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Actuator/Motor/motor.cpp
 #        ${CMAKE_CURRENT_SOURCE_DIR}/AHRS/mahony.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Board/board.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Board/board_esp32_mini.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Control/AttitudeControl/default_attitude_controller.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Control/pid_core.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Debug/ac_debug.cpp
-#        ${CMAKE_CURRENT_SOURCE_DIR}/Protocol/Dshot/dshot.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Protocol/Ibus/ibus.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Protocol/Crsf/crsf.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Remote/remote_channel.cpp
-#        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Mag/ak09916.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/SysTask/sys_init.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/SysTask/test_task.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Light/light.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Filter/filter.cpp
-        )
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/PoseCalculating/pose_calculating.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/SysTask/task_init.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/SensorCalibrate/sensor_calibrate.cpp
+)
 
 if(STM32)
         set(INCLUDES

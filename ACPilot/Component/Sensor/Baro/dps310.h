@@ -33,13 +33,13 @@ private:
 
     int16_t _c0 = 0, _c1 = 0, _c01 = 0, _c11 = 0, _c20 = 0, _c21 = 0, _c30 = 0;
     int32_t _c00 = 0, _c10 = 0;
-    int32_t pressure_scale = 0;
-    int32_t temp_scale = 0;
+    int32_t _pressure_scale = 0;
+    int32_t _temp_scale = 0;
     float _scaled_raw_temp = 0.0f;
 
-    void _baroWriteRag(uint8_t address, uint8_t value);
+    void _baroWriteReg(uint8_t address, uint8_t value);
 
-    void _baroReadRag(uint8_t address, uint8_t length, uint8_t *buf);
+    void _baroReadReg(uint8_t address, uint8_t length, uint8_t *buf);
 
     AC_RET _readCalibration();
 

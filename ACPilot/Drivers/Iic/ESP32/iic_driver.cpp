@@ -26,6 +26,10 @@ AC_RET IicBus::init() const
     {
         return AC_ERROR;
     }
+    if (ESP_OK != i2c_driver_install(handle->host, handle->config.mode, 0, 0, 0))
+    {
+        return AC_ERROR;
+    }
     return AC_OK;
 }
 
@@ -64,8 +68,7 @@ AC_RET Iic::init()
 AC_RET Iic::readReg(uint8_t address, uint8_t &value, uint32_t timeout)
 {
     _bus->lock(timeout);
-    i2c_master_write_to_device(_bus->handle->host, _handle->addr, &address, 1, timeout);
-    i2c_master_read_from_device(_bus->handle->host, _handle->addr, &value, 1, timeout);
+    i2c_master_write_read_device(_bus->handle->host, _handle->addr, &address, 1, &value, 1, timeout);
     _bus->unlock();
     return AC_OK;
 }
@@ -73,44 +76,31 @@ AC_RET Iic::readReg(uint8_t address, uint8_t &value, uint32_t timeout)
 AC_RET Iic::readBytes(uint8_t address, uint8_t len, uint8_t *dataBuf, uint32_t timeout)
 {
     _bus->lock(timeout);
-    i2c_master_write_to_device(_bus->handle->host, _handle->addr, &address, 1, timeout);
-    i2c_master_read_from_device(_bus->handle->host, _handle->addr, dataBuf, len, timeout);
+    i2c_master_write_read_device(_bus->handle->host, _handle->addr, &address, 1, dataBuf, len, timeout);
     _bus->unlock();
     return AC_OK;
 }
 
 AC_RET Iic::readBytesDMA(uint8_t address, uint8_t len, uint8_t *dataBuf, uint32_t timeout)
 {
-    _bus->lock(timeout);
-    i2c_master_write_to_device(_bus->handle->host, _handle->addr, &address, 1, timeout);
-    i2c_master_read_from_device(_bus->handle->host, _handle->addr, dataBuf, len, timeout);
-    _bus->unlock();
-    return AC_OK;
+    return AC_NOT_SUPPORT;
 }
 
 AC_RET Iic::writeReg(uint8_t address, uint8_t value, uint32_t timeout)
 {
+    uint8_t buf[2] = {address, value};
     _bus->lock(timeout);
-    i2c_master_write_to_device(_bus->handle->host, _handle->addr, &address, 1, timeout);
-    i2c_master_write_to_device(_bus->handle->host, _handle->addr, &value, 1, timeout);
+    i2c_master_write_to_device(_bus->handle->host, _handle->addr, buf, 2, timeout);
     _bus->unlock();
     return AC_OK;
 }
 
 AC_RET Iic::writeBytes(uint8_t address, uint8_t len, uint8_t *value, uint32_t timeout)
 {
-    _bus->lock(timeout);
-    i2c_master_write_to_device(_bus->handle->host, _handle->addr, &address, 1, timeout);
-    i2c_master_write_to_device(_bus->handle->host, _handle->addr, value, len, timeout);
-    _bus->unlock();
-    return AC_OK;
+    return AC_NOT_SUPPORT;
 }
 
 AC_RET Iic::writeBytesDMA(uint8_t address, uint8_t len, uint8_t *value, uint32_t timeout)
 {
-    _bus->lock(timeout);
-    i2c_master_write_to_device(_bus->handle->host, _handle->addr, &address, 1, timeout);
-    i2c_master_write_to_device(_bus->handle->host, _handle->addr, value, len, timeout);
-    _bus->unlock();
-    return AC_OK;
+    return AC_NOT_SUPPORT;
 }

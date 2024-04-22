@@ -2,6 +2,7 @@
 // Created by zhaohe on 2023/8/28.
 //
 #include <math.h>
+#include <string.h>
 #include "Dps310.h"
 #include "os.h"
 
@@ -23,33 +24,38 @@
 Dps310::Dps310(IoInterface *interface)
 {
     _interface = interface;
+    strncpy(_name, "DPS310", sizeof(_name));
+    _ability = (1U << BAROMETER_DEV) |
+               (1U << ALTIMETER_DEV) |
+               (1U << THERMOMETER_DEV);
 }
 
 AC_RET Dps310::init()
 {
     uint8_t cfg = 0x0;
-    _baroReadRag(DPS310_PRODREVID, 1, &_id);
+    _baroReadReg(DPS310_PRODREVID, 1, &_id);
     if (0x10 != _id)
     {
+        BASE_ERROR("DPS310: ID error");
         return AC_ERROR;
     }
     tickSleep(10);
     _readCalibration();
     tickSleep(10);
-    _baroWriteRag(DPS310_RESET, 0b10001001);
+    _baroWriteReg(DPS310_RESET, 0b10001001);
     tickSleep(10);
-    _baroWriteRag(DPS310_PRSCFG, 0b01000100);
+    _baroWriteReg(DPS310_PRSCFG, 0b01000100);
     tickSleep(10);
-    _baroReadRag(DPS310_TMPCOEFSRCE, 1, &cfg);
+    _baroReadReg(DPS310_TMPCOEFSRCE, 1, &cfg);
     cfg = cfg & 0x80;
     tickSleep(10);
-    _baroWriteRag(DPS310_TMPCFG, 0b01000100 + cfg);
+    _baroWriteReg(DPS310_TMPCFG, 0b01000100 + cfg);
     tickSleep(10);
-    _baroWriteRag(DPS310_MEASCFG, 0b00000111);
+    _baroWriteReg(DPS310_MEASCFG, 0b00000111);
     tickSleep(10);
-    _baroWriteRag(DPS310_CFGREG, 0b00001100);
-    pressure_scale = 253952;
-    temp_scale = 253952;
+    _baroWriteReg(DPS310_CFGREG, 0b00001100);
+    _pressure_scale = 253952;
+    _temp_scale = 253952;
     return AC_OK;
 }
 
@@ -79,9 +85,9 @@ AC_RET Dps310::_readCalibration()
     do
     {
         tickSleep(10);
-        _baroReadRag(DPS310_MEASCFG, 1, &cfg);
+        _baroReadReg(DPS310_MEASCFG, 1, &cfg);
     } while (!(cfg & (0x01 << 7)));
-    _baroReadRag(0x10, 18, co_effs);
+    _baroReadReg(0x10, 18, co_effs);
 
     _c0 = (int16_t) (((uint16_t) co_effs[0] << 4) | (((uint16_t) co_effs[1] >> 4) & 0x0F));
     _c0 = (int16_t) _twosComplement(_c0, 12);
@@ -118,12 +124,12 @@ int32_t Dps310::_twosComplement(uint32_t val, uint8_t bits)
     return complement;
 }
 
-void Dps310::_baroWriteRag(uint8_t address, uint8_t value)
+void Dps310::_baroWriteReg(uint8_t address, uint8_t value)
 {
     _interface->writeReg(address & WRITE, value, IO_DEFAULT_TIMEOUT);
 }
 
-void Dps310::_baroReadRag(uint8_t address, uint8_t length, uint8_t *buf)
+void Dps310::_baroReadReg(uint8_t address, uint8_t length, uint8_t *buf)
 {
     _interface->readBytes(address | READ, length, buf, IO_DEFAULT_TIMEOUT);
 }
@@ -133,12 +139,12 @@ AC_RET Dps310::updateTemp()
     int32_t raw_temperature = 0;
     uint8_t raw_data[3] = {0};
 
-    _baroReadRag(DPS310_TMPB2, 3, raw_data);
+    _baroReadReg(DPS310_TMPB2, 3, raw_data);
+
     raw_temperature = _twosComplement(
             (uint32_t) raw_data[0] << 16 | (uint32_t) raw_data[1] << 8 | (uint32_t) raw_data[2], 24);
-    _scaled_raw_temp = (float) raw_temperature / (float) temp_scale;
+    _scaled_raw_temp = (float) raw_temperature / (float) _temp_scale;
     _temperature_data.x = _scaled_raw_temp * (float) _c1 + (float) _c0 / 2.0f;
-
     return AC_OK;
 }
 
@@ -146,10 +152,10 @@ AC_RET Dps310::updatePressure()
 {
     int32_t raw_pressure = 0;
     uint8_t raw_data[3] = {0};
-    _baroReadRag(DPS310_PRSB2, 3, raw_data);
+    _baroReadReg(DPS310_PRSB2, 3, raw_data);
     raw_pressure = _twosComplement((uint32_t) raw_data[0] << 16 | (uint32_t) raw_data[1] << 8 | (uint32_t) raw_data[2],
                                    24);
-    _pressure_data.x = (float) raw_pressure / (float) pressure_scale;
+    _pressure_data.x = (float) raw_pressure / (float) _pressure_scale;
 
     _pressure_data.x =
             (float) _c00 +

@@ -2,6 +2,8 @@ set(APP_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/Command/command.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Command/command_parser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Command/command_server.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Light/light.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Light/light_server.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Receive/receive_parser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Receive/receive_server.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Transmit/transmit_server.cpp

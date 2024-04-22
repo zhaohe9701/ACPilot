@@ -1,21 +1,26 @@
 //
 // Created by zhaohe on 2023/8/20.
 //
+#include <string.h>
 #include "Gpio/gpio_driver.h"
 
-Gpio::Gpio(GpioPort port, GpioPin pin)
+GpioHandle::GpioHandle()
 {
-    _pin = pin;
+    memset(&config, 0, sizeof(gpio_config_t));
 }
 
-Gpio::Gpio(GpioPin pin)
+Gpio::Gpio(GpioHandle *handle)
 {
-    _pin = pin;
+    _handle = handle;
 }
 
-AC_RET Gpio::init(GpioState state)
+AC_RET Gpio::init()
 {
-    if (ESP_OK != gpio_set_level(_pin, GPIO_SET))
+    if (ESP_OK != gpio_config(&_handle->config))
+    {
+        return AC_ERROR;
+    }
+    if (ESP_OK != gpio_set_level(_handle->pin, _handle->state))
     {
         return AC_ERROR;
     }
@@ -29,12 +34,12 @@ GpioPort Gpio::getPort()
 
 GpioPin Gpio::getPin()
 {
-    return _pin;
+    return _handle->pin;
 }
 
 AC_RET Gpio::toSet()
 {
-    if (ESP_OK != gpio_set_level(_pin, GPIO_SET))
+    if (ESP_OK != gpio_set_level(_handle->pin, GPIO_SET))
     {
         return AC_ERROR;
     }
@@ -43,7 +48,7 @@ AC_RET Gpio::toSet()
 
 AC_RET Gpio::toReset()
 {
-    if (ESP_OK != gpio_set_level(_pin, GPIO_RESET))
+    if (ESP_OK != gpio_set_level(_handle->pin, GPIO_RESET))
     {
         return AC_ERROR;
     }
@@ -52,9 +57,30 @@ AC_RET Gpio::toReset()
 
 AC_RET Gpio::flip()
 {
-    return AC_ERROR;
+    if (GPIO_SET == gpio_get_level(_handle->pin))
+    {
+        if (ESP_OK != gpio_set_level(_handle->pin, GPIO_RESET))
+        {
+            return AC_ERROR;
+        }
+    } else
+    {
+        if (ESP_OK != gpio_set_level(_handle->pin, GPIO_SET))
+        {
+            return AC_ERROR;
+        }
+    }
+    return AC_OK;
 }
 
-void Gpio::enable() {}
+AC_RET Gpio::set(GpioState state)
+{
+    if (ESP_OK != gpio_set_level(_handle->pin, state))
+    {
+        return AC_ERROR;
+    }
+    return AC_OK;
+}
+
 
 

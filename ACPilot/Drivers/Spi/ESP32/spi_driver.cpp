@@ -71,7 +71,6 @@ AC_RET Spi::readReg(uint8_t address, uint8_t &value, uint32_t timeout)
     data.addr = address;  // 设备ID
     data.length = 8;
     data.rx_buffer = &value;
-    data.flags = SPI_TRANS_VARIABLE_ADDR | SPI_TRANS_USE_RXDATA;
     _bus->lock(timeout);
     spi_device_polling_transmit(_handle->handle, &data);
     _bus->unlock();
@@ -85,7 +84,6 @@ AC_RET Spi::readBytes(uint8_t address, uint8_t len, uint8_t *dataBuf, uint32_t t
     data.addr = address;  // 设备ID
     data.length = 8 * len;
     data.rx_buffer = dataBuf;
-    data.flags = SPI_TRANS_VARIABLE_ADDR | SPI_TRANS_USE_RXDATA;
     _bus->lock(timeout);
     spi_device_polling_transmit(_handle->handle, &data);
     _bus->unlock();
@@ -94,16 +92,7 @@ AC_RET Spi::readBytes(uint8_t address, uint8_t len, uint8_t *dataBuf, uint32_t t
 
 AC_RET Spi::readBytesDMA(uint8_t address, uint8_t len, uint8_t *dataBuf, uint32_t timeout)
 {
-    spi_transaction_t data;
-    memset(&data, 0, sizeof(spi_transaction_t));
-    data.addr = address;  // 设备ID
-    data.length = 8 * len;
-    data.rx_buffer = dataBuf;
-    data.flags = SPI_TRANS_VARIABLE_ADDR | SPI_TRANS_USE_RXDATA;
-    _bus->lock(timeout);
-    spi_device_polling_transmit(_handle->handle, &data);
-    _bus->unlock();
-    return AC_OK;
+    return readBytes(address, len, dataBuf, timeout);
 }
 
 AC_RET Spi::writeReg(uint8_t address, uint8_t value, uint32_t timeout)
@@ -113,7 +102,6 @@ AC_RET Spi::writeReg(uint8_t address, uint8_t value, uint32_t timeout)
     data.addr = address;  // 设备ID
     data.length = 8;
     data.tx_buffer = &value;
-    data.flags = SPI_TRANS_VARIABLE_ADDR | SPI_TRANS_USE_TXDATA;
     _bus->lock(timeout);
     spi_device_polling_transmit(_handle->handle, &data);
     _bus->unlock();
@@ -127,7 +115,6 @@ AC_RET Spi::writeBytes(uint8_t address, uint8_t len, uint8_t *value, uint32_t ti
     data.addr = address;  // 设备ID
     data.length = 8 * len;
     data.tx_buffer = value;
-    data.flags = SPI_TRANS_VARIABLE_ADDR | SPI_TRANS_USE_TXDATA;
     _bus->lock(timeout);
     spi_device_polling_transmit(_handle->handle, &data);
     _bus->unlock();
@@ -136,14 +123,5 @@ AC_RET Spi::writeBytes(uint8_t address, uint8_t len, uint8_t *value, uint32_t ti
 
 AC_RET Spi::writeBytesDMA(uint8_t address, uint8_t len, uint8_t *value, uint32_t timeout)
 {
-    spi_transaction_t data;
-    memset(&data, 0, sizeof(spi_transaction_t));
-    data.addr = address;  // 设备ID
-    data.length = 8 * len;
-    data.tx_buffer = value;
-    data.flags = SPI_TRANS_VARIABLE_ADDR | SPI_TRANS_USE_TXDATA;
-    _bus->lock(timeout);
-    spi_device_polling_transmit(_handle->handle, &data);
-    _bus->unlock();
-    return AC_OK;
+    return writeBytes(address, len, value, timeout);
 }

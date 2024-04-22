@@ -2,7 +2,7 @@
 // Created by zhaohe on 2023/5/21.
 //
 
-#include "Board/board.h"
+#include "Board/board_esp32_mini.h"
 #include "Protocol/Crsf/crsf.h"
 #include "Memory/ac_memory.h"
 #include "Debug/ac_debug.h"
@@ -19,10 +19,13 @@
 #include "Command/command_server.h"
 #include "StateMachine/state_machine.h"
 #include "Receive/test_input_parser.h"
+#include "Light/light_server.h"
+#include "Light/Led/led.h"
+#include "Command/Calibrate/calibrate_command.h"
 
 /******************对外暴露接口*****************/
-extern "C" void sysInit();
-
+extern "C" void frameworkInit();
+extern "C" void serviceInit();
 /*********************************************/
 
 
@@ -47,6 +50,7 @@ void initService()
     MessageReceiveServer::init();
     CommandServer::init();
     StateMachine::init();
+    LightServer::init();
 }
 
 void startService()
@@ -55,6 +59,7 @@ void startService()
     MessageReceiveServer::start();
     CommandServer::start();
     StateMachine::start();
+    LightServer::start();
 }
 
 void addFrameworkInstance()
@@ -72,6 +77,10 @@ void addFrameworkInstance()
     new Mailbox<CommandMessage>("command", 5);
     /* 创建指令信箱实例 */
     new Mailbox<RemoteData>("remote", 1);
+    /* 灯指令信箱实例 */
+    new Mailbox<LightMessage>("light", 1);
+
+    new Mailbox<CaliMessage>("cali", 1);
 
     BASE_INFO("MAILBOX SERVICE INSTANCE ADD");
 }
@@ -92,13 +101,17 @@ void createComponent()
 
     new ThreadCommand();
 
-    State *state_init       = new State("init", ENTER_INIT_EVENT);
-    State *state_lock       = new State("lock", ENTER_LOCK_EVENT);
-    State *state_unlocking  = new State("unlocking", ENTER_UNLOCKING_EVENT);
-    State *state_ready      = new State("ready", ENTER_READY_EVENT);
-    State *state_manual     = new State("manual", ENTER_MANUAL_EVENT);
-    State *state_height     = new State("height", ENTER_HEIGHT_EVENT);
-    State *state_calibrate  = new State("calibrate", ENTER_CALIBRATE_EVENT);
+    new CalibrateCommand();
+
+    new Led(Board::led_pin, GPIO_RESET, LIGHT_DOUBLE_PULSE_FLASHING, 0x01);
+
+    State *state_init       = new State("init", ENTER_INIT_EVENT, LEAVE_INIT_EVENT);
+    State *state_lock       = new State("lock", ENTER_LOCK_EVENT, LEAVE_LOCK_EVENT);
+    State *state_unlocking  = new State("unlocking", ENTER_UNLOCKING_EVENT, LEAVE_UNLOCKING_EVENT);
+    State *state_ready      = new State("ready", ENTER_READY_EVENT, LEAVE_READY_EVENT);
+    State *state_manual     = new State("manual", ENTER_MANUAL_EVENT, LEAVE_MANUAL_EVENT);
+    State *state_height     = new State("height", ENTER_HEIGHT_EVENT, LEAVE_HEIGHT_EVENT);
+    State *state_calibrate  = new State("calibrate", ENTER_CALIBRATE_EVENT, LEAVE_CALIBRATE_EVENT);
 
     //                                          状态转换表
     //--------------------------------------------------------------------------------------------------------------------
@@ -142,14 +155,15 @@ void createComponent()
     BASE_INFO("MESSAGE PARSER INSTANCE CREATE");
 }
 
-void sysInit()
+void frameworkInit()
 {
-    printf("Memory size:now:%lu min:%lu\n", Memory::getFreeHeapSize(), Memory::getMinimumFreeHeapSize());
-
     initFramework();
 
     addFrameworkInstance();
+}
 
+void serviceInit()
+{
     initService();
 
     createComponent();

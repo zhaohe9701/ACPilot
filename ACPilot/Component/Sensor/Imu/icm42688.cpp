@@ -15,7 +15,7 @@
 #define WRITE 0x7f
 
 /**********REGISTER MAP*************/
-#define REG_BANK_SEL					0x76
+#define REG_BANK_SEL                    0x76
 #define BANK0                           0
 #define BANK1                           1
 #define BANK2                           2
@@ -53,8 +53,8 @@
 #define APEX_DATA3                0x34
 #define APEX_DATA4                0x35
 #define APEX_DATA5                0x36
-#define INT_STATUS2               0x37   
-#define INT_STATUS3               0x38   
+#define INT_STATUS2               0x37
+#define INT_STATUS3               0x38
 #define SIGNAL_PATH_RESET         0x4B
 #define INTF_CONFIG0              0x4C
 #define INTF_CONFIG1              0x4D
@@ -138,17 +138,22 @@
 #define OFFSET_USER6              0x7D
 #define OFFSET_USER7              0x7E
 #define OFFSET_USER8              0x7F
+
 /***********************************/
 
 Icm42688::Icm42688(IoInterface *interface)
 {
     _interface = interface;
-    strncpy(_name, "ICM42688", PARAM_NAME_LEN);
+    strncpy(_name, "ICM42688", sizeof(_name));
     _READ = READ;
     _WRITE = WRITE;
     _REG_BANK_SEL = REG_BANK_SEL;
     _BANK0 = BANK0;
+    _ability = (1U << ACCELEROMETER_DEV) |
+               (1U << THERMOMETER_DEV) |
+               (1U << GYROSCOPE_DEV);
 }
+
 AC_RET Icm42688::init()
 {
     /*复位芯片*/
@@ -179,6 +184,11 @@ AC_RET Icm42688::init()
     _imuWriteRag(PWR_MGMT0, 0x0F);
     tickSleep(50);
     _imuReadRag(BANK0, WHO_AM_I, 1, &_id);
+    if (_id != 0x47)
+    {
+        BASE_ERROR("ICM42688: ID error");
+        return AC_ERROR;
+    }
     _gyro_sensitivity = 0.061035;
     _acc_sensitivity = 0.48828;
     return AC_OK;
@@ -194,9 +204,9 @@ AC_RET Icm42688::updateTemp()
     uint8_t buf[2];
     int16_t raw;
     _imuReadRag(TEMP_DATA1, 2, buf);
-    raw = ((int16_t)buf[0] << 8) | buf[1];
+    raw = ((int16_t) buf[0] << 8) | buf[1];
 
-    _tmp_data.x = 25.0f + (float)raw / 326.8f;
+    _tmp_data.x = 25.0f + (float) raw / 326.8f;
 
     return AC_OK;
 }
@@ -207,14 +217,14 @@ AC_RET Icm42688::updateGyro()
     uint16_t gx_raw, gy_raw, gz_raw;
 
     _imuReadRag(GYRO_DATA_X1, 6, buf);
-    
-    gx_raw = ((uint16_t)buf[0] << 8) | buf[1];
-    gy_raw = ((uint16_t)buf[2] << 8) | buf[3];
-    gz_raw = ((uint16_t)buf[4] << 8) | buf[5];
 
-    _gyro_data.x = (float)((int16_t)(gx_raw)-_bias_gyro_x) * _gyro_sensitivity;
-    _gyro_data.y = (float)((int16_t)(gy_raw)-_bias_gyro_y) * _gyro_sensitivity;
-    _gyro_data.z = (float)((int16_t)(gz_raw)-_bias_gyro_z) * _gyro_sensitivity;
+    gx_raw = ((uint16_t) buf[0] << 8) | buf[1];
+    gy_raw = ((uint16_t) buf[2] << 8) | buf[3];
+    gz_raw = ((uint16_t) buf[4] << 8) | buf[5];
+
+    _gyro_data.x = (float) ((int16_t) (gx_raw)) * _gyro_sensitivity;
+    _gyro_data.y = (float) ((int16_t) (gy_raw)) * _gyro_sensitivity;
+    _gyro_data.z = (float) ((int16_t) (gz_raw)) * _gyro_sensitivity;
 
     return AC_OK;
 }
@@ -225,14 +235,14 @@ AC_RET Icm42688::updateAcc()
     uint16_t ax_raw, ay_raw, az_raw;
 
     _imuReadRag(ACCEL_DATA_X1, 6, buf);
-    
-    ax_raw = ((uint16_t)buf[0] << 8) | buf[1];
-    ay_raw = ((uint16_t)buf[2] << 8) | buf[3];
-    az_raw = ((uint16_t)buf[4] << 8) | buf[5];
 
-    _acc_data.x = (float)((int16_t)(ax_raw) - _bias_acc_x) * _acc_sensitivity;
-    _acc_data.y = (float)((int16_t)(ay_raw) - _bias_acc_y) * _acc_sensitivity;
-    _acc_data.z = (float)((int16_t)(az_raw) - _bias_acc_z) * _acc_sensitivity;
+    ax_raw = ((uint16_t) buf[0] << 8) | buf[1];
+    ay_raw = ((uint16_t) buf[2] << 8) | buf[3];
+    az_raw = ((uint16_t) buf[4] << 8) | buf[5];
+
+    _acc_data.x = (float) ((int16_t) (ax_raw)) * _acc_sensitivity;
+    _acc_data.y = (float) ((int16_t) (ay_raw)) * _acc_sensitivity;
+    _acc_data.z = (float) ((int16_t) (az_raw)) * _acc_sensitivity;
 
     return AC_OK;
 }

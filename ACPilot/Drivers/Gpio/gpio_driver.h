@@ -18,11 +18,9 @@
 class Gpio
 {
 public:
-    Gpio(GpioPort port, GpioPin pin);
+    explicit Gpio(GpioHandle *handle);
 
-    explicit Gpio(GpioPin pin);
-
-    AC_RET init(GpioState state);
+    AC_RET init();
 
     GpioPort getPort();
 
@@ -34,11 +32,9 @@ public:
 
     AC_RET flip();
 
-    static void enable();
-
+    AC_RET set(GpioState state);
 private:
-    GpioPort _port = nullptr;
-    GpioPin _pin;
+    GpioHandle *_handle = nullptr;
 };
 
 

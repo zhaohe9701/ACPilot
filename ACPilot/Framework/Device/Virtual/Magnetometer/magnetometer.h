@@ -15,7 +15,13 @@ public:
 
     AC_RET read(MagData &data);
 
+    AC_RET cali(Vec3 *data, uint16_t num, DeviceCali *cali) override;
+
+    AC_RET clearCali() override;
+
     ~Magnetometer() = default;
+private:
+    DeviceCaliData _cali_data;
 };
 
 

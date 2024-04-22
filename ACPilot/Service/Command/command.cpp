@@ -39,13 +39,14 @@ AC_RET Command::_alloc_result_buf()
 
 AC_RET Command::getReplay(ComMessage &replay)
 {
-    if (nullptr == _res_buf || nullptr == _pool)
-    {
-        return AC_ERROR;
-    }
-
     replay.pool = _pool;
     replay.buf = (uint8_t *)_res_buf;
     replay.len = strlen(_res_buf);
+    replay.port = _port;
     return AC_OK;
+}
+
+void Command::setPort(uint8_t port)
+{
+    _port = port;
 }

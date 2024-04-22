@@ -10,6 +10,11 @@ List<VirtualDevice *> VirtualDevice::_list;
 
 AC_RET VirtualDevice::bind(PhysicalDevice *device)
 {
+    if (nullptr == device)
+    {
+        BASE_ERROR("device is null");
+        return AC_ERROR;
+    }
     if (device->haveAbility(_type))
     {
         _physical_device = device;
@@ -43,6 +48,27 @@ VirtualDevice *VirtualDevice::find(const char *name, VirtualDeviceType type)
 VirtualDevice::VirtualDevice(const char *name)
 {
     strncpy(_name, name, DEVICE_NAME_LEN - 1);
+    add(this);
+}
+
+AC_RET VirtualDevice::cali(Vec3 *data, uint16_t num, DeviceCali *cali)
+{
+    return AC_NOT_SUPPORT;
+}
+
+AC_RET VirtualDevice::clearCali()
+{
+    return AC_NOT_SUPPORT;
+}
+
+void VirtualDevice::add(VirtualDevice *device)
+{
+    _list.pushBack(device);
+}
+
+DeviceCaliData *VirtualDevice::getCali()
+{
+    return nullptr;
 }
 
 

@@ -17,4 +17,14 @@ enum GpioState
     GPIO_RESET = 0,
 };
 
+struct GpioHandle
+{
+    GpioHandle();
+
+    gpio_config_t config{};
+    gpio_num_t pin = GPIO_NUM_NC;
+    GpioState state = GPIO_RESET;
+};
+
+
 #endif //GPIO_DRIVER_PARAM_H_

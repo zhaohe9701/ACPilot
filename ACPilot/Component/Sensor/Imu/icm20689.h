@@ -33,16 +33,6 @@ public:
     AC_RET updateGyro() override;
 
     AC_RET updateAcc() override;
-
-private:
-    float _acc_sensitivity = 0.0f;
-    float _gyro_sensitivity = 0.0f;
-    int16_t _bias_acc_x = 0;
-    int16_t _bias_acc_y = 0;
-    int16_t _bias_acc_z = 0;
-    int16_t _bias_gyro_x = 0;
-    int16_t _bias_gyro_y = 0;
-    int16_t _bias_gyro_z = 0;
 };
 
 

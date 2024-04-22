@@ -14,29 +14,40 @@
 #include "type.h"
 
 
-void Vec1::Set(float xi)
+void Vec1::set(float xi)
 {
     x = xi;
 }
 
-void Vec1::Clear()
+void Vec1::clear()
 {
     x = 0;
 }
 
-void Vec2::Set(float xi, float yi)
+Vec1::Vec1(float xi)
+{
+    x = xi;
+}
+
+void Vec2::set(float xi, float yi)
 {
     x = xi;
     y = yi;
 }
 
-void Vec2::Clear()
+void Vec2::clear()
 {
     x = 0;
     y = 0;
 }
 
-void Vec3::Set(float xi, float yi, float zi)
+Vec2::Vec2(float xi, float yi)
+{
+    x = xi;
+    y = yi;
+}
+
+void Vec3::set(float xi, float yi, float zi)
 {
     x = xi;
     y = yi;
@@ -44,14 +55,21 @@ void Vec3::Set(float xi, float yi, float zi)
 }
 
 
-void Vec3::Clear()
+void Vec3::clear()
 {
     x = 0;
     y = 0;
     z = 0;
 }
 
-void Vec4::Set(float xi, float yi, float zi, float wi)
+Vec3::Vec3(float xi, float yi, float zi)
+{
+    x = xi;
+    y = yi;
+    z = zi;
+}
+
+void Vec4::set(float wi, float xi, float yi, float zi)
 {
     x = xi;
     y = yi;
@@ -59,12 +77,20 @@ void Vec4::Set(float xi, float yi, float zi, float wi)
     w = wi;
 }
 
-void Vec4::Clear()
+void Vec4::clear()
 {
     x = 0;
     y = 0;
     z = 0;
     w = 0;
+}
+
+Vec4::Vec4(float wi, float xi, float yi, float zi)
+{
+    x = xi;
+    y = yi;
+    z = zi;
+    w = wi;
 }
 
 AC_RET Type::transTypeToStr(char *type_buf, AC_DATA_TYPE type)
@@ -262,3 +288,23 @@ AC_RET Type::transStrToData(char *data_buf, uint16_t len, void *data, AC_DATA_TY
 }
 
 
+void Euler::set(float pitchi, float rolli, float yawi)
+{
+    roll = rolli;
+    pitch = pitchi;
+    yaw = yawi;
+}
+
+void Euler::clear()
+{
+    roll = 0;
+    pitch = 0;
+    yaw = 0;
+}
+
+Euler::Euler(float pitchi, float rolli, float yawi)
+{
+    roll = rolli;
+    pitch = pitchi;
+    yaw = yawi;
+}

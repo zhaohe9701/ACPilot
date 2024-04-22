@@ -42,9 +42,9 @@ private:
 
     bool _checkCRC();
 
-    void _baroWriteRag(uint8_t address, uint8_t length, uint8_t *value);
+    void _baroWriteReg(uint8_t address, uint8_t length, uint8_t *value);
 
-    void _baroReadRag(uint8_t address, uint8_t length, uint8_t *buf);
+    void _baroReadReg(uint8_t address, uint8_t length, uint8_t *buf);
 };
 
 #endif

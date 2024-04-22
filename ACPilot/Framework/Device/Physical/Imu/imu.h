@@ -54,7 +54,6 @@ public:
 protected:
     uint8_t _id = 0x00;
     IoInterface *_interface = nullptr;
-    char _name[PARAM_NAME_LEN] = "imu";
 
     TempData _tmp_data{0};
     GyroData _gyro_data{0.0f, 0.0f, 0.0f};

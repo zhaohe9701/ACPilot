@@ -17,17 +17,20 @@ class State;
 class State
 {
 public:
-    explicit State(const char *name, Event action);
+    explicit State(const char *name, Event enter_action, Event leave_action);
 
     AC_RET addNextState(State *state, Event event);
 
     State *trans(Event event);
 
-    void action();
+    void enterAction();
+
+    void leaveAction();
 private:
     char _name[STATE_NAME_LEN] = {0};
     State *_next_state[EVENT_NUM] = {nullptr};
-    Event _action = EVENT_NUM;
+    Event _enter_action = EVENT_NUM;
+    Event _leave_action = EVENT_NUM;
 };
 
 class StateMachine

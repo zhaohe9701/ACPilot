@@ -8,14 +8,23 @@
 #include "Device/device_data.h"
 #include "Device/Virtual/virtual_device.h"
 
-class Accelerometer : virtual public VirtualDevice
+class Accelerometer : public VirtualDevice
 {
 public:
+
     explicit Accelerometer(const char *name);
 
     AC_RET read(AccData &data);
 
+    AC_RET cali(Vec3 *data, uint16_t num, DeviceCali *cali) override;
+
+    AC_RET clearCali() override;
+
+    DeviceCaliData *getCali() override;
+
     ~Accelerometer() = default;
+private:
+    DeviceCaliData _cali_data;
 };
 
 

@@ -43,11 +43,10 @@ public:
 protected:
     uint8_t _id = 0x00;
     IoInterface *_interface = nullptr;
-    char _name[PARAM_NAME_LEN] = "baro";
 
     AltitudeData _altitude_data{0.0f};
     TempData _temperature_data{0.0f};
     AtaData _pressure_data{0.0f};
 };
 
-#endif
+#endif //BARO_H_

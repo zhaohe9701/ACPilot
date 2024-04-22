@@ -6,27 +6,25 @@
 
 extern void boardInit();
 extern void deviceInit();
-extern void sysInit();
 extern void taskInit();
-
+extern void frameworkInit();
+extern void serviceInit();
 void app_main(void)
 {
     tickSleep(10000);
 
-    sysInit();
+    frameworkInit();
 
     boardInit();
 
-//    deviceInit();
-//    printf("Hello world2222!\n");
-//    sysInit();
-//    printf("Hello world3333!\n");
-//    taskInit();
-//    DataNode node;
+    serviceInit();
+
+    deviceInit();
+
+    taskInit();
+
     for (;;)
     {
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
-
-
 }
