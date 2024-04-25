@@ -12,7 +12,7 @@
 #define ATTITUDE_CONTROLLER_H_
 
 #include "AircraftState/aircraft_state.h"
-#include "Actuator/actuator_data.h"
+
 #include <stdint.h>
 
 

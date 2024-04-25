@@ -28,6 +28,8 @@ public:
 
     virtual DeviceCaliData *getCali();
 
+    virtual AC_RET setCali(DeviceCaliData &cali);
+
     ~VirtualDevice() = default;
 
     static void add(VirtualDevice *device);

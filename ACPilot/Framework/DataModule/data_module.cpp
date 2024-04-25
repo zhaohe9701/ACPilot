@@ -6,6 +6,7 @@
 #include "data_module.h"
 #include "error_handing.h"
 #include "default_debug.h"
+#include "Nvs/nvs_driver.h"
 
 static uint16_t getArrayNum(char *key)
 {
@@ -265,22 +266,49 @@ AC_RET AllocDataTreeData::operator()(Tree *node, TREE_VISIT_ORDER order)
     return AC_ERROR;
 }
 
+class NodeRelocate : public TreeVisit
+{
+public:
+    explicit NodeRelocate(uint32_t offset);
+
+    AC_RET operator()(Tree *node, TREE_VISIT_ORDER order) override;
+
+private:
+    uint32_t _offset = 0;
+};
+
+NodeRelocate::NodeRelocate(uint32_t offset)
+{
+    _offset = offset;
+}
+
+AC_RET NodeRelocate::operator()(Tree *node, TREE_VISIT_ORDER order)
+{
+    DataTree *data_node = static_cast<DataTree *>(node);
+
+    return AC_OK;
+}
+
+uint8_t *DataModule::_head = nullptr;
 uint8_t *DataModule::_node_head = nullptr;
 uint8_t *DataModule::_data_head = nullptr;
 uint8_t *DataModule::_ptr = nullptr;
 uint32_t DataModule::_size = 0;
+uint32_t DataModule::_node_size = 0;
+uint32_t DataModule::_data_size = 0;
 DataTree *DataModule::_root = nullptr;
 
 AC_RET DataModule::init()
 {
-    _node_head = new uint8_t[DATA_MODULE_MEMORY_SIZE];
+    _head = new uint8_t[DATA_MODULE_MEMORY_SIZE];
 
-    memset(_node_head, 0, DATA_MODULE_MEMORY_SIZE);
+    memset(_head, 0, DATA_MODULE_MEMORY_SIZE);
 
+    _node_head = _head + sizeof(uint8_t *) + sizeof(_node_size) + sizeof(_data_size);
     _data_head = _node_head;
     _ptr = _node_head;
-    _size = DATA_MODULE_MEMORY_SIZE;
-
+    _size = DATA_MODULE_MEMORY_SIZE - sizeof(uint8_t *) - sizeof(_node_size) - sizeof(_data_size);
+    load();
     return AC_OK;
 }
 
@@ -292,33 +320,83 @@ AC_RET DataModule::deInit()
     return AC_OK;
 }
 
-void DataModule::clear()
-{
-    _ptr = _node_head;
-    _data_head = _node_head;
-    _root = nullptr;
-    memset(_node_head, 0, _size);
-}
-
 AC_RET DataModule::load()
 {
+    Nvs *fd = Nvs::open(DATA_MODULE_NVS_NAMESPACE);
+    uint8_t *old_head = nullptr;
+    int32_t offset = 0;
+
+    NULL_CHECK(fd);
+    RETURN_CHECK(fd->read(DATA_MODULE_NVS_KEY, _head, DATA_MODULE_MEMORY_SIZE));
+
+    memcpy(&old_head, _head, sizeof(uint8_t *));
+    memcpy(&_node_size, _head + sizeof(uint8_t *), sizeof(_node_size));
+    memcpy(&_data_size, _head + sizeof(uint8_t *) + sizeof(_node_size), sizeof(_data_size));
+
+    _node_head = _head + sizeof(uint8_t *) + sizeof(_node_size) + sizeof(_data_size);
+    _data_head = _node_head + _node_size;
+    _ptr = _data_head + _data_size;
+    _root = static_cast<DataTree *>((void *) _node_head);
+
+    Nvs::close(fd);
+
+    offset = _head - old_head;
+
+    for (uint32_t i = 0; i < _node_size / sizeof(DataTree); ++i)
+    {
+        if (nullptr != _root[i].getParent())
+        {
+            _root[i].setParent((DataTree *)((uint8_t *)_root[i].getParent() + offset));
+        }
+        if (nullptr != _root[i].getFirstChild())
+        {
+            _root[i].setFirstChild((DataTree *)((uint8_t *)_root[i].getFirstChild() + offset));
+        }
+        if (nullptr != _root[i].getNeighbor())
+        {
+            _root[i].setNeighbor((DataTree *)((uint8_t *)_root[i].getNeighbor() + offset));
+        }
+        if (nullptr != _root[i].getData())
+        {
+            _root[i].setData((uint8_t *)_root[i].getData() + offset);
+        }
+    }
     return AC_OK;
+    error:
+    BASE_ERROR("load data error");
+    Nvs::close(fd);
+    return AC_ERROR;
 }
 
 AC_RET DataModule::save()
 {
+    Nvs *fd = Nvs::open(DATA_MODULE_NVS_NAMESPACE);
+    NULL_CHECK(fd);
+
+    memcpy(_head, &_head, sizeof(uint8_t *));
+    memcpy(_head + sizeof(uint8_t *), &_node_size, sizeof(_node_size));
+    memcpy(_head + sizeof(uint8_t *) + sizeof(_node_size), &_data_size, sizeof(_data_size));
+
+    RETURN_CHECK(fd->write(DATA_MODULE_NVS_KEY, _head, DATA_MODULE_MEMORY_SIZE));
+    RETURN_CHECK(fd->save());
+
+    Nvs::close(fd);
+
     return AC_OK;
+    error:
+    BASE_ERROR("save data error");
+    Nvs::close(fd);
+    return AC_ERROR;
 }
 
 AC_RET DataModule::reset()
 {
-
-    memset(_node_head, 0, DATA_MODULE_MEMORY_SIZE);
-
-    _data_head = _node_head;
     _ptr = _node_head;
-    _size = DATA_MODULE_MEMORY_SIZE;
-
+    _data_head = _node_head;
+    _root = nullptr;
+    _node_size = 0;
+    _data_size = 0;
+    memset(_head, 0, DATA_MODULE_MEMORY_SIZE);
     return AC_OK;
 }
 
@@ -327,20 +405,24 @@ AC_RET DataModule::create(JsonTree *data)
     CreateDataTreeNode create_node;
     CalcDataSize calc_size;
     AllocDataTreeData alloc_data;
+    reset();
 
     RETURN_CHECK(data->traverse(create_node));
     NULL_CHECK(_root = create_node.getRes());
 
+    _node_size = _ptr - _node_head;
     _sync();
 
     RETURN_CHECK(_root->traverse(calc_size));
 
     RETURN_CHECK(_root->traverse(alloc_data));
 
+    _data_size = _ptr - _data_head;
+
     return AC_OK;
     error:
     BASE_ERROR("create data tree error");
-    clear();
+    reset();
     return AC_ERROR;
 }
 
@@ -693,10 +775,8 @@ AC_RET DataModule::write(char *url, void *data, uint16_t size)
 AC_RET DataModule::info(char *buf, uint32_t len)
 {
     snprintf(buf, len, "DATA MODULE INFO:\n"
-                       "\ttotal: %luB\n"
-                       "\tfree : %luB\n"
-                       "\tused :-node size:%luB\n"
-                       "\t      -data size:%luB\n",
+                       "\ttotal   free    node    data\n"
+                       "\t%-8lu%-8lu%-8lu%-8lu\n",
              _size,
              _size - (uint32_t) (_ptr - _node_head),
              (uint32_t) (_data_head - _node_head),

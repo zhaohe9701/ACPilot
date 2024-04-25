@@ -13,6 +13,7 @@
 #include "Device/Virtual/Gyroscope/gyroscope.h"
 #include "Notify/notify.h"
 #include "Command/Calibrate/calibrate_command.h"
+#include "Nvs/nvs_driver.h"
 
 static AcThread *task = nullptr;
 static Mailbox<LightMessage> *light_mailbox = nullptr;
@@ -173,14 +174,23 @@ void sensorCalibrateTask(void *param)
 {
     CaliMessage cmd;
     LightMessage light_msg;
+
     cali_mailbox->pop(&cmd);
     if (cmd.cmd == CALI_CMD_SIMPLE)
     {
         gyro->clearCali();
         reply("input '>cali sampling' to continue\n", cmd.port);
         caliGyro(cmd.port);
+
     } else if (cmd.cmd == CALI_CMD_ADVANCED)
     {
+        Nvs *fd = Nvs::open("calibration");
+        if (fd == nullptr)
+        {
+            BASE_ERROR("open calibration data failed");
+            Notify::notify(CALI_FINISH_EVENT);
+            AcThread::killSelf();
+        }
         gyro->clearCali();
         reply("gyro cali. input '>cali sampling' to continue\n", cmd.port);
         caliGyro(cmd.port);
@@ -189,6 +199,22 @@ void sensorCalibrateTask(void *param)
         caliAccEllipsoid(cmd.port);
         reply("rotary cali. input '>cali sampling' to continue\n", cmd.port);
         caliRotary(cmd.port);
+        reply("rotary cali. input '>cali save' to save\n", cmd.port);
+        light_msg.id = 0x01;
+        light_msg.mode = LIGHT_FAST_FLASHING;
+        light_mailbox->push(&light_msg);
+        cali_mailbox->pop(&cmd);
+        if (cmd.cmd == CALI_CMD_SAVE)
+        {
+            fd->write("gyro", gyro->getCali(), sizeof(DeviceCaliData));
+            fd->write("acc", acc->getCali(), sizeof(DeviceCaliData));
+            fd->save();
+            reply("calibrate data save success\n", cmd.port);
+        } else
+        {
+            reply("calibrate data not save\n", cmd.port);
+        }
+        Nvs::close(fd);
     }
     light_msg.id = 0x01;
     light_msg.mode = LIGHT_BREATHE;

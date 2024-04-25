@@ -12,6 +12,7 @@ enum CaliCmd
     CALI_CMD_ADVANCED,
     CALI_CMD_SIMPLE,
     CALI_CMD_SAMPLING,
+    CALI_CMD_SAVE,
     CALI_CMD_STOP,
 };
 

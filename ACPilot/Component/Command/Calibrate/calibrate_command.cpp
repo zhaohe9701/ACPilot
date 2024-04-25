@@ -63,6 +63,10 @@ int CalibrateCommand::commandMain(int argc, char **argv)
     {
         cali_message.cmd = CALI_CMD_SAMPLING;
         _cali_cmd_mailbox->push(&cali_message);
+    } else if (0 == strncmp(argv[1], "save", CMD_MAX_LEN))
+    {
+        cali_message.cmd = CALI_CMD_SAVE;
+        _cali_cmd_mailbox->push(&cali_message);
     } else
     {
         snprintf(_res_buf, MAX_CALI_REPLY_BUF_LEN, "unknown cmd:%s\n", argv[1]);

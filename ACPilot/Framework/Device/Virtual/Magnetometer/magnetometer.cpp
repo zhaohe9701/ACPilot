@@ -2,6 +2,7 @@
 // Created by zhaohe on 2023/8/30.
 //
 
+#include <string.h>
 #include "magnetometer.h"
 
 Magnetometer::Magnetometer(const char *name) : VirtualDevice(name)
@@ -53,5 +54,16 @@ AC_RET Magnetometer::clearCali()
     _cali_data.rot[0][0] = 1;
     _cali_data.rot[1][1] = 1;
     _cali_data.rot[2][2] = 1;
+    return AC_OK;
+}
+
+DeviceCaliData *Magnetometer::getCali()
+{
+    return &_cali_data;
+}
+
+AC_RET Magnetometer::setCali(DeviceCaliData &cali)
+{
+    memcpy(&_cali_data, &cali, sizeof(DeviceCaliData));
     return AC_OK;
 }

@@ -18,6 +18,7 @@ else ()
             ${CMAKE_CURRENT_SOURCE_DIR}/Uart/ESP32/uart_driver.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/Usb/ESP32/usb_driver.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/Iic/ESP32/iic_driver.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/Nvs/ESP32/nvs_driver.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/HardTimer/ESP32/hard_timer_driver.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/AdConverter/ESP32/ad_converter_driver.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/Wlan/wlan_driver.cpp

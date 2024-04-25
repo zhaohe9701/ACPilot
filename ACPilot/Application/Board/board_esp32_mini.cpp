@@ -29,7 +29,7 @@ GpioHandle gpio21_handle;   // led
 void uartHandleInit()
 {
     esp32_mini_uart1_handle.index = UART_NUM_1;
-    esp32_mini_uart1_handle.config.baud_rate = 921600;
+    esp32_mini_uart1_handle.config.baud_rate = 420000;
     esp32_mini_uart1_handle.config.data_bits = UART_DATA_8_BITS;
     esp32_mini_uart1_handle.config.parity = UART_PARITY_DISABLE;
     esp32_mini_uart1_handle.config.stop_bits = UART_STOP_BITS_1;

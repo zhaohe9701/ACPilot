@@ -22,6 +22,8 @@ public:
 
     DeviceCaliData *getCali() override;
 
+    AC_RET setCali(DeviceCaliData &cali) override;
+
     ~Accelerometer() = default;
 private:
     DeviceCaliData _cali_data;

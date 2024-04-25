@@ -22,6 +22,7 @@
 #include "Light/light_server.h"
 #include "Light/Led/led.h"
 #include "Command/Calibrate/calibrate_command.h"
+#include "Command/Nvs/nvs_command.h"
 
 /******************对外暴露接口*****************/
 extern "C" void frameworkInit();
@@ -103,7 +104,9 @@ void createComponent()
 
     new CalibrateCommand();
 
-    new Led(Board::led_pin, GPIO_RESET, LIGHT_DOUBLE_PULSE_FLASHING, 0x01);
+    new NvsCommand();
+
+    new Led(Board::led_pin, GPIO_RESET, LIGHT_BREATHE, 0x01);
 
     State *state_init       = new State("init", ENTER_INIT_EVENT, LEAVE_INIT_EVENT);
     State *state_lock       = new State("lock", ENTER_LOCK_EVENT, LEAVE_LOCK_EVENT);

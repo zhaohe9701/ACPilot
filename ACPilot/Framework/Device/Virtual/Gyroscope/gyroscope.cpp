@@ -55,3 +55,14 @@ AC_RET Gyroscope::copyRot(DeviceCaliData *cali)
               _cali_data.trans[2][0], _cali_data.trans[2][1], _cali_data.trans[2][2]);
     return AC_OK;
 }
+
+DeviceCaliData *Gyroscope::getCali()
+{
+    return &_cali_data;
+}
+
+AC_RET Gyroscope::setCali(DeviceCaliData &cali)
+{
+    memcpy(&_cali_data, &cali, sizeof(DeviceCaliData));
+    return AC_OK;
+}

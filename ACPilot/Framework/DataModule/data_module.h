@@ -9,7 +9,9 @@
 #include "Json/ac_json.h"
 #include "DataTree/data_tree.h"
 
-#define DATA_MODULE_MEMORY_SIZE 32768
+#define DATA_MODULE_MEMORY_SIZE 10000
+#define DATA_MODULE_NVS_NAMESPACE "dm"
+#define DATA_MODULE_NVS_KEY "dm"
 
 class DataModule
 {
@@ -17,8 +19,6 @@ public:
     static AC_RET init();
 
     static AC_RET deInit();
-
-    static void clear();
 
     static AC_RET load();
 
@@ -61,9 +61,13 @@ public:
     static DataTree *copyTree(DataTree *src);
 
 private:
+    static uint8_t *_head;
     static uint8_t *_node_head;
     static uint8_t *_data_head;
     static uint8_t *_ptr;
+
+    static uint32_t _node_size;
+    static uint32_t _data_size;
     static uint32_t _size;
     static DataTree *_root;
 

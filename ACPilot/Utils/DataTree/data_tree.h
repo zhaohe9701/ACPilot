@@ -20,6 +20,8 @@ public:
 
     AC_RET setData(void *data, uint16_t size);
 
+    AC_RET setData(void *data);
+
     AC_RET copyData(DataTree *tree);
 
     void *getData();

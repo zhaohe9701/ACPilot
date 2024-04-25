@@ -11,6 +11,7 @@
 #include "AHRS/Mahony/mahony.h"
 #include "AHRS/attitude.h"
 #include "HardTimer/hard_timer_driver.h"
+#include "Nvs/nvs_driver.h"
 
 static AcThread *task = nullptr;
 static HardwareTimer *timer = nullptr;
@@ -44,6 +45,22 @@ void poseCalculatingTask(void *param)
         BASE_ERROR("acc or gyro is nullptr");
         AcThread::killSelf();
     }
+    Nvs *fd = Nvs::open("calibration");
+    if (fd == nullptr)
+    {
+        BASE_ERROR("open calibration data failed");
+        AcThread::killSelf();
+    }
+
+    DeviceCaliData cali;
+
+    fd->read("gyro", &cali, sizeof(DeviceCaliData));
+    gyro->setCali(cali);
+
+    fd->read("acc", &cali, sizeof(DeviceCaliData));
+    acc->setCali(cali);
+
+    Nvs::close(fd);
 
     Attitude attitude{new Mahony()};
     int i = 0;
@@ -69,7 +86,7 @@ void poseCalculatingTask(void *param)
 //            printf("%f %f %f\n", mems.acc.x, mems.acc.y, mems.acc.z);
 //            printf("%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", mems.gyro.x, mems.gyro.y, mems.gyro.z, mems.acc.x,
 //                   mems.acc.y, mems.acc.z);
-            printf("euler: %f, %f, %f\n", attitude.euler.roll, attitude.euler.pitch, attitude.euler.yaw);
+//            printf("euler: %f, %f, %f\n", attitude.euler.roll, attitude.euler.pitch, attitude.euler.yaw);
             i = 0;
         } else
         {

@@ -10,7 +10,9 @@ set(APP_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/Command/Memory/memory_command.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Command/Thread/thread_command.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Command/Mailbox/mailbox_command.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Command/Nvs/nvs_command.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Light/Led/led.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Motor/PwmMotor/pwm_motor.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Receive/test_input_parser.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/tdk_imu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/mpu6X00.cpp

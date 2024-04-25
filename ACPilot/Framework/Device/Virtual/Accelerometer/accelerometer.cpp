@@ -2,6 +2,7 @@
 // Created by zhaohe on 2023/8/29.
 //
 
+#include <string.h>
 #include "accelerometer.h"
 
 Accelerometer::Accelerometer(const char *name) : VirtualDevice(name)
@@ -72,4 +73,10 @@ AC_RET Accelerometer::clearCali()
 DeviceCaliData *Accelerometer::getCali()
 {
     return &_cali_data;
+}
+
+AC_RET Accelerometer::setCali(DeviceCaliData &cali)
+{
+    memcpy(&_cali_data, &cali, sizeof(DeviceCaliData));
+    return AC_OK;
 }

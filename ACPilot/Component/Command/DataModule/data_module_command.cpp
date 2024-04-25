@@ -49,8 +49,11 @@ int DataModuleCommand::commandMain(int argc, char **argv)
     {
         if (AC_OK != DataModule::create(argv[2]))
         {
-            snprintf(_res_buf, MAX_DATA_MODULE_REPLY_BUF_LEN, "get failed\n");
+            snprintf(_res_buf, MAX_DATA_MODULE_REPLY_BUF_LEN, "create failed\n");
             return -1;
+        } else
+        {
+            snprintf(_res_buf, MAX_DATA_MODULE_REPLY_BUF_LEN, "create success\n");
         }
     } else if (0 == strncmp(argv[1], "reset", CMD_MAX_LEN))
     {
@@ -68,6 +71,12 @@ int DataModuleCommand::commandMain(int argc, char **argv)
         {
             snprintf(_res_buf, MAX_DATA_MODULE_REPLY_BUF_LEN, "dump data failed\n");
             return -1;
+        } else
+        {
+            if (strlen(_res_buf) < MAX_DATA_MODULE_REPLY_BUF_LEN)
+            {
+                _res_buf[strlen(_res_buf)] = '\n';
+            }
         }
     } else if (0 == strncmp(argv[1], "dump_struct", CMD_MAX_LEN))
     {
@@ -75,6 +84,12 @@ int DataModuleCommand::commandMain(int argc, char **argv)
         {
             snprintf(_res_buf, MAX_DATA_MODULE_REPLY_BUF_LEN, "dump struct failed\n");
             return -1;
+        } else
+        {
+            if (strlen(_res_buf) < MAX_DATA_MODULE_REPLY_BUF_LEN)
+            {
+                _res_buf[strlen(_res_buf)] = '\n';
+            }
         }
     } else if (0 == strncmp(argv[1], "save", CMD_MAX_LEN))
     {
@@ -98,6 +113,12 @@ int DataModuleCommand::commandMain(int argc, char **argv)
         {
             snprintf(_res_buf, MAX_DATA_MODULE_REPLY_BUF_LEN, "get failed\n");
             return -1;
+        } else
+        {
+            if (strlen(_res_buf) < MAX_DATA_MODULE_REPLY_BUF_LEN)
+            {
+                _res_buf[strlen(_res_buf)] = '\n';
+            }
         }
     } else if (0 == strncmp(argv[1], "set", CMD_MAX_LEN))
     {

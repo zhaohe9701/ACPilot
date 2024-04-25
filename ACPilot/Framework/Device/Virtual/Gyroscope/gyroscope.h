@@ -21,6 +21,10 @@ public:
 
     AC_RET clearCali() override;
 
+    DeviceCaliData *getCali() override;
+
+    AC_RET setCali(DeviceCaliData &cali) override;
+
     ~Gyroscope() = default;
 private:
     DeviceCaliData _cali_data;

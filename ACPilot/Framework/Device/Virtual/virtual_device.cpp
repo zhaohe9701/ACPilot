@@ -71,6 +71,11 @@ DeviceCaliData *VirtualDevice::getCali()
     return nullptr;
 }
 
+AC_RET VirtualDevice::setCali(DeviceCaliData &cali)
+{
+    return AC_NOT_SUPPORT;
+}
+
 
 
 

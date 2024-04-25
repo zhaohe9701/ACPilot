@@ -21,7 +21,7 @@ public:
 private:
     uint16_t _channel_data[CRSF_CHANNEL_NUM] = {0};
     Mailbox<RemoteData> *_manager = nullptr;
-    AC_RET _decode(const uint8_t *bin, uint16_t *axis, int bit_num, int len);
+    static AC_RET _decode(const uint8_t *bin, uint16_t *axis, int bit_num, int len);
 };
 
 #endif

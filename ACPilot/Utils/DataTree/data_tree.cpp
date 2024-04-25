@@ -214,6 +214,12 @@ AC_RET DataTree::setData(void *data, uint16_t size)
     return AC_OK;
 }
 
+AC_RET DataTree::setData(void *data)
+{
+    _data = data;
+    return AC_OK;
+}
+
 AC_RET DataTree::copyData(DataTree *tree)
 {
     if (nullptr == tree || nullptr == tree->getData() || nullptr == _data || tree->getSize() != _size)
@@ -285,20 +291,25 @@ AC_RET DataTree::singleNodeFromStruct(JsonTree *json)
 {
     if (JSON_TYPE_DATA == json->getType())
     {
-        setKey(json->getKey());
         _size = Type::transStrToType(json->getVal(), _type);
+        if (0 == _size)
+        {
+            BASE_ERROR("Invalid data type:%s", json->getVal());
+            return AC_ERROR;
+        }
     } else
     {
-        if (nullptr != json->getParent() && JSON_TYPE_ARRAY == json->getParent()->getType())
-        {
-            dataArrayNodeSetIndex(this, 0);
-        } else
-        {
-            setKey(json->getKey());
-        }
         setType(static_cast<AC_DATA_TYPE>(json->getType()));
         setSize(0);
     }
+    if (nullptr != json->getParent() && JSON_TYPE_ARRAY == json->getParent()->getType())
+    {
+        dataArrayNodeSetIndex(this, 0);
+    } else
+    {
+        setKey(json->getKey());
+    }
+
     return AC_OK;
 }
 
@@ -450,6 +461,8 @@ JsonTree *DataTree::toJson(DataTree *tree)
     tree->traverse(visit);
     return visit.getRes();
 }
+
+
 
 
 

@@ -1,9 +1,8 @@
 set(APP_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/AircraftState/aircraft_state.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Actuator/Motor/motor.cpp
-#        ${CMAKE_CURRENT_SOURCE_DIR}/AHRS/mahony.cpp
+
         ${CMAKE_CURRENT_SOURCE_DIR}/Board/board_esp32_mini.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Control/AttitudeControl/default_attitude_controller.cpp
+
         ${CMAKE_CURRENT_SOURCE_DIR}/Control/pid_core.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Debug/ac_debug.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Protocol/Ibus/ibus.cpp
