@@ -23,6 +23,14 @@ AC_RET Motor::set(uint8_t id, float value)
     {
         return AC_ERROR;
     }
+    if (value > 100.f)
+    {
+        value = 100.f;
+    }
+    if (value < 0.f)
+    {
+        value = 0.f;
+    }
     return _group[id]->set(value);
 }
 

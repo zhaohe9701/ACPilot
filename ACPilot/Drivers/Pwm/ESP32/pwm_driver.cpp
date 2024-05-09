@@ -2,12 +2,21 @@
 // Created by zhaohe on 2023/11/27.
 //
 #include "Pwm/pwm_driver.h"
+#include "pwm_driver_param.h"
+
 
 PwmHandle::PwmHandle()
 {
-    memset(&timer_config, 0, sizeof(ledc_timer_config_t));
+
     memset(&channel_config, 0, sizeof(ledc_channel_config_t));
 }
+
+PwmTimerHandle::PwmTimerHandle()
+{
+    memset(&timer_config, 0, sizeof(ledc_timer_config_t));
+}
+
+uint32_t Pwm::_resolution = 0;
 
 Pwm::Pwm(PwmHandle *handle)
 {
@@ -16,15 +25,12 @@ Pwm::Pwm(PwmHandle *handle)
 
 AC_RET Pwm::init()
 {
-    if (ESP_OK != ledc_timer_config(&_handle->timer_config))
-    {
-        return AC_ERROR;
-    }
+
     if (ESP_OK != ledc_channel_config(&_handle->channel_config))
     {
         return AC_ERROR;
     }
-    _resolution = (uint32_t) 1 < _resolution - (uint32_t) 1;
+    set(0.f);
     return AC_OK;
 }
 
@@ -41,3 +47,15 @@ AC_RET Pwm::set(float duty)
     }
     return AC_OK;
 }
+
+AC_RET Pwm::timerInit(PwmTimerHandle *handle)
+{
+    if (ESP_OK != ledc_timer_config(&handle->timer_config))
+    {
+        return AC_ERROR;
+    }
+    _resolution = 1U << handle->timer_config.duty_resolution;
+    return AC_OK;
+}
+
+

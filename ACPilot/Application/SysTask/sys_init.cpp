@@ -3,7 +3,7 @@
 //
 
 #include "Board/board_esp32_mini.h"
-#include "Protocol/Crsf/crsf.h"
+#include "Receive/Crsf/crsf.h"
 #include "Memory/ac_memory.h"
 #include "Debug/ac_debug.h"
 #include "Json/ac_json.h"
@@ -23,14 +23,13 @@
 #include "Light/Led/led.h"
 #include "Command/Calibrate/calibrate_command.h"
 #include "Command/Nvs/nvs_command.h"
+#include "AHRS/attitude.h"
 
 /******************对外暴露接口*****************/
 extern "C" void frameworkInit();
 extern "C" void serviceInit();
+extern "C" void lightControlInit();
 /*********************************************/
-
-
-
 
 void initFramework()
 {
@@ -79,9 +78,11 @@ void addFrameworkInstance()
     /* 创建指令信箱实例 */
     new Mailbox<RemoteData>("remote", 1);
     /* 灯指令信箱实例 */
-    new Mailbox<LightMessage>("light", 1);
+    new Mailbox<LightMessage>("light", 5);
 
     new Mailbox<CaliMessage>("cali", 1);
+
+    new Mailbox<PoseData>("attitude", 1);
 
     BASE_INFO("MAILBOX SERVICE INSTANCE ADD");
 }
@@ -106,45 +107,33 @@ void createComponent()
 
     new NvsCommand();
 
-    new Led(Board::led_pin, GPIO_RESET, LIGHT_BREATHE, 0x01);
+    new Led(Board::led_pin, GPIO_RESET, LIGHT_KEEP_OFF, 0x01);
 
     State *state_init       = new State("init", ENTER_INIT_EVENT, LEAVE_INIT_EVENT);
     State *state_lock       = new State("lock", ENTER_LOCK_EVENT, LEAVE_LOCK_EVENT);
-    State *state_unlocking  = new State("unlocking", ENTER_UNLOCKING_EVENT, LEAVE_UNLOCKING_EVENT);
-    State *state_ready      = new State("ready", ENTER_READY_EVENT, LEAVE_READY_EVENT);
     State *state_manual     = new State("manual", ENTER_MANUAL_EVENT, LEAVE_MANUAL_EVENT);
     State *state_height     = new State("height", ENTER_HEIGHT_EVENT, LEAVE_HEIGHT_EVENT);
-    State *state_calibrate  = new State("calibrate", ENTER_CALIBRATE_EVENT, LEAVE_CALIBRATE_EVENT);
+    State *state_calibrate  = new State("calibrate", ENTER_CALI_EVENT, LEAVE_CALI_EVENT);
 
     //                                          状态转换表
-    //--------------------------------------------------------------------------------------------------------------------
-    //|         |init       |lock         |unlocking        |ready         |manual         |height        |calibrate     |
-    //--------------------------------------------------------------------------------------------------------------------
-    //|init     | *         |INIT_FINISH  | -               | -            | -             | -            | -            |
-    //--------------------------------------------------------------------------------------------------------------------
-    //|lock     | -         | *           |UNLOCK_COMMAND   | -            | -             | -            | CALI_COMMAND |
-    //--------------------------------------------------------------------------------------------------------------------
-    //|unlocking| -         | -           | *               |ROCK_BACK     | -             | -            | -            |
-    //--------------------------------------------------------------------------------------------------------------------
-    //|ready    | -         |MOVE_ROCK    | -               | *            |MANUAL_COMMAND |HEIGHT_COMMAND| -            |
-    //--------------------------------------------------------------------------------------------------------------------
-    //|manual   | -         |LOCK_COMMAND | HEIGHT_COMMAND  | -            | *             | -            | -            |
-    //--------------------------------------------------------------------------------------------------------------------
-    //|height   | -         |LOCK_COMMAND | -               | -            | -             | *            | -            |
-    //--------------------------------------------------------------------------------------------------------------------
-    //|calibrate| -         |CALI_FINISH  | -               | -            | -             | -            | *            |
-    //--------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //|         |init       |lock         |manual         |height        |calibrate     |
+    //-----------------------------------------------------------------------------------
+    //|init     | *         |INIT_FINISH  | -             | -            | -            |
+    //-----------------------------------------------------------------------------------
+    //|lock     | -         | *           |UNLOCK_COMMAND | -            | CALI_COMMAND |
+    //-----------------------------------------------------------------------------------
+    //|manual   | -         |LOCK_COMMAND | *             |HEIGHT_COMMAND| -            |
+    //-----------------------------------------------------------------------------------
+    //|height   | -         |LOCK_COMMAND | -             | *            | -            |
+    //-----------------------------------------------------------------------------------
+    //|calibrate| -         |CALI_FINISH  | -             | -            | *            |
+    //-----------------------------------------------------------------------------------
 
     state_init->addNextState(state_lock, INIT_FINISH_EVENT);
 
-    state_lock->addNextState(state_unlocking, UNLOCK_COMMAND_EVENT);
+    state_lock->addNextState(state_manual, UNLOCK_COMMAND_EVENT);
     state_lock->addNextState(state_calibrate, CALI_COMMAND_EVENT);
-
-    state_unlocking->addNextState(state_ready, ROCK_BACK_EVENT);
-
-    state_ready->addNextState(state_manual, MANUAL_COMMAND_EVENT);
-    state_ready->addNextState(state_height, HEIGHT_COMMAND_EVENT);
-    state_ready->addNextState(state_lock, MOVE_ROCK_EVENT);
 
     state_manual->addNextState(state_lock, LOCK_COMMAND_EVENT);
     state_manual->addNextState(state_height, HEIGHT_COMMAND_EVENT);
@@ -157,6 +146,59 @@ void createComponent()
 
     BASE_INFO("MESSAGE PARSER INSTANCE CREATE");
 }
+
+static Mailbox<LightMessage> *light_mailbox = nullptr;
+
+static void setLight(LightMode light_mode)
+{
+    LightMessage light_msg;
+    light_msg.id = 0x01;
+    light_msg.mode = light_mode;
+    light_mailbox->push(&light_msg, AC_IMMEDIATELY);
+}
+
+void eventHandle(void *param)
+{
+    NotifyToken *token = (NotifyToken *) param;
+    switch (token->getEvent())
+    {
+        case ENTER_INIT_EVENT:
+            setLight(LIGHT_KEEP_OFF);
+            break;
+        case ENTER_LOCK_EVENT:
+            setLight(LIGHT_BREATHE);
+            break;
+        case ENTER_MANUAL_EVENT:
+            setLight(LIGHT_PULSE_FLASHING);
+            break;
+        case ENTER_HEIGHT_EVENT:
+            setLight(LIGHT_DOUBLE_PULSE_FLASHING);
+            break;
+        case ENTER_CALI_EVENT:
+            setLight(LIGHT_SLOW_FLASHING);
+            break;
+        default:
+            break;
+    }
+}
+
+void lightControlInit()
+{
+    light_mailbox = Mailbox<LightMessage>::find("light");
+    if (light_mailbox == nullptr)
+    {
+        BASE_ERROR("light mailbox not found");
+        return;
+    }
+    Notify::sub(ENTER_INIT_EVENT, eventHandle, nullptr);
+    Notify::sub(ENTER_LOCK_EVENT, eventHandle, nullptr);
+    Notify::sub(ENTER_MANUAL_EVENT, eventHandle, nullptr);
+    Notify::sub(ENTER_HEIGHT_EVENT, eventHandle, nullptr);
+    Notify::sub(ENTER_CALI_EVENT, eventHandle, nullptr);
+}
+
+
+
 
 void frameworkInit()
 {

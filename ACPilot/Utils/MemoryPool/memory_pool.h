@@ -9,7 +9,7 @@
 #include "Queue/ac_queue.h"
 #include "ac_list.h"
 
-#define MAX_BUF_NUM 128
+#define MAX_BUF_NUM 300
 #define BUF_POOL_NAME_LEN PARAM_NAME_LEN
 
 

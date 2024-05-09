@@ -45,7 +45,7 @@ int DataModuleCommand::commandMain(int argc, char **argv)
             snprintf(_res_buf, MAX_DATA_MODULE_REPLY_BUF_LEN, "info failed\n");
             return -1;
         }
-    } else if (0 == strncmp(argv[1], "create", CMD_MAX_LEN))
+    } else if (0 == strncmp(argv[1], "create", CMD_MAX_LEN) && argc == 3)
     {
         if (AC_OK != DataModule::create(argv[2]))
         {
@@ -107,7 +107,7 @@ int DataModuleCommand::commandMain(int argc, char **argv)
             return -1;
         }
         snprintf(_res_buf, MAX_DATA_MODULE_REPLY_BUF_LEN, "load success\n");
-    } else if (0 == strncmp(argv[1], "get", CMD_MAX_LEN))
+    } else if (0 == strncmp(argv[1], "get", CMD_MAX_LEN) && argc == 3)
     {
         if (AC_OK != DataModule::get(argv[2], _res_buf, MAX_DATA_MODULE_REPLY_BUF_LEN))
         {
@@ -120,7 +120,7 @@ int DataModuleCommand::commandMain(int argc, char **argv)
                 _res_buf[strlen(_res_buf)] = '\n';
             }
         }
-    } else if (0 == strncmp(argv[1], "set", CMD_MAX_LEN))
+    } else if (0 == strncmp(argv[1], "set", CMD_MAX_LEN) && argc == 4)
     {
         if (AC_OK != DataModule::set(argv[2], argv[3]))
         {
@@ -128,7 +128,7 @@ int DataModuleCommand::commandMain(int argc, char **argv)
             return -1;
         }
         snprintf(_res_buf, MAX_DATA_MODULE_REPLY_BUF_LEN, "set success\n");
-    } else if (0 == strncmp(argv[1], "add", CMD_MAX_LEN))
+    } else if (0 == strncmp(argv[1], "add", CMD_MAX_LEN) && argc == 4)
     {
         if (AC_OK != DataModule::add(argv[2], argv[3]))
         {
@@ -136,7 +136,7 @@ int DataModuleCommand::commandMain(int argc, char **argv)
             return -1;
         }
         snprintf(_res_buf, MAX_DATA_MODULE_REPLY_BUF_LEN, "add success\n");
-    } else if (0 == strncmp(argv[1], "del", CMD_MAX_LEN))
+    } else if (0 == strncmp(argv[1], "del", CMD_MAX_LEN) && argc == 3)
     {
         if (AC_OK != DataModule::del(argv[2]))
         {
@@ -144,6 +144,14 @@ int DataModuleCommand::commandMain(int argc, char **argv)
             return -1;
         }
         snprintf(_res_buf, MAX_DATA_MODULE_REPLY_BUF_LEN, "del success\n");
+    } else if (0 == strncmp(argv[1], "do", CMD_MAX_LEN) && argc == 3)
+    {
+        if (AC_OK != DataModule::doAction(argv[2]))
+        {
+            snprintf(_res_buf, MAX_DATA_MODULE_REPLY_BUF_LEN, "do failed\n");
+            return -1;
+        }
+        snprintf(_res_buf, MAX_DATA_MODULE_REPLY_BUF_LEN, "do success\n");
     } else
     {
         snprintf(_res_buf, MAX_DATA_MODULE_REPLY_BUF_LEN, "unknown cmd:%s\n", argv[1]);

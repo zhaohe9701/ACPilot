@@ -3,8 +3,6 @@
 #include "type.h"
 #include "default_debug.h"
 
-#define COMMAND_TASK_PRIO  10
-#define COMMAND_TASK_STACK_SIZE 3000
 
 Mailbox<CommandMessage> *CommandServer::_cmd_mailbox = nullptr;
 Mailbox<ComMessage> *CommandServer::_send_mailbox = nullptr;
@@ -20,7 +18,7 @@ AC_RET CommandServer::init()
         BASE_ERROR("object can't find");
         return AC_ERROR;
     }
-    _command_task = new AcThread("command", COMMAND_TASK_STACK_SIZE, COMMAND_TASK_PRIO);
+    _command_task = new AcThread("command", COMMAND_TASK_STACK_SIZE, COMMAND_TASK_PRIO, COMMAND_TASK_CORE);
     return AC_OK;
 }
 

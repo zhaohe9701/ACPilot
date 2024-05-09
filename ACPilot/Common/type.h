@@ -40,6 +40,7 @@ enum AC_DATA_TYPE
     AC_STRING,
     AC_NULL,
     AC_SWITCH,
+    AC_ACTION,
     AC_DATA,
 };
 
@@ -128,12 +129,10 @@ public:
 
     static AC_RET transDataToStr(char *data_buf, uint16_t len, void *data, AC_DATA_TYPE type);
 
-    static uint16_t transStrToType(char *type_buf, AC_DATA_TYPE &type);
+    static AC_RET transStrToType(char *type_buf, AC_DATA_TYPE &type, uint16_t &size);
 
     static AC_RET transStrToData(char *data_buf, uint16_t len, void *data, AC_DATA_TYPE type);
 };
-
-void TypeTest(char *data_buf, void *data, AC_DATA_TYPE type);
 
 typedef uint8_t AcSwitch;
 

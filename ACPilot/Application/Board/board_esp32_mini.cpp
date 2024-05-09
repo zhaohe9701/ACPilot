@@ -12,6 +12,8 @@
 #include "Device/Virtual/Accelerometer/accelerometer.h"
 #include "Device/Virtual/Gyroscope/gyroscope.h"
 #include "Device/Virtual/Altimeter/altimeter.h"
+#include "DataModule/data_module.h"
+#include "Light/light_server.h"
 
 /* uart */
 UartHandle esp32_mini_uart1_handle;
@@ -25,6 +27,52 @@ SpiHandle spi1_handle;
 SpiHandle spi2_handle;
 /* gpio */
 GpioHandle gpio21_handle;   // led
+/* pwm */
+PwmTimerHandle pwm_timer_handle;
+PwmHandle pwm0_handle;
+PwmHandle pwm1_handle;
+PwmHandle pwm2_handle;
+PwmHandle pwm3_handle;
+/* interrupt */
+ExtInterruptHandle imu_interrupt_handle;
+
+void interruptHandleInit()
+{
+    imu_interrupt_handle.config.intr_type = GPIO_INTR_POSEDGE;
+    imu_interrupt_handle.config.pin_bit_mask = 1U << GPIO_NUM_14;
+    imu_interrupt_handle.config.mode = GPIO_MODE_INPUT;
+    imu_interrupt_handle.config.pull_down_en = GPIO_PULLDOWN_ENABLE;
+    imu_interrupt_handle.pin = GPIO_NUM_14;
+}
+
+void pwmHandleInit()
+{
+    pwm0_handle.channel_config.speed_mode = LEDC_LOW_SPEED_MODE;
+    pwm0_handle.channel_config.channel = LEDC_CHANNEL_0;
+    pwm0_handle.channel_config.timer_sel = LEDC_TIMER_0;
+    pwm0_handle.channel_config.gpio_num = GPIO_NUM_38;
+
+    pwm1_handle.channel_config.speed_mode = LEDC_LOW_SPEED_MODE;
+    pwm1_handle.channel_config.channel = LEDC_CHANNEL_1;
+    pwm1_handle.channel_config.timer_sel = LEDC_TIMER_0;
+    pwm1_handle.channel_config.gpio_num = GPIO_NUM_7;
+
+    pwm2_handle.channel_config.speed_mode = LEDC_LOW_SPEED_MODE;
+    pwm2_handle.channel_config.channel = LEDC_CHANNEL_2;
+    pwm2_handle.channel_config.timer_sel = LEDC_TIMER_0;
+    pwm2_handle.channel_config.gpio_num = GPIO_NUM_6;
+
+    pwm3_handle.channel_config.speed_mode = LEDC_LOW_SPEED_MODE;
+    pwm3_handle.channel_config.channel = LEDC_CHANNEL_3;
+    pwm3_handle.channel_config.timer_sel = LEDC_TIMER_0;
+    pwm3_handle.channel_config.gpio_num = GPIO_NUM_37;
+
+    pwm_timer_handle.timer_config.speed_mode = LEDC_LOW_SPEED_MODE;
+    pwm_timer_handle.timer_config.timer_num = LEDC_TIMER_0;
+    pwm_timer_handle.timer_config.duty_resolution = LEDC_TIMER_8_BIT;
+    pwm_timer_handle.timer_config.freq_hz = 15000;
+
+}
 
 void uartHandleInit()
 {
@@ -41,9 +89,22 @@ void uartHandleInit()
 
 void wlanHandleInit()
 {
-    wlan_handle.mode = WLAN_MODE_STA;
-    strcpy((char *) wlan_handle.config.sta.ssid, "ZGL_2G");
-    strcpy((char *) wlan_handle.config.sta.password, "77140019");
+    WlanConfig config;
+    RETURN_CHECK(DataModule::read("/wlan", &config, sizeof(WlanConfig)));
+    if (strcmp(config.mode, "AP") == 0)
+    {
+        wlan_handle.mode = WLAN_MODE_AP;
+        strcpy((char *) wlan_handle.config.ap.ssid, config.ssid);
+        strcpy((char *) wlan_handle.config.ap.password, config.password);
+    } else
+    {
+        wlan_handle.mode = WLAN_MODE_STA;
+        strcpy((char *) wlan_handle.config.sta.ssid, config.ssid);
+        strcpy((char *) wlan_handle.config.sta.password, config.password);
+    }
+    return;
+    error:
+    BASE_ERROR("wlan init error");
 }
 
 void udpHandleInit()
@@ -87,16 +148,17 @@ void gpioInit()
 }
 
 Gpio *Board::led_pin = nullptr;
-Gpio *Board::imu_interrupt_pin = nullptr;
+ExtInterrupt *Board::imu_interrupt = nullptr;
 SpiBus *Board::spi_bus_1 = nullptr;
 Spi *Board::spi1 = nullptr;
 Spi *Board::spi2 = nullptr;
 Uart *Board::uart1 = nullptr;
 Usb *Board::usb = nullptr;
 Udp *Board::udp = nullptr;
-ExtInterrupt *Board::imu_interrupt = nullptr;
-
-void test(void *param);
+Pwm *Board::pwm0 = nullptr;
+Pwm *Board::pwm1 = nullptr;
+Pwm *Board::pwm2 = nullptr;
+Pwm *Board::pwm3 = nullptr;
 
 void boardInit()
 {
@@ -111,6 +173,10 @@ void boardInit()
     Board::uart1 = new Uart(&esp32_mini_uart1_handle, 0x02);
     Board::uart1->init();
 
+    interruptHandleInit();
+    Board::imu_interrupt = new ExtInterrupt(&imu_interrupt_handle);
+    Board::imu_interrupt->init();
+
     spiHandleInit();
     Board::spi_bus_1 = new SpiBus(&spi_bus_handle);
     Board::spi_bus_1->init();
@@ -118,6 +184,17 @@ void boardInit()
     Board::spi2 = new Spi(Board::spi_bus_1, &spi2_handle);
     Board::spi1->init();
     Board::spi2->init();
+
+    pwmHandleInit();
+    Pwm::timerInit(&pwm_timer_handle);
+    Board::pwm0 = new Pwm(&pwm0_handle);
+    Board::pwm1 = new Pwm(&pwm1_handle);
+    Board::pwm2 = new Pwm(&pwm2_handle);
+    Board::pwm3 = new Pwm(&pwm3_handle);
+    Board::pwm0->init();
+    Board::pwm1->init();
+    Board::pwm2->init();
+    Board::pwm3->init();
 
     udpHandleInit();
     Board::udp = new Udp(&udp_handle, 0x04);
@@ -127,6 +204,8 @@ void boardInit()
     WlanDriver::init(&wlan_handle);
 }
 
+void eventHandle(void *param);
+
 void deviceInit()
 {
     (new Icm42688(Board::spi1))->init();
@@ -135,65 +214,4 @@ void deviceInit()
     (new Accelerometer("acc"))->bind(PhysicalDevice::find("ICM42688"));
     (new Gyroscope("gyro"))->bind(PhysicalDevice::find("ICM42688"));
     (new Altimeter("altimeter"))->bind(PhysicalDevice::find("DPS310"));
-
-//    AcThread *test_thread = new AcThread("test", 4000, 20);
-//    test_thread->run(test, nullptr);
-}
-
-
-void eventHandle(void *param);
-
-void test(void *param)
-{
-    Notify::sub(ENTER_INIT_EVENT, eventHandle, nullptr);
-    Notify::sub(ENTER_LOCK_EVENT, eventHandle, nullptr);
-    Notify::sub(ENTER_UNLOCKING_EVENT, eventHandle, nullptr);
-    Notify::sub(ENTER_READY_EVENT, eventHandle, nullptr);
-    Notify::sub(ENTER_MANUAL_EVENT, eventHandle, nullptr);
-    Notify::sub(ENTER_HEIGHT_EVENT, eventHandle, nullptr);
-    Notify::sub(ENTER_CALIBRATE_EVENT, eventHandle, nullptr);
-
-    Altimeter *alt = static_cast<Altimeter *>(VirtualDevice::find("altimeter", ALTIMETER_DEV));
-    Accelerometer *acc = static_cast<Accelerometer *>(VirtualDevice::find("acc", ACCELEROMETER_DEV));
-    while (1)
-    {
-        AccData data;
-        acc->read(data);
-        printf("acc: %f, %f, %f\n", data.x, data.y, data.z);
-        AltitudeData alt_data;
-        alt->read(alt_data);
-        printf("alt: %f\n", alt_data.x);
-        tickSleep(500);
-    }
-}
-
-void eventHandle(void *param)
-{
-    NotifyToken *token = (NotifyToken *) param;
-    switch (token->getEvent())
-    {
-        case ENTER_INIT_EVENT:
-            printf("init finish event\n");
-            break;
-        case ENTER_LOCK_EVENT:
-            printf("lock event\n");
-            break;
-        case ENTER_UNLOCKING_EVENT:
-            printf("unlocking event\n");
-            break;
-        case ENTER_READY_EVENT:
-            printf("ready event\n");
-            break;
-        case ENTER_MANUAL_EVENT:
-            printf("manual event\n");
-            break;
-        case ENTER_HEIGHT_EVENT:
-            printf("height event\n");
-            break;
-        case ENTER_CALIBRATE_EVENT:
-            printf("calibrate event\n");
-            break;
-        default:
-            break;
-    }
 }

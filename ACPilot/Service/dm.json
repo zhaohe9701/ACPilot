@@ -1,0 +1,1 @@
+{"wlan":{"mode":"string[4]","ssid":"string[16]","password":"string[16]"},"remote":{"map[8]":["uint8"]}}

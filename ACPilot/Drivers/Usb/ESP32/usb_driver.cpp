@@ -14,8 +14,6 @@
 #include "default_debug.h"
 
 #define USB_FREE_DELAY_US 1000
-#define USB_RECEIVE_TASK_PRIO 24
-#define USB_RECEIVE_TASK_STACK 2000
 
 Usb::Usb(uint8_t port_num) : Com(port_num)
 {
@@ -34,7 +32,7 @@ AC_RET Usb::init()
 
     _timer = new HardwareTimer("usb", _timer_callback, this);
     _timer->init();
-    _usb_task = new AcThread("usb", USB_RECEIVE_TASK_STACK, USB_RECEIVE_TASK_PRIO);
+    _usb_task = new AcThread("usb", USB_RECEIVE_TASK_STACK, USB_RECEIVE_TASK_PRIO, USB_RECEIVE_TASK_CORE);
     _usb_task->run(_receive_task, this);
     return AC_OK;
 }

@@ -20,7 +20,7 @@ public:
     void setBright(uint8_t bright, uint16_t time);
 
 private:
-    LightMode _mode = LIGHT_KEEP_OFF;
+    volatile LightMode _mode = LIGHT_KEEP_OFF;
     AcThread *_thread = nullptr;
     Gpio *_pin = nullptr;
     GpioState _on = GPIO_RESET;

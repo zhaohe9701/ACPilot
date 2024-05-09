@@ -17,7 +17,7 @@ AC_RET MemoryPoolManager::init()
         general_list[i] = new MemoryPool(name,
                                          per_general_memory_pool_size[i],
                                          per_general_memory_pool_num[i],
-                                         false);
+                                         true);
     }
     return AC_OK;
 }

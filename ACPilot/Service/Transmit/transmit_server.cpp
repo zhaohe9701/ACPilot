@@ -4,9 +4,6 @@
 #include "transmit_server.h"
 #include "default_debug.h"
 
-#define SEND_TASK_PRIO  24
-#define SEND_TASK_STACK_SIZE 2000
-
 List<Com *> *MessageTransmitServer::_interface_list;
 Mailbox<ComMessage> *MessageTransmitServer::_mailbox = nullptr;
 AcThread *MessageTransmitServer::_transmit_task = nullptr;
@@ -19,7 +16,7 @@ AC_RET MessageTransmitServer::init()
         BASE_ERROR("object can't find");
         return AC_ERROR;
     }
-    _transmit_task = new AcThread("transmit", SEND_TASK_STACK_SIZE, SEND_TASK_PRIO);
+    _transmit_task = new AcThread("transmit", SEND_TASK_STACK_SIZE, SEND_TASK_PRIO, SEND_TASK_CORE);
     return AC_OK;
 }
 

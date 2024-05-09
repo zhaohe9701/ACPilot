@@ -266,29 +266,6 @@ AC_RET AllocDataTreeData::operator()(Tree *node, TREE_VISIT_ORDER order)
     return AC_ERROR;
 }
 
-class NodeRelocate : public TreeVisit
-{
-public:
-    explicit NodeRelocate(uint32_t offset);
-
-    AC_RET operator()(Tree *node, TREE_VISIT_ORDER order) override;
-
-private:
-    uint32_t _offset = 0;
-};
-
-NodeRelocate::NodeRelocate(uint32_t offset)
-{
-    _offset = offset;
-}
-
-AC_RET NodeRelocate::operator()(Tree *node, TREE_VISIT_ORDER order)
-{
-    DataTree *data_node = static_cast<DataTree *>(node);
-
-    return AC_OK;
-}
-
 uint8_t *DataModule::_head = nullptr;
 uint8_t *DataModule::_node_head = nullptr;
 uint8_t *DataModule::_data_head = nullptr;
@@ -346,19 +323,19 @@ AC_RET DataModule::load()
     {
         if (nullptr != _root[i].getParent())
         {
-            _root[i].setParent((DataTree *)((uint8_t *)_root[i].getParent() + offset));
+            _root[i].setParent((DataTree *) ((uint8_t *) _root[i].getParent() + offset));
         }
         if (nullptr != _root[i].getFirstChild())
         {
-            _root[i].setFirstChild((DataTree *)((uint8_t *)_root[i].getFirstChild() + offset));
+            _root[i].setFirstChild((DataTree *) ((uint8_t *) _root[i].getFirstChild() + offset));
         }
         if (nullptr != _root[i].getNeighbor())
         {
-            _root[i].setNeighbor((DataTree *)((uint8_t *)_root[i].getNeighbor() + offset));
+            _root[i].setNeighbor((DataTree *) ((uint8_t *) _root[i].getNeighbor() + offset));
         }
         if (nullptr != _root[i].getData())
         {
-            _root[i].setData((uint8_t *)_root[i].getData() + offset);
+            _root[i].setData((uint8_t *) _root[i].getData() + offset);
         }
     }
     return AC_OK;
@@ -473,7 +450,7 @@ AC_RET DataModule::dumpData(char *buf, uint32_t len)
     return AC_ERROR;
 }
 
-AC_RET DataModule::set(char *url, JsonTree *data)
+AC_RET DataModule::set(const char *url, JsonTree *data)
 {
     if (nullptr == _root || nullptr == data || nullptr == url)
     {
@@ -489,7 +466,7 @@ AC_RET DataModule::set(char *url, JsonTree *data)
     return DataTree::fromJson(node, data->getFirstChild());
 }
 
-AC_RET DataModule::get(char *url, JsonTree *data)
+AC_RET DataModule::get(const char *url, JsonTree *data)
 {
     if (nullptr == _root || nullptr == data || nullptr == url)
     {
@@ -505,7 +482,7 @@ AC_RET DataModule::get(char *url, JsonTree *data)
     return AC_OK;
 }
 
-AC_RET DataModule::add(char *url, JsonTree *data)
+AC_RET DataModule::add(const char *url, JsonTree *data)
 {
     if (nullptr == _root || nullptr == data || nullptr == url)
     {
@@ -572,7 +549,7 @@ AC_RET DataModule::add(char *url, JsonTree *data)
     return AC_OK;
 }
 
-AC_RET DataModule::del(char *url)
+AC_RET DataModule::del(const char *url)
 {
     if (nullptr == _root || nullptr == url)
     {
@@ -632,7 +609,7 @@ AC_RET DataModule::create(char *data)
     return ret;
 }
 
-AC_RET DataModule::set(char *url, char *data)
+AC_RET DataModule::set(const char *url, char *data)
 {
     JsonTree *json = nullptr;
     AC_RET ret = AC_OK;
@@ -652,7 +629,7 @@ AC_RET DataModule::set(char *url, char *data)
     return ret;
 }
 
-AC_RET DataModule::get(char *url, char *data, uint32_t len)
+AC_RET DataModule::get(const char *url, char *data, uint32_t len)
 {
     JsonTree *json = nullptr;
 
@@ -684,7 +661,7 @@ AC_RET DataModule::get(char *url, char *data, uint32_t len)
     return AC_OK;
 }
 
-AC_RET DataModule::add(char *url, char *data)
+AC_RET DataModule::add(const char *url, char *data)
 {
     JsonTree *json = nullptr;
     AC_RET ret = AC_OK;
@@ -704,7 +681,7 @@ AC_RET DataModule::add(char *url, char *data)
     return ret;
 }
 
-AC_RET DataModule::read(char *url, void *data, uint16_t size)
+AC_RET DataModule::read(const char *url, void *data, uint16_t size)
 {
     DataTree *node = nullptr;
 
@@ -738,7 +715,55 @@ AC_RET DataModule::read(char *url, void *data, uint16_t size)
     return AC_OK;
 }
 
-AC_RET DataModule::write(char *url, void *data, uint16_t size)
+AC_RET DataModule::registerAction(const char *url, TaskFunction action)
+{
+    DataTree *node = nullptr;
+
+    if (nullptr == _root || nullptr == url || nullptr == action)
+    {
+        BASE_ERROR("param error");
+        return AC_ERROR;
+    }
+    node = DataTree::find(_root, url);
+
+    if (nullptr == node)
+    {
+        BASE_ERROR("url[%s] not found", url);
+    }
+
+    node->setData((void *) action);
+
+    return AC_OK;
+}
+
+AC_RET DataModule::doAction(const char *url)
+{
+    DataTree *node = nullptr;
+
+    if (nullptr == _root || nullptr == url)
+    {
+        BASE_ERROR("param error");
+        return AC_ERROR;
+    }
+    node = DataTree::find(_root, url);
+
+    if (nullptr == node)
+    {
+        BASE_ERROR("url[%s] not found", url);
+    }
+
+    TaskFunction func = (TaskFunction) node->getData();
+
+    if (nullptr == func)
+    {
+        BASE_ERROR("action is NULL");
+        return AC_ERROR;
+    }
+    func(nullptr);
+    return AC_OK;
+}
+
+AC_RET DataModule::write(const char *url, void *data, uint16_t size)
 {
     DataTree *node = nullptr;
 
@@ -854,6 +879,8 @@ void DataModule::_sync()
 {
     _data_head = _ptr;
 }
+
+
 
 
 

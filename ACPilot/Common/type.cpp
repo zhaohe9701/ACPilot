@@ -130,6 +130,9 @@ AC_RET Type::transTypeToStr(char *type_buf, AC_DATA_TYPE type)
         case AC_ENUM:
             strncpy(type_buf, "enum", TYPE_BUF_LEN - 1);
             break;
+        case AC_ACTION:
+            strncpy(type_buf, "action", TYPE_BUF_LEN - 1);
+            break;
         default:
             return AC_ERROR;
     }
@@ -151,7 +154,7 @@ AC_RET Type::transDataToStr(char *data_buf, uint16_t len, void *data, AC_DATA_TY
     switch (type)
     {
         case AC_UINT8:
-            snprintf(data_buf, len, "%u", (*(uint8_t *)data));
+            snprintf(data_buf, len, "%u", (*(uint8_t *) data));
             break;
         case AC_UINT16:
             snprintf(data_buf, len, "%u", (*(uint16_t *) data));
@@ -169,19 +172,22 @@ AC_RET Type::transDataToStr(char *data_buf, uint16_t len, void *data, AC_DATA_TY
             snprintf(data_buf, len, "%ld", (*(int32_t *) data));
             break;
         case AC_FLOAT:
-            snprintf(data_buf, len, "%f", (*(float *) data));
+            snprintf(data_buf, len, "%g", (*(float *) data));
             break;
         case AC_DOUBLE:
-            snprintf(data_buf, len, "%f", (*(double *)data));
+            snprintf(data_buf, len, "%g", (*(double *) data));
             break;
         case AC_SWITCH:
             snprintf(data_buf, len, "0x%x", (*(uint8_t *) data));
             break;
         case AC_STRING:
-            snprintf(data_buf, len, "%s", (char*)data);
+            snprintf(data_buf, len, "%s", (char *) data);
             break;
         case AC_ENUM:
             snprintf(data_buf, len, "%u", (*(uint16_t *) data));
+            break;
+        case AC_ACTION:
+            snprintf(data_buf, len, "(action)");
             break;
         default:
             return AC_ERROR;
@@ -190,57 +196,61 @@ AC_RET Type::transDataToStr(char *data_buf, uint16_t len, void *data, AC_DATA_TY
     return AC_OK;
 }
 
-uint16_t Type::transStrToType(char *type_buf, AC_DATA_TYPE &type)
+AC_RET Type::transStrToType(char *type_buf, AC_DATA_TYPE &type, uint16_t &size)
 {
     if (0 == strncmp("uint8", type_buf, TYPE_BUF_LEN))
     {
         type = AC_UINT8;
-        return sizeof(uint8_t);
+        size = sizeof(uint8_t);
     } else if (0 == strncmp("uint16", type_buf, TYPE_BUF_LEN))
     {
         type = AC_UINT16;
-        return sizeof(uint16_t);
+        size = sizeof(uint16_t);
     } else if (0 == strncmp("uint32", type_buf, TYPE_BUF_LEN))
     {
         type = AC_UINT32;
-        return sizeof(uint32_t);
+        size = sizeof(uint32_t);
     } else if (0 == strncmp("int8", type_buf, TYPE_BUF_LEN))
     {
         type = AC_INT8;
-        return sizeof(int8_t);
+        size = sizeof(int8_t);
     } else if (0 == strncmp("int16", type_buf, TYPE_BUF_LEN))
     {
         type = AC_INT16;
-        return sizeof(int16_t);
+        size = sizeof(int16_t);
     } else if (0 == strncmp("int32", type_buf, TYPE_BUF_LEN))
     {
         type = AC_INT32;
-        return sizeof(int32_t);
+        size = sizeof(int32_t);
     } else if (0 == strncmp("float", type_buf, TYPE_BUF_LEN))
     {
         type = AC_FLOAT;
-        return sizeof(float);
+        size = sizeof(float);
     } else if (0 == strncmp("double", type_buf, TYPE_BUF_LEN))
     {
         type = AC_DOUBLE;
-        return sizeof(double);
+        size = sizeof(double);
     } else if (0 == strncmp("string", type_buf, 6))
     {
         type = AC_STRING;
-        return strtol(type_buf + 7, nullptr, 10);
+        size = strtol(type_buf + 7, nullptr, 10);
     } else if (0 == strncmp("switch", type_buf, TYPE_BUF_LEN))
     {
         type = AC_SWITCH;
-        return sizeof(uint8_t);
+        size = sizeof(uint8_t);
     } else if (0 == strncmp("enum", type_buf, TYPE_BUF_LEN))
     {
         type = AC_ENUM;
-        return sizeof(uint16_t);
-    }
-    else
+        size = sizeof(uint16_t);
+    } else if (0 == strncmp("action", type_buf, TYPE_BUF_LEN))
     {
-        return 0;
+        type = AC_ACTION;
+        size = 0;
+    } else
+    {
+        return AC_ERROR;
     }
+    return AC_OK;
 }
 
 AC_RET Type::transStrToData(char *data_buf, uint16_t len, void *data, AC_DATA_TYPE type)
@@ -276,7 +286,7 @@ AC_RET Type::transStrToData(char *data_buf, uint16_t len, void *data, AC_DATA_TY
             *((uint8_t *) data) = strtoul(data_buf + 2, nullptr, 16);
             break;
         case AC_STRING:
-            strncpy((char*)data, data_buf, len);
+            strncpy((char *) data, data_buf, len);
             break;
         case AC_ENUM:
             *((uint16_t *) data) = strtoul(data_buf, end, 10);
@@ -286,7 +296,6 @@ AC_RET Type::transStrToData(char *data_buf, uint16_t len, void *data, AC_DATA_TY
     }
     return AC_OK;
 }
-
 
 void Euler::set(float pitchi, float rolli, float yawi)
 {

@@ -13,8 +13,6 @@
 #include "hal/uart_ll.h"
 
 #define UART_FREE_DELAY_US 300
-#define UART_RECEIVE_TASK_PRIO 24
-#define UART_RECEIVE_TASK_STACK 2000
 
 UartHandle::UartHandle()
 {
@@ -54,7 +52,7 @@ AC_RET Uart::init()
     snprintf(name, PARAM_NAME_LEN, "uart_%d", _handle->index);
     _timer = new HardwareTimer(name, _timer_callback, this);
     _timer->init();
-    _uart_task = new AcThread(name, UART_RECEIVE_TASK_STACK, UART_RECEIVE_TASK_PRIO);
+    _uart_task = new AcThread(name, UART_RECEIVE_TASK_STACK, UART_RECEIVE_TASK_PRIO, UART_RECEIVE_TASK_CORE);
     _uart_task->run(_receive_task, this);
     return AC_OK;
 }

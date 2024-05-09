@@ -24,11 +24,13 @@ public:
 
     AC_RET init();
 
+    static AC_RET timerInit(PwmTimerHandle *handle);
+
     AC_RET set(float duty);
 
 private:
     PwmHandle *_handle = nullptr;
-    uint32_t _resolution = 0;
+    static uint32_t _resolution;
 };
 
 #endif //PWM_DRIVER_H_

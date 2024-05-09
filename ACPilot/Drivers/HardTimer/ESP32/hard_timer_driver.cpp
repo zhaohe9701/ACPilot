@@ -71,3 +71,8 @@ bool HardwareTimer::isActive()
 {
     return esp_timer_is_active(_handle.handle);
 }
+
+uint64_t HardwareTimer::getCurrentTime()
+{
+    return esp_timer_get_time();
+}

@@ -3,6 +3,7 @@
 //
 #include "Interrupt/interrupt_driver.h"
 #include "driver/gpio.h"
+#include "default_debug.h"
 
 void extInterruptHandle(void *arg)
 {
@@ -17,20 +18,19 @@ ExtInterrupt::ExtInterrupt(ExtInterruptHandle *handle)
 
 AC_RET ExtInterrupt::init()
 {
-    if (ESP_OK != gpio_set_intr_type(_handle->gpio->getPin(), GPIO_INTR_NEGEDGE))
+    if (ESP_OK != gpio_config(&_handle->config))
     {
+        BASE_ERROR("gpio config error");
         return AC_ERROR;
     }
-    if (ESP_OK != gpio_isr_handler_add(_handle->gpio->getPin(), extInterruptHandle, this))
+    gpio_install_isr_service(0);
+    if (ESP_OK != gpio_isr_handler_add(_handle->pin, extInterruptHandle, this))
     {
+        BASE_ERROR("isr add error");
         return AC_ERROR;
     }
-    return AC_OK;
-}
 
-bool ExtInterrupt::matchPin(GpioPin pin)
-{
-    return _handle->gpio->getPin() == pin;
+    return AC_OK;
 }
 
 void ExtInterrupt::notify()

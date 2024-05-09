@@ -179,7 +179,7 @@ JsonTree *DataTreeDataToJson::getRes()
     return _root;
 }
 
-AC_RET DataTree::setKey(char *key)
+AC_RET DataTree::setKey(const char *key)
 {
     if (nullptr == key)
     {
@@ -291,8 +291,7 @@ AC_RET DataTree::singleNodeFromStruct(JsonTree *json)
 {
     if (JSON_TYPE_DATA == json->getType())
     {
-        _size = Type::transStrToType(json->getVal(), _type);
-        if (0 == _size)
+        if (AC_OK != Type::transStrToType(json->getVal(), _type, _size))
         {
             BASE_ERROR("Invalid data type:%s", json->getVal());
             return AC_ERROR;
@@ -338,7 +337,7 @@ AC_RET DataTree::singleNodeToStruct(JsonTree *json)
     return AC_ERROR;
 }
 
-DataTree *DataTree::findChild(char *key)
+DataTree *DataTree::findChild(const char *key)
 {
     if (nullptr == key)
     {
@@ -387,7 +386,7 @@ AC_RET DataTree::traverse(TreeVisit &visit)
 }
 
 
-DataTree *DataTree::find(DataTree *tree, char *url)
+DataTree *DataTree::find(DataTree *tree, const char *url)
 {
     if (nullptr == url)
     {

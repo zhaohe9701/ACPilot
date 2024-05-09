@@ -15,9 +15,6 @@
 #include "receive_server.h"
 #include "default_debug.h"
 
-#define RECEIVE_TASK_PRIO  24
-#define RECEIVE_TASK_STACK_SIZE 3000
-
 Mailbox<ComMessage> *MessageReceiveServer::_mailbox = nullptr;
 AcThread *MessageReceiveServer::_receive_task = nullptr;
 List<MessageReceiveParser *> MessageReceiveServer::_parser_list;
@@ -31,7 +28,7 @@ AC_RET MessageReceiveServer::init()
         BASE_ERROR("object can't find");
         return AC_ERROR;
     }
-    _receive_task = new AcThread("receive", RECEIVE_TASK_STACK_SIZE, RECEIVE_TASK_PRIO);
+    _receive_task = new AcThread("receive", RECEIVE_TASK_STACK_SIZE, RECEIVE_TASK_PRIO, RECEIVE_TASK_CORE);
     return AC_OK;
 }
 

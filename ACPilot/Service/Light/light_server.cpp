@@ -5,8 +5,7 @@
 #include "light_server.h"
 #include "default_debug.h"
 
-#define LIGHT_TASK_PRIO  9
-#define LIGHT_TASK_STACK_SIZE 2000
+
 
 List<Light *> LightServer::_list;
 AcThread *LightServer::_light_task = nullptr;
@@ -20,7 +19,7 @@ AC_RET LightServer::init()
         BASE_ERROR("object can't find");
         return AC_ERROR;
     }
-    _light_task = new AcThread("light", LIGHT_TASK_STACK_SIZE, LIGHT_TASK_PRIO);
+    _light_task = new AcThread("light", LIGHT_TASK_STACK_SIZE, LIGHT_TASK_PRIO, LIGHT_TASK_CORE);
     return AC_OK;
 }
 

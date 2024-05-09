@@ -19,6 +19,9 @@
 #include "Semaphore/ac_semaphore.h"
 #include "Thread/ac_thread.h"
 
+#define S_TO_US(s) ((s) * 1000000)
+#define US_TO_S(us) ((float)(us) / 1000000.f)
+
 enum TimerMode
 {
     TIMER_MODE_SINGLE,
@@ -39,6 +42,8 @@ public:
     AC_RET stop();
 
     AC_RET del();
+
+    static uint64_t getCurrentTime();
 
 private:
     HardTimerHandle _handle{};

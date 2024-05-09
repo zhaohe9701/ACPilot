@@ -25,103 +25,69 @@
 
 #define BASE_DEBUG
 /*系统*/
-#define SEMAPHORE_NUM       5
-#define QUEUE_NUM           2
-#define MUTEX_NUM           2
-#define DEBUG_PORT          0x01
 
-/*状态机*/
+#define DEBUG_PORT                  0x01
 
-/*传感器*/
-#define IMU1                Icm42688
-#define IMU1_INTERFACE_OBJ  hspi1
-#define IMU1_INTERFACE      SpiBus
-#define IMU1_CS_PORT        IMU1_CS_GPIO_Port
-#define IMU1_CS_PIN         IMU1_CS_Pin
-#define IMU1_EXIT_PIN       SPI1_EXIT_Pin
-
-// #define MAGNETOMETER
-
-#define BARO                Ms5611
-#define BARO_INTERFACE_OBJ  hi2c1
-#define BARO_INTERFACE      Iic
-#define BARO_ADDRESS        MS5611_ADDR
-
-/*电机*/
-#define MOTOR_OUTPUT_MAX    100.0f
-#define MOTOR_OUTPUT_MIN    0.0f
-#define MOTOR_NUM           4
-/*舵机*/
-#define SERVO_NUM           0
-#define MOTOR_1_TIM                 htim8
-#define MOTOR_1_CHANNEL         TIM_CHANNEL_1
-
-#define MOTOR_2_TIM                 htim8
-#define MOTOR_2_CHANNEL         TIM_CHANNEL_2
-
-#define MOTOR_3_TIM                 htim8
-#define MOTOR_3_CHANNEL         TIM_CHANNEL_3
-
-#define MOTOR_4_TIM                 htim8
-#define MOTOR_4_CHANNEL         TIM_CHANNEL_4
-
-/*控制*/
-#define ATTITUDE_CONTROLLER_PARAM_NUM   36
-#define ACTUAL_STATE_MUTEX              mutex[0]
-#define EXPECT_STATE_MUTEX              mutex[1]
-#define ACTUAL_STATE_SEMAPHORE          semaphore[1]
-/*通信*/
-#define RECEIVE_MESSAGE_QUEUE           queue[0]
-#define TRANSMIT_MESSAGE_QUEUE          queue[1]
-#define MESSAGE_TRANSMIT_QUEUE_LEN  10
-#define MESSAGE_RECEIVE_QUEUE_LEN   5
-#define MESSAGE_QUEUE_MAX_LENGTH    10
-#define MAX_MESSAGE_PACKAGE_LENGTH  64
 #define MAX_MESSAGE_BUF_LEN         2048
 #define MAX_UART_BUF_LEN            MAX_MESSAGE_BUF_LEN
 #define MAX_USB_BUF_LEN             MAX_MESSAGE_BUF_LEN
 #define MAX_UDP_BUF_LEN             MAX_MESSAGE_BUF_LEN
-#define USB_PORT_NUMBER             0x01
-#define UART_PORT_NUMBER            0x02
+
 
 /*遥控*/
 #define MAX_CHANNEL_NUM             8
 
-enum ChannelMap
-{
-    MODE_CHANNEL,
-    LOCK_CHANNEL,
-    PITCH_CHANNEL,
-    ROLL_CHANNEL,
-    YAW_CHANNEL,
-    THROTTLE_CHANNEL,
-    X_CHANNEL,
-    Y_CHANNEL,
-    Z_CHANNEL,
-    CHANNEL_MAP_LEN
-};
-#define MANUAL_SWITCH               IBUS_SWITCH_1
-#define ALTITUDE_SWITCH             IBUS_SWITCH_0
-#define AUTO_SWITCH                 IBUS_SWITCH_2
+#define RECEIVE_TASK_CORE               1
+#define RECEIVE_TASK_PRIO               11
+#define RECEIVE_TASK_STACK_SIZE         3000
 
-#define LOCK_SWITCH                 IBUS_SWITCH_0
-#define UNLOCK_SWITCH               IBUS_SWITCH_2
+#define COMMAND_TASK_CORE               1
+#define COMMAND_TASK_PRIO               9
+#define COMMAND_TASK_STACK_SIZE         3000
 
-#define REMOTE_ATTITUDE_SCOPE   30.0f
-#define REMOTE_POSITION_SCOPE   30.0f
-#define REMOTE_THROTTLE_SCOPE   100.0f
-#define REMOTE_PALSTANCE_SCOPE  60.0f
+#define LIGHT_TASK_CORE                 1
+#define LIGHT_TASK_PRIO                 2
+#define LIGHT_TASK_STACK_SIZE           2000
 
-/*消息*/
+#define FSM_TASK_CORE                   1
+#define FSM_TASK_PRIO                   22
+#define FSM_TASK_STACK_SIZE             2000
 
+#define SEND_TASK_CORE                  1
+#define SEND_TASK_PRIO                  10
+#define SEND_TASK_STACK_SIZE            2000
 
-/*循环频率*/
-#define ATTITUDE_SOLVE_CYCLE_FREQ   500
-#define ATTITUDE_CONTROL_CYCLE_FREQ 500
-#define POSITION_CONTROL_CYCLE_FREQ 50
-#define LIGHT_CONTROL_CYCLE_FREQ    1000
-#define DATA_LINK_CYCLE_FREQ        50
-#define BARO_UPDATE_CYCLE_FREQ      20
+#define LED_TASK_CORE                   1
+#define LED_TASK_PRIO                   3
+#define LED_TASK_STACK_SIZE             3000
+
+#define UART_RECEIVE_TASK_CORE          1
+#define UART_RECEIVE_TASK_PRIO          24
+#define UART_RECEIVE_TASK_STACK         2000
+
+#define USB_RECEIVE_TASK_CORE           1
+#define USB_RECEIVE_TASK_PRIO           24
+#define USB_RECEIVE_TASK_STACK          2000
+
+#define UDP_RECEIVE_TASK_CORE           1
+#define UDP_RECEIVE_TASK_PRIO           10
+#define UDP_RECEIVE_TASK_STACK          3000
+
+#define MAIN_CONTROL_TASK_CORE          0
+#define MAIN_CONTROL_TASK_PRIO          23
+#define MAIN_CONTROL_TASK_STACK_SIZE    5000
+
+#define POS_CONTROL_TASK_CORE           0
+#define POS_CONTROL_TASK_PRIO           22
+#define POS_CONTROL_TASK_STACK_SIZE     4000
+
+#define CALI_TASK_CORE                  0
+#define CALI_TASK_PRIO                  10
+#define CALI_TASK_STACK_SIZE            4000
+
+#define BARO_TASK_CORE                  0
+#define BARO_TASK_PRIO                  22
+#define BARO_TASK_STACK_SIZE            4000
 /*------------------------------------------------------*/
 
 

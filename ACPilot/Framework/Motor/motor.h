@@ -32,7 +32,8 @@ public:
     static void enableAll();
 
     static void disableAll();
-private:
+
+protected:
     uint8_t _id = 0x0;
     static Motor *_group[MAX_MOTOR_NUM];
 };

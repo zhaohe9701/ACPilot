@@ -38,9 +38,6 @@ void State::leaveAction()
     Notify::notify(_leave_action);
 }
 
-#define FSM_TASK_PRIO  25
-#define FSM_TASK_STACK_SIZE 2000
-
 List<State *> StateMachine::_state_list;
 AcQueue<Event> StateMachine::_event_queue{5};
 AcThread *StateMachine::_state_machine_task = nullptr;
@@ -54,7 +51,7 @@ AC_RET StateMachine::init()
         Notify::sub((Event)i, _monitor);
     }
 
-    _state_machine_task = new AcThread("fsm", FSM_TASK_STACK_SIZE, FSM_TASK_PRIO);
+    _state_machine_task = new AcThread("fsm", FSM_TASK_STACK_SIZE, FSM_TASK_PRIO, FSM_TASK_CORE);
     return AC_OK;
 }
 

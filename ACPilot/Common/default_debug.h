@@ -6,6 +6,7 @@
 #define DEFAULT_DEBUG_H_
 
 #include "config.h"
+#include <stdio.h>
 
 #ifdef BASE_DEBUG
 #define BASE_INFO(fmt, args...) printf("\033[1;32mINFO :" fmt "\033[0m\n", ## args)

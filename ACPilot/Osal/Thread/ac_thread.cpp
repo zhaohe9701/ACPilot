@@ -10,6 +10,7 @@ AcThread::AcThread(const char *name, uint16_t stack, AcPriority prio, int16_t co
     strncpy(_name, name, PARAM_NAME_LEN - 1);
     _stack_size = stack;
     _prio = prio;
+    _core = core;
 }
 
 void AcThread::kill()

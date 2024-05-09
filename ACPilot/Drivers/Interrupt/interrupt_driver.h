@@ -26,8 +26,6 @@ public:
 
     AC_RET init();
 
-    bool matchPin(GpioPin pin);
-
     void notify();
 
     AC_RET waitNotify(uint32_t timeout = AC_FOREVER);

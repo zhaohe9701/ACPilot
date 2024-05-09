@@ -2,6 +2,7 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <nvs_flash.h>
+#include <driver/gpio.h>
 #include "os.h"
 
 
@@ -10,6 +11,7 @@ extern void deviceInit();
 extern void taskInit();
 extern void frameworkInit();
 extern void serviceInit();
+extern void lightControlInit();
 
 void nvsInit()
 {
@@ -23,9 +25,16 @@ void nvsInit()
     ESP_ERROR_CHECK( err );
 }
 
+void isrInit()
+{
+    gpio_install_isr_service(0);
+}
+
 void app_main(void)
 {
-    tickSleep(10000);
+    tickSleep(2000);
+
+//    isrInit();
 
     nvsInit();
 
@@ -36,6 +45,8 @@ void app_main(void)
     serviceInit();
 
     deviceInit();
+
+    lightControlInit();
 
     taskInit();
 

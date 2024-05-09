@@ -16,12 +16,15 @@
 
 class AcBinSemaphore
 {
-private:
-    SemaphoreHandle _handle = nullptr;
 public:
     AcBinSemaphore();
+
     AC_RET get(uint32_t timeout = AC_FOREVER);
+
     AC_RET give();
+
+private:
+    SemaphoreHandle _handle = nullptr;
 };
 
 class AcCountSemaphore
@@ -30,7 +33,9 @@ private:
     SemaphoreHandle_t _handle = nullptr;
 public:
     explicit AcCountSemaphore(uint32_t max_count, uint32_t init_count = 0);
+
     AC_RET get(uint32_t timeout = AC_FOREVER);
+
     AC_RET give();
 };
 

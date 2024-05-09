@@ -5,10 +5,6 @@
 #include "led.h"
 #include "default_debug.h"
 
-#define LED_TASK_PRIO  2
-#define LED_TASK_STACK_SIZE 1500
-
-
 Led::Led(Gpio *pin, GpioState on, LightMode mode, uint8_t id) : Light(id)
 {
     char name[PARAM_NAME_LEN] = {0};
@@ -24,7 +20,7 @@ Led::Led(Gpio *pin, GpioState on, LightMode mode, uint8_t id) : Light(id)
         _on = GPIO_RESET;
         _off = GPIO_SET;
     }
-    _thread = new AcThread(name, LED_TASK_STACK_SIZE, LED_TASK_PRIO, 1);
+    _thread = new AcThread(name, LED_TASK_STACK_SIZE, LED_TASK_PRIO, LED_TASK_CORE);
     _thread->run(_loop, this);
 }
 
@@ -35,7 +31,7 @@ AC_RET Led::setMode(LightMode mode)
 }
 
 static const uint8_t keep_on[] = {10};
-static const uint8_t keep_off[] = {10};
+static const uint8_t keep_off[] = {0};
 static const uint8_t fast_flashing[] = {10, 10, 0, 0};
 static const uint8_t slow_flashing[] = {10, 10, 0, 0};
 static const uint8_t breathe[] = {0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};

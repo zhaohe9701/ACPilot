@@ -2,9 +2,10 @@
 // Created by zhaohe on 2024/4/19.
 //
 
-#include "PoseCalculating/pose_calculating.h"
+#include "Control/PoseCalculating/pose_calculating.h"
 #include "SensorCalibrate/sensor_calibrate.h"
 #include "Notify/notify.h"
+#include "Control/control.h"
 
 /******************对外暴露接口*****************/
 extern "C" void taskInit();
@@ -12,7 +13,7 @@ extern "C" void taskInit();
 
 void taskInit()
 {
-    registerPoseCalculatingTask();
+    PoseCalculating::init();
     registerSensorCalibrateTask();
-    Notify::notify(INIT_FINISH_EVENT);
+    registerControlTask();
 }

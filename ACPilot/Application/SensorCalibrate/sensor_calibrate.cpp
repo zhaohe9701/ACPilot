@@ -83,7 +83,6 @@ void caliAccEllipsoid(uint8_t port)
 {
     LightMessage light_msg;
     EllipsoidFit ellipsoid_fit{1000.0F};
-    Accelerometer *acc = static_cast<Accelerometer *>(VirtualDevice::find("acc", ACCELEROMETER_DEV));
     CaliMessage cmd;
     Vec3 *data = new Vec3[CALI_ACC_ELLIPSOID_SAMPLING_NUM];
 
@@ -246,6 +245,6 @@ void registerSensorCalibrateTask()
         BASE_ERROR("object is null");
         return;
     }
-    task = new AcThread("cali", 4000, 10);
-    Notify::sub(ENTER_CALIBRATE_EVENT, startPoseCalculatingCb);
+    task = new AcThread("cali", CALI_TASK_STACK_SIZE, CALI_TASK_PRIO, CALI_TASK_CORE);
+    Notify::sub(ENTER_CALI_EVENT, startPoseCalculatingCb);
 }

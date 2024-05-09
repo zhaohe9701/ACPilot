@@ -5,8 +5,7 @@
 #include "udp.h"
 #include "default_debug.h"
 
-#define UDP_RECEIVE_TASK_PRIO 10
-#define UDP_RECEIVE_TASK_STACK 3000
+
 
 Udp::Udp(UdpHandle *handle, uint8_t port_num) : Com(port_num)
 {
@@ -21,7 +20,7 @@ AC_RET Udp::init()
         BASE_ERROR("sub wifi connect success event fail");
         return AC_ERROR;
     }
-    _udp_task = new AcThread("udp", UDP_RECEIVE_TASK_STACK, UDP_RECEIVE_TASK_PRIO);
+    _udp_task = new AcThread("udp", UDP_RECEIVE_TASK_STACK, UDP_RECEIVE_TASK_PRIO, UDP_RECEIVE_TASK_CORE);
     _udp_task->run(Udp::_receive_task, this);
     return AC_OK;
 }

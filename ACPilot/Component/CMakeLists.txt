@@ -2,18 +2,25 @@ set(APP_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/AHRS/attitude.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/AHRS/attitude_solver.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/AHRS/Mahony/mahony.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Algorithm/AltitudeEstimate/altitude_estimate.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Algorithm/BiasDetect/bias_detect.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Algorithm/EllipsoidFit/ellipsoid_fit.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Algorithm/RotaryTrans/rotary_trans.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Algorithm/Variance/variance.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Command/Calibrate/calibrate_command.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Command/DataModule/data_module_command.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Command/Memory/memory_command.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Command/Thread/thread_command.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Command/Mailbox/mailbox_command.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Command/Nvs/nvs_command.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Controller/PID/pid.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Filter/IIR/lpf.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Light/Led/led.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Motor/PwmMotor/pwm_motor.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Receive/test_input_parser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Receive/Ibus/ibus.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Receive/Crsf/crsf.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/RemoteMap/remote_mapper.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/tdk_imu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/mpu6X00.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/icm20602.cpp

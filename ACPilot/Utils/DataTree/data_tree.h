@@ -12,7 +12,7 @@
 class DataTree : public Tree
 {
 public:
-    AC_RET setKey(char *key);
+    AC_RET setKey(const char *key);
 
     char *getKey();
 
@@ -60,11 +60,11 @@ public:
 
     AC_RET delChild(DataTree *child);
 
-    DataTree *findChild(char *key);
+    DataTree *findChild(const char *key);
 
     AC_RET traverse(TreeVisit &visit);
 
-    static DataTree *find(DataTree *tree, char *url);
+    static DataTree *find(DataTree *tree, const char *url);
 
     static DataTree *find(DataTree *tree, Url &url);
 

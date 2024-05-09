@@ -156,39 +156,81 @@ Icm42688::Icm42688(IoInterface *interface)
 
 AC_RET Icm42688::init()
 {
-    /*复位芯片*/
-    _imuWriteRag(DEVICE_CONFIG, 0x01);
-    tickSleep(200);
-    /*配置陀螺仪*/
-    _imuWriteRag(GYRO_CONFIG0, 0x06);
-    tickSleep(50);
-    _imuWriteRag(GYRO_CONFIG1, 0x16);
-    tickSleep(50);
-    /*配置加速度计*/
-    _imuWriteRag(ACCEL_CONFIG0, 0x06);
-    tickSleep(50);
-    _imuWriteRag(ACCEL_CONFIG1, 0x0D);
-
-    tickSleep(50);
-    _imuWriteRag(GYRO_ACCEL_CONFIG0, 0x22); // BW = 200Hz
-    tickSleep(50);
-    /*设置中断高电平脉冲*/
-    _imuWriteRag(INT_CONFIG, 0x03);
-    tickSleep(50);
-    _imuWriteRag(INT_CONFIG0, 0x80);
-    tickSleep(50);
-    /*使能数据就绪中断*/
-    _imuWriteRag(INT_SOURCE0, 0x08);
-    tickSleep(50);
-    /*使能陀螺仪加速度计*/
-    _imuWriteRag(PWR_MGMT0, 0x0F);
-    tickSleep(50);
     _imuReadRag(BANK0, WHO_AM_I, 1, &_id);
     if (_id != 0x47)
     {
         BASE_ERROR("ICM42688: ID error");
         return AC_ERROR;
     }
+
+    /* 复位芯片 */
+    _imuWriteRag(DEVICE_CONFIG, 0x01);
+    tickSleep(15);
+    /* 关闭陀螺仪加速度计 */
+    _imuWriteRag(PWR_MGMT0, 0x00);
+    tickSleep(15);
+
+    /* 抗混叠滤波器参数        Section 5.3                     */
+    /* frequency    delt    deltSqr     bitshift            */
+    /* 258HZ        6       36          10                  */
+    /* 536HZ        12      144         8                   */
+    /* 997HZ        21      440         6                   */
+    /* 1962HZ       37      1376        4                   */
+
+    /* 按258Hz配置 */
+    _imuWriteRag(REG_BANK_SEL, BANK1);
+    tickSleep(1);
+    _imuWriteRag(GYRO_CONFIG_STATIC3, 6);                       // delt
+    tickSleep(1);
+    _imuWriteRag(GYRO_CONFIG_STATIC4, 36 & 0xFF);               // deltSqr
+    tickSleep(1);
+    _imuWriteRag(GYRO_CONFIG_STATIC5, (36 >> 8) | 10 << 4);     // bitshift
+    tickSleep(1);
+
+    _imuWriteRag(REG_BANK_SEL, BANK2);
+    tickSleep(1);
+    _imuWriteRag(ACCEL_CONFIG_STATIC2, 6);
+    tickSleep(1);
+    _imuWriteRag(ACCEL_CONFIG_STATIC3, 36 & 0xFF);
+    tickSleep(1);
+    _imuWriteRag(ACCEL_CONFIG_STATIC4, (36 >> 8) | 10 << 4);
+    tickSleep(1);
+
+    /* 配置低通滤波器 */
+    _imuWriteRag(REG_BANK_SEL, BANK0);
+    tickSleep(1);
+    _imuWriteRag(GYRO_ACCEL_CONFIG0, 0xFF); // Low Latency option
+    tickSleep(1);
+
+    /* 配置中断 */
+    _imuWriteRag(INT_CONFIG, 0x03);     // 设置中断高电平脉冲
+    tickSleep(1);
+    _imuWriteRag(INT_CONFIG0, 0x00);
+    tickSleep(1);
+    _imuWriteRag(INT_SOURCE0, 0x08);    // 使能数据就绪中断
+    tickSleep(1);
+    _imuWriteRag(INT_CONFIG1, 0x60);    // 改变中断脉冲持续时间为8us, 复位中断引脚
+    tickSleep(1);
+
+    /* 关闭AFSR */
+    uint8_t config_value = 0x0;
+    _imuReadRag(INTF_CONFIG1, 1, &config_value);
+    tickSleep(1);
+    config_value &= ~0xC0;
+    config_value |= 0x40;
+    _imuWriteRag(INTF_CONFIG1, config_value);
+    tickSleep(1);
+
+    /*使能陀螺仪加速度计*/
+    _imuWriteRag(PWR_MGMT0, 0x0F);
+    tickSleep(1);
+
+    /* 配置量程及输出速率 */
+    _imuWriteRag(GYRO_CONFIG0, 0x06);       // 2000dps 1000Hz
+    tickSleep(15);
+    _imuWriteRag(ACCEL_CONFIG0, 0x06);      // 16g 1000Hz
+    tickSleep(15);
+
     _gyro_sensitivity = 0.061035;
     _acc_sensitivity = 0.48828;
     return AC_OK;

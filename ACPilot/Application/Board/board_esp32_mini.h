@@ -12,20 +12,24 @@
 #include "Interrupt/interrupt_driver.h"
 #include "Wlan/udp.h"
 #include "Iic/iic_driver.h"
+#include "Pwm/pwm_driver.h"
 
 class Board
 {
 public:
     static Gpio *led_pin;
     static Gpio *imu_interrupt_pin;
-
+    static ExtInterrupt *imu_interrupt;
     static SpiBus *spi_bus_1;
     static Spi *spi1;
     static Spi *spi2;
     static Uart *uart1;
     static Usb *usb;
     static Udp *udp;
-    static ExtInterrupt *imu_interrupt;
+    static Pwm *pwm0;
+    static Pwm *pwm1;
+    static Pwm *pwm2;
+    static Pwm *pwm3;
 };
 
 extern "C" void boardInit();

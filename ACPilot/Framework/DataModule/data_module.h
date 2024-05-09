@@ -5,7 +5,7 @@
 #ifndef DATA_MODULE_H_
 #define DATA_MODULE_H_
 
-
+#include "dm_template.h"
 #include "Json/ac_json.h"
 #include "DataTree/data_tree.h"
 
@@ -34,23 +34,27 @@ public:
 
     static AC_RET dumpData(char *buf, uint32_t len);
 
-    static AC_RET set(char *url, JsonTree *data);
+    static AC_RET set(const char *url, JsonTree *data);
 
-    static AC_RET set(char *url, char *data);
+    static AC_RET set(const char *url, char *data);
 
-    static AC_RET get(char *url, JsonTree *data);
+    static AC_RET get(const char *url, JsonTree *data);
 
-    static AC_RET get(char *url, char *data, uint32_t len);
+    static AC_RET get(const char *url, char *data, uint32_t len);
 
-    static AC_RET add(char *url, JsonTree *data);
+    static AC_RET add(const char *url, JsonTree *data);
 
-    static AC_RET add(char *url, char *data);
+    static AC_RET add(const char *url, char *data);
 
-    static AC_RET del(char *url);
+    static AC_RET del(const char *url);
 
-    static AC_RET read(char *url, void *data, uint16_t size);
+    static AC_RET read(const char *url, void *data, uint16_t size);
 
-    static AC_RET write(char *url, void *data, uint16_t size);
+    static AC_RET write(const char *url, void *data, uint16_t size);
+
+    static AC_RET doAction(const char *url);
+
+    static AC_RET registerAction(const char *url, TaskFunction action);
 
     static AC_RET info(char *buf, uint32_t len);
 
