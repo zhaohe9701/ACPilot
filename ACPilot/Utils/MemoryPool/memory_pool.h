@@ -8,12 +8,9 @@
 #include "type.h"
 #include "Queue/ac_queue.h"
 #include "ac_list.h"
+#include "config.h"
 
-#define MAX_BUF_NUM 300
 #define BUF_POOL_NAME_LEN PARAM_NAME_LEN
-
-
-#define GENERAL_MEMORY_POOL_NUM 4
 
 class MemoryPool
 {
@@ -50,6 +47,7 @@ public:
 
 private:
     bool _allowed_dynamic = false;
+    uint8_t *_head = nullptr;
     uint32_t _size = 0;
     uint32_t _num = 0;
     char _name[BUF_POOL_NAME_LEN] = {0};

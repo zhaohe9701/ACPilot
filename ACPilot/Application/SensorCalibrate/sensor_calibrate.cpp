@@ -237,8 +237,8 @@ void registerSensorCalibrateTask()
     cali_mailbox = Mailbox<CaliMessage>::find("cali");
     send_mailbox = Mailbox<ComMessage>::find("send");
     memory_pool = MemoryPool::getGeneral(CALI_REPLY_LEN);
-    gyro = static_cast<Gyroscope *>(VirtualDevice::find("gyro", GYROSCOPE_DEV));
-    acc = static_cast<Accelerometer *>(VirtualDevice::find("acc", ACCELEROMETER_DEV));
+    gyro = VirtualDevice::find<Gyroscope>("gyro", GYROSCOPE_DEV);
+    acc = VirtualDevice::find<Accelerometer>("acc", ACCELEROMETER_DEV);
     if (light_mailbox == nullptr || cali_mailbox == nullptr || send_mailbox == nullptr || memory_pool == nullptr ||
         gyro == nullptr || acc == nullptr)
     {

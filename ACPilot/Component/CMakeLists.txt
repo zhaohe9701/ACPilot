@@ -21,14 +21,15 @@ set(APP_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/Receive/Ibus/ibus.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Receive/Crsf/crsf.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/RemoteMap/remote_mapper.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Battery/build_in_battery.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Baro/dps310.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Baro/ms5611.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/tdk_imu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/mpu6X00.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/icm20602.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/icm20689.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/icm20948.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Imu/icm42688.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Baro/ms5611.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Baro/dps310.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Sensor/Mag/qmc5883.cpp
         )
 

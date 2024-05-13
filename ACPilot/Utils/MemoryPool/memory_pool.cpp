@@ -11,26 +11,20 @@ MemoryPool *MemoryPool::_general_memory_pool[GENERAL_MEMORY_POOL_NUM] = {nullptr
 
 MemoryPool::MemoryPool(const char *name, uint32_t size, uint32_t num, bool allowed_dynamic)
 {
-    _queue = new AcQueue<uint8_t *>(MAX_BUF_NUM);
+    _queue = new AcQueue<uint8_t *>(num);
     strncpy(_name, name, BUF_POOL_NAME_LEN);
     uint8_t *buf = nullptr;
 
-    if (num > MAX_BUF_NUM)
-    {
-        return;
-    }
     _size = size;
     _num = num;
     _allowed_dynamic = allowed_dynamic;
+    _head = new uint8_t[_size * _num];
+
+    memset(_head, 0, _size * _num);
 
     for (uint32_t i = 0; i < _num; ++i)
     {
-        buf = new uint8_t[_size];
-        if (nullptr == buf)
-        {
-            return;
-        }
-        memset(buf, 0, _size);
+        buf = _head + i * _size;
         _queue->push(&buf, AC_IMMEDIATELY);
     }
     add(this);
@@ -59,16 +53,9 @@ uint8_t *MemoryPool::alloc()
         return buf;
     } else
     {
-        if (_allowed_dynamic && _num < MAX_BUF_NUM)
+        if (_allowed_dynamic)
         {
-            buf = new uint8_t[_size];
-            if (nullptr == buf)
-            {
-                return nullptr;
-            }
-            memset(buf, 0, _size);
-            _queue->push(&buf, AC_IMMEDIATELY);
-            _num++;
+            return new uint8_t[_size];
         }
         return nullptr;
     }
@@ -76,8 +63,17 @@ uint8_t *MemoryPool::alloc()
 
 void MemoryPool::free(uint8_t *buf)
 {
-    memset(buf, 0, _size);
-    _queue->push(&buf, AC_IMMEDIATELY);
+    if (nullptr == buf)
+    {
+        return;
+    }
+    if (buf >= _head && buf < _head + _size * _num)
+    {
+        memset(buf, 0, _size);
+        _queue->push(&buf, AC_IMMEDIATELY);
+        return;
+    }
+    delete buf;
 }
 
 uint32_t MemoryPool::getUsedNum()

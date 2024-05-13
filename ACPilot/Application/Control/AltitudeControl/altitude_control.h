@@ -13,6 +13,7 @@
 #include "Device/device_data.h"
 #include "Algorithm/AltitudeEstimate/altitude_estimate.h"
 #include "AircraftState/aircraft_state.h"
+#include "Controller/PID/pid.h"
 
 class AltitudeControl
 {
@@ -26,20 +27,21 @@ public:
     static void reset();
 
     static void clear();
+
 private:
     static void _altitudeSensorUpdate(void *param);
 
     static Mailbox<AltitudeData> *_baro_mailbox;
-
     static AcThread *_baro_task;
-
     static AltitudeEstimate *_estimator;
-
     static Vec3 _acc_bias;
-
     static float _height_bias;
-
+    static float _aim_height;
+    static float _base_throttle;
+    static bool _isTakeOff;
     static uint64_t last_time;
+    static Pid *_vel_pid;
+    static Pid *_pos_pid;
 };
 
 

@@ -65,7 +65,7 @@ void startService()
 void addFrameworkInstance()
 {
     /* 创建内存资源实例 */
-    new MemoryPool("json", sizeof(JsonTree), 100, true);
+    new MemoryPool("json", sizeof(JsonTree), 10, true);
 
     BASE_INFO("MEMORY POOL SERVICE INSTANCE ADD");
 
@@ -121,9 +121,9 @@ void createComponent()
     //-----------------------------------------------------------------------------------
     //|init     | *         |INIT_FINISH  | -             | -            | -            |
     //-----------------------------------------------------------------------------------
-    //|lock     | -         | *           |UNLOCK_COMMAND | -            | CALI_COMMAND |
+    //|lock     | -         | *           |MANUAL_EVENT   |HEIGHT_COMMAND| CALI_COMMAND |
     //-----------------------------------------------------------------------------------
-    //|manual   | -         |LOCK_COMMAND | *             |HEIGHT_COMMAND| -            |
+    //|manual   | -         |LOCK_COMMAND | *             | -            | -            |
     //-----------------------------------------------------------------------------------
     //|height   | -         |LOCK_COMMAND | -             | *            | -            |
     //-----------------------------------------------------------------------------------
@@ -132,14 +132,12 @@ void createComponent()
 
     state_init->addNextState(state_lock, INIT_FINISH_EVENT);
 
-    state_lock->addNextState(state_manual, UNLOCK_COMMAND_EVENT);
+    state_lock->addNextState(state_manual, MANUAL_COMMAND_EVENT);
+    state_lock->addNextState(state_height, HEIGHT_COMMAND_EVENT);
     state_lock->addNextState(state_calibrate, CALI_COMMAND_EVENT);
 
     state_manual->addNextState(state_lock, LOCK_COMMAND_EVENT);
-    state_manual->addNextState(state_height, HEIGHT_COMMAND_EVENT);
-
     state_height->addNextState(state_lock, LOCK_COMMAND_EVENT);
-
     state_calibrate->addNextState(state_lock, CALI_FINISH_EVENT);
 
     StateMachine::setStartState(state_init);

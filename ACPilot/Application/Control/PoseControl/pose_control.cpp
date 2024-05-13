@@ -91,14 +91,6 @@ AC_RET PoseControl::init()
 
     error:
     BASE_ERROR("pose control init failed");
-    delete pitch_filter;
-    delete roll_filter;
-    delete yaw_filter;
-    delete o_pitch;
-    delete o_roll;
-    delete i_pitch;
-    delete i_roll;
-    delete i_yaw;
     return AC_ERROR;
 }
 

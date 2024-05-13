@@ -40,8 +40,8 @@ AC_RET PoseCalculating::init()
         return AC_ERROR;
     }
 
-    acc = static_cast<Accelerometer *>(VirtualDevice::find("acc", ACCELEROMETER_DEV));
-    gyro = static_cast<Gyroscope *>(VirtualDevice::find("gyro", GYROSCOPE_DEV));
+    acc = VirtualDevice::find<Accelerometer>("acc", ACCELEROMETER_DEV);
+    gyro = VirtualDevice::find<Gyroscope>("gyro", GYROSCOPE_DEV);
 
     if (acc == nullptr || gyro == nullptr)
     {

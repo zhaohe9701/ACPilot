@@ -1,0 +1,41 @@
+{
+  "wlan": {
+    "mode": "string[4]",
+    "ssid": "string[16]",
+    "password": "string[16]"
+  },
+  "remote": {
+    "map[8]": [
+      "uint8"
+    ],
+    "sw[8]": [
+      "uint8"
+    ],
+    "thr[3]": [
+      "uint16"
+    ]
+  },
+  "controller": {
+    "pose_reset": "action",
+    "pose[4]": [
+      {
+        "kp": "float",
+        "ki": "float",
+        "kd": "float",
+        "int_limit": "float",
+        "out_limit": "float",
+        "cut_freq": "float"
+      }
+    ],
+    "pos[2]": [
+      {
+        "kp": "float",
+        "ki": "float",
+        "kd": "float",
+        "int_limit": "float",
+        "out_limit": "float",
+        "cut_freq": "float"
+      }
+    ]
+  }
+}

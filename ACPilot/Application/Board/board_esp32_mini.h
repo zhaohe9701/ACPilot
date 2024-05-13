@@ -13,12 +13,14 @@
 #include "Wlan/udp.h"
 #include "Iic/iic_driver.h"
 #include "Pwm/pwm_driver.h"
+#include "AdConverter/ad_converter_driver.h"
 
 class Board
 {
 public:
     static Gpio *led_pin;
-    static Gpio *imu_interrupt_pin;
+    static AdConverterUnit *adc_unit;
+    static AdConverterChannel *adc_channel0;
     static ExtInterrupt *imu_interrupt;
     static SpiBus *spi_bus_1;
     static Spi *spi1;

@@ -14,6 +14,9 @@
 #include "Device/Virtual/Altimeter/altimeter.h"
 #include "DataModule/data_module.h"
 #include "Light/light_server.h"
+#include "Sensor/Battery/build_in_battery.h"
+#include "Device/Virtual/Coulometer/coulometer.h"
+#include "Device/Virtual/Voltmeter/voltmeter.h"
 
 /* uart */
 UartHandle esp32_mini_uart1_handle;
@@ -35,6 +38,18 @@ PwmHandle pwm2_handle;
 PwmHandle pwm3_handle;
 /* interrupt */
 ExtInterruptHandle imu_interrupt_handle;
+/* adc */
+AdConverterUnitHandle adc_unit_handle;
+AdConverterChannelHandle adc_channel0_handle;
+
+void adcInit()
+{
+    adc_unit_handle.cfg.unit_id = ADC_UNIT_1;
+    adc_channel0_handle.cfg.bitwidth = ADC_BITWIDTH_DEFAULT;
+    adc_channel0_handle.cfg.atten = ADC_ATTEN_DB_11;
+    adc_channel0_handle.channel = ADC_CHANNEL_8;
+
+}
 
 void interruptHandleInit()
 {
@@ -148,6 +163,8 @@ void gpioInit()
 }
 
 Gpio *Board::led_pin = nullptr;
+AdConverterUnit *Board::adc_unit = nullptr;
+AdConverterChannel *Board::adc_channel0 = nullptr;
 ExtInterrupt *Board::imu_interrupt = nullptr;
 SpiBus *Board::spi_bus_1 = nullptr;
 Spi *Board::spi1 = nullptr;
@@ -166,11 +183,11 @@ void boardInit()
     Board::led_pin = new Gpio(&gpio21_handle);
     Board::led_pin ->init();
 
-    Board::usb = new Usb(0x01);
+    Board::usb = new Usb(USP_PORT_ID);
     Board::usb->init();
 
     uartHandleInit();
-    Board::uart1 = new Uart(&esp32_mini_uart1_handle, 0x02);
+    Board::uart1 = new Uart(&esp32_mini_uart1_handle, UART1_PORT_ID);
     Board::uart1->init();
 
     interruptHandleInit();
@@ -185,6 +202,12 @@ void boardInit()
     Board::spi1->init();
     Board::spi2->init();
 
+    adcInit();
+    Board::adc_unit = new AdConverterUnit(&adc_unit_handle);
+    Board::adc_unit->init();
+    Board::adc_channel0 = new AdConverterChannel(Board::adc_unit, &adc_channel0_handle);
+    Board::adc_channel0->init();
+
     pwmHandleInit();
     Pwm::timerInit(&pwm_timer_handle);
     Board::pwm0 = new Pwm(&pwm0_handle);
@@ -197,7 +220,7 @@ void boardInit()
     Board::pwm3->init();
 
     udpHandleInit();
-    Board::udp = new Udp(&udp_handle, 0x04);
+    Board::udp = new Udp(&udp_handle, UDP_PORT_ID);
     Board::udp->init();
 
     wlanHandleInit();
@@ -210,8 +233,10 @@ void deviceInit()
 {
     (new Icm42688(Board::spi1))->init();
     (new Dps310(Board::spi2))->init();
+    (new BuildInBattery(Board::adc_channel0))->init();
 
     (new Accelerometer("acc"))->bind(PhysicalDevice::find("ICM42688"));
     (new Gyroscope("gyro"))->bind(PhysicalDevice::find("ICM42688"));
     (new Altimeter("altimeter"))->bind(PhysicalDevice::find("DPS310"));
+    (new Voltmeter("voltmeter"))->bind(PhysicalDevice::find("BuildInBattery"));
 }

@@ -174,3 +174,10 @@ AC_RET AltitudeEstimate::calculate(const float altitude, const float acc, float 
     X0[2] = X[2];
     return AC_OK;
 }
+
+void AltitudeEstimate::clear()
+{
+    P[0] = 1;
+    P[4] = 1;
+    P[8] = 1;
+}

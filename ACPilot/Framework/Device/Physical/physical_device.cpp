@@ -45,6 +45,21 @@ AC_RET PhysicalDevice::readLocator(PosData &data)
     return AC_ERROR;
 }
 
+AC_RET PhysicalDevice::readVoltmeter(VolData &data)
+{
+    return AC_ERROR;
+}
+
+AC_RET PhysicalDevice::readAmmeter(CurData &data)
+{
+    return AC_ERROR;
+}
+
+AC_RET PhysicalDevice::readCoulometer(ElectricQuantityData &data)
+{
+    return AC_ERROR;
+}
+
 bool PhysicalDevice::haveAbility(VirtualDeviceType type)
 {
     if (0 != (_ability & ((uint32_t) 1 << type)))
@@ -81,6 +96,11 @@ bool PhysicalDevice::match(const char *name)
     }
     return false;
 }
+
+
+
+
+
 
 
 

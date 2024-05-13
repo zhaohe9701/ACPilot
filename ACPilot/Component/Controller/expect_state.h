@@ -12,7 +12,7 @@ struct ExpectState
     Euler euler{};
     Vec3 ang_v{};
     float throttle = 0.f;
-    float height = 0.f;
+    float height_rate = 0.f;
 };
 
 #endif //EXPECT_STATE_H_

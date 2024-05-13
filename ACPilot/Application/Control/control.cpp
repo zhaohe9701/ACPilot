@@ -40,7 +40,8 @@ static Mailbox<ComMessage> *send_mailbox = nullptr;
 static Mailbox<ExpectState> *expect_state_mailbox = nullptr;
 static Mailbox<AircraftState> *actual_state_mailbox = nullptr;
 
-static uint8_t mode = 0;
+volatile static uint8_t mode = 0;
+
 static uint64_t tick = 0;
 
 static void modeCb(void *param)
@@ -101,6 +102,7 @@ void posControlTask(void *param)
     AltitudeControl::setAccBias(acc_bias);
     Tick delay = msToTick(1000 / _100HZ);
     last_tick = getTick();
+
     for (;;)
     {
         tickSleepUntil(&last_tick, delay);
@@ -108,9 +110,14 @@ void posControlTask(void *param)
         {
             expect_state_mailbox->copy(&expect_state, AC_IMMEDIATELY);
             actual_state_mailbox->copy(&state, AC_IMMEDIATELY);
+
             AltitudeControl::step(expect_state, state);
+
             expect_state_mailbox->update(&expect_state);
 //            printf("h:%f v:%f\n", state.earth_pos.z, state.earth_vel.z);
+        } else
+        {
+            AltitudeControl::clear();
         }
     }
 }
@@ -130,9 +137,9 @@ void mainControlTask(void *param)
     caliGyro();
     collectAccBias(acc_bias);
 
-    Notify::notify(INIT_FINISH_EVENT);
-
     pos_control_task->run(posControlTask, &acc_bias);
+
+    Notify::notify(INIT_FINISH_EVENT);
 
     for (;;)
     {
@@ -142,9 +149,10 @@ void mainControlTask(void *param)
         PoseCalculating::step(state);
         actual_state_mailbox->update(&state);
 
-        expect_state_mailbox->copy(&expect_state, AC_IMMEDIATELY);
+
         if (IS_TIME_TO_GO(tick, F500HZ))
         {
+            expect_state_mailbox->copy(&expect_state, AC_IMMEDIATELY);
             ExpectState new_expect_state;
             Remote::analysis(new_expect_state);
             if (mode == 1)
@@ -154,7 +162,7 @@ void mainControlTask(void *param)
             } else if (mode == 2)
             {
                 expect_state.euler = new_expect_state.euler;
-                expect_state.height = new_expect_state.height;
+                expect_state.height_rate = new_expect_state.height_rate;
             }
             expect_state_mailbox->update(&expect_state);
         }
@@ -182,6 +190,7 @@ void mainControlTask(void *param)
             } else
             {
                 expect_yaw = state.pose.euler.yaw;
+                PoseControl::clear();
             }
         }
         if (IS_TIME_TO_GO(tick, F500HZ))
@@ -221,7 +230,7 @@ void mainControlTask(void *param)
 
 void registerControlTask()
 {
-    main_control_task = new AcThread("control", MAIN_CONTROL_TASK_STACK_SIZE, MAIN_CONTROL_TASK_PRIO, MAIN_CONTROL_TASK_CORE);
+    main_control_task = new AcThread("m_control", MAIN_CONTROL_TASK_STACK_SIZE, MAIN_CONTROL_TASK_PRIO, MAIN_CONTROL_TASK_CORE);
     pos_control_task = new AcThread("pos_control", POS_CONTROL_TASK_STACK_SIZE, POS_CONTROL_TASK_PRIO, POS_CONTROL_TASK_CORE);
 
     send_mailbox = Mailbox<ComMessage>::find("send");

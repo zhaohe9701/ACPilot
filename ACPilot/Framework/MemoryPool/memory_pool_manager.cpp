@@ -3,9 +3,10 @@
 //
 
 #include "memory_pool_manager.h"
+#include "config.h"
 
-static uint16_t per_general_memory_pool_num[GENERAL_MEMORY_POOL_NUM] = {10, 3, 3, 3};
-static uint16_t per_general_memory_pool_size[GENERAL_MEMORY_POOL_NUM] = {128, 256, 1024, 2048};
+static uint16_t per_general_memory_pool_num[GENERAL_MEMORY_POOL_NUM] = PER_GENERAL_MEMORY_POOL_NUM;
+static uint16_t per_general_memory_pool_size[GENERAL_MEMORY_POOL_NUM] = PER_GENERAL_MEMORY_POOL_SIZE;
 
 AC_RET MemoryPoolManager::init()
 {

@@ -17,7 +17,7 @@ RemoteMapper Remote::m{MODE_AXIS_ID};
 
 #define POSE_LIMIT (40.f)
 #define YAW_LIMIT (90.f)
-#define HEIGHT_LIMIT (2.f)
+#define HEIGHT_RATE_LIMIT (2.f)
 
 AC_RET Remote::init()
 {
@@ -46,30 +46,26 @@ AC_RET Remote::analysis(ExpectState &expect_state)
                 Notify::notify(LOCK_COMMAND_EVENT);
                 break;
             case 1:
-                if  (t_z.map(remote_data) < 5 && m.map(remote_data) == 0)
+                if (t_z.map(remote_data) < 5)
                 {
-                    Notify::notify(UNLOCK_COMMAND_EVENT);
+                    switch (m.map(remote_data))
+                    {
+                        case 0:
+                            Notify::notify(MANUAL_COMMAND_EVENT);
+                            break;
+                        case 1:
+                            Notify::notify(HEIGHT_COMMAND_EVENT);
+                            break;
+                        default:
+                            break;
+                    }
                 }
                 break;
             default:
                 break;
         }
     }
-    key = m.map(remote_data);
-    if (m.isChanged())
-    {
-        switch (key)
-        {
-            case 0:
-                Notify::notify(MANUAL_COMMAND_EVENT);
-                break;
-            case 1:
-                Notify::notify(HEIGHT_COMMAND_EVENT);
-                break;
-            default:
-                break;
-        }
-    }
+
 
     expect_state.euler.roll = ((float) r_x.map(remote_data) - (float) REMOTE_MAX / 2) * POSE_LIMIT / (float) REMOTE_MAX;
     expect_state.euler.pitch =
@@ -77,6 +73,6 @@ AC_RET Remote::analysis(ExpectState &expect_state)
     expect_state.euler.yaw = -((float) y_w.map(remote_data) - (float) REMOTE_MAX / 2) * YAW_LIMIT / (float) REMOTE_MAX;
 
     expect_state.throttle = (float) t_z.map(remote_data) * 100.f / (float) REMOTE_MAX;
-    expect_state.height = ((float) t_z.map(remote_data) - (float) REMOTE_MAX / 2) * HEIGHT_LIMIT / (float) REMOTE_MAX;
+    expect_state.height_rate = ((float) t_z.map(remote_data) - (float) REMOTE_MAX / 2) * HEIGHT_RATE_LIMIT / (float) REMOTE_MAX;
     return AC_OK;
 }

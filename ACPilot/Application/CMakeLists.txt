@@ -7,6 +7,8 @@ set(APP_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/Control/PoseControl/pose_control.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Control/PoseCalculating/pose_calculating.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Control/Remote/remote.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Monitor/monitor.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Monitor/Battery/battery_monitor.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/SysTask/sys_init.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/SysTask/test_task.cpp
 

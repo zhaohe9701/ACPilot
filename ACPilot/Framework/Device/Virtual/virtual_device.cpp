@@ -33,18 +33,6 @@ bool VirtualDevice::isMatch(const char *name, VirtualDeviceType type)
     return false;
 }
 
-VirtualDevice *VirtualDevice::find(const char *name, VirtualDeviceType type)
-{
-    for (ListNode<VirtualDevice *> *it = _list.begin(); it != _list.end(); it = it->getNext())
-    {
-        if ((**it)->isMatch(name, type))
-        {
-            return **it;
-        }
-    }
-    return nullptr;
-}
-
 VirtualDevice::VirtualDevice(const char *name)
 {
     strncpy(_name, name, DEVICE_NAME_LEN - 1);

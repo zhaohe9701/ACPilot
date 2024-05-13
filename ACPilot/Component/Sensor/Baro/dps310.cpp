@@ -49,7 +49,7 @@ AC_RET Dps310::init()
     _baroReadReg(DPS310_TMPCOEFSRCE, 1, &cfg);
     cfg = cfg & 0x80;
     tickSleep(10);
-    _baroWriteReg(DPS310_TMPCFG, 0b01000100 + cfg);
+    _baroWriteReg(DPS310_TMPCFG, 0b01010100 | cfg);
     tickSleep(10);
     _baroWriteReg(DPS310_MEASCFG, 0b00000111);
     tickSleep(10);

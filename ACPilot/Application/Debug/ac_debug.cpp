@@ -10,7 +10,7 @@
 // #include "usbd_cdc_if.h"
 
 #define MAX_DEBUG_BUF_LENGTH MAX_MESSAGE_BUF_LEN
-uint8_t Debug::_port = DEBUG_PORT;
+uint8_t Debug::_port = DEBUG_PORT_ID;
 Mailbox<ComMessage> *Debug::_mail;
 MemoryPool *Debug::_buffer_pool;
 

@@ -34,7 +34,8 @@ public:
 
     static void add(VirtualDevice *device);
 
-    static VirtualDevice *find(const char *name, VirtualDeviceType type);
+    template<class T>
+    static T *find(const char *name, VirtualDeviceType type);
 
 protected:
     char _name[DEVICE_NAME_LEN] = "unknown";
@@ -45,5 +46,17 @@ protected:
 
 };
 
+template<class T>
+T *VirtualDevice::find(const char *name, VirtualDeviceType type)
+{
+    for (ListNode<VirtualDevice *> *it = _list.begin(); it != _list.end(); it = it->getNext())
+    {
+        if ((**it)->isMatch(name, type))
+        {
+            return static_cast<T*>(**it);
+        }
+    }
+    return nullptr;
+}
 
 #endif //DEVICE_H_

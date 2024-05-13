@@ -14,6 +14,8 @@ public:
     AC_RET init(float r00, float r11, float q00, float q11, float q22);
 
     AC_RET calculate(float altitude, float acc, float X[3], float dt);
+
+    void clear();
 private:
     float R[4] = {0.f};
     float Q[9] = {0.f};

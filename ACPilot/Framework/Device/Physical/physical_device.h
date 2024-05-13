@@ -17,19 +17,25 @@ public:
 
     bool match(const char *name);
 
-    virtual AC_RET readAccelerometer(AccData &data);
+    virtual AC_RET readAccelerometer(AccData &data);            // 加速度计
 
-    virtual AC_RET readGyroscope(GyroData &data);
+    virtual AC_RET readGyroscope(GyroData &data);               // 陀螺仪
 
-    virtual AC_RET readMagnetometer(MagData &data);
+    virtual AC_RET readMagnetometer(MagData &data);             // 磁力计
 
-    virtual AC_RET readThermometer(TempData &data);
+    virtual AC_RET readThermometer(TempData &data);             // 温度计
 
-    virtual AC_RET readAltimeter(AltitudeData &data);
+    virtual AC_RET readAltimeter(AltitudeData &data);           // 高度计
 
-    virtual AC_RET readBarometer(AtaData &data);
+    virtual AC_RET readBarometer(AtaData &data);                // 气压计
 
-    virtual AC_RET readLocator(PosData &data);
+    virtual AC_RET readLocator(PosData &data);                  // 定位器
+
+    virtual AC_RET readVoltmeter(VolData &data);                // 电压计
+
+    virtual AC_RET readAmmeter(CurData &data);                  // 安培表
+
+    virtual AC_RET readCoulometer(ElectricQuantityData &data);  // 库伦计
 
     bool haveAbility(VirtualDeviceType type);
 

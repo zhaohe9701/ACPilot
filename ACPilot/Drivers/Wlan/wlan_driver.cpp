@@ -10,7 +10,7 @@
 #include "default_debug.h"
 #include "Notify/notify.h"
 
-#define CONNECT_MAXIMUM_RETRY 3
+#define CONNECT_MAXIMUM_RETRY 10
 
 WlanHandle::WlanHandle()
 {

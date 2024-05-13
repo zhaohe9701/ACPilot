@@ -17,11 +17,6 @@ struct AdConverterUnitHandle
     adc_oneshot_unit_init_cfg_t cfg{};
 };
 
-AdConverterUnitHandle::AdConverterUnitHandle()
-{
-    memset(&cfg, 0, sizeof(adc_oneshot_unit_init_cfg_t));
-}
-
 struct AdConverterChannelHandle
 {
     AdConverterChannelHandle();
@@ -31,9 +26,5 @@ struct AdConverterChannelHandle
     adc_channel_t channel = ADC_CHANNEL_0;
 };
 
-AdConverterChannelHandle::AdConverterChannelHandle()
-{
-    memset(&cfg, 0, sizeof(adc_oneshot_chan_cfg_t));
-}
 
 #endif //AD_CONVERTER_DRIVER_PARAM_H_
