@@ -21,7 +21,7 @@ if (STM32)
 endif()
 
 if (ESP32)
-        include($ENV{IDF_PATH}/tools/cmake/project.cmake)
+        include($ENV{IDF_PATH}\\tools\\cmake\\project.cmake)
 endif()
 
 project(ACPilot C CXX ASM)

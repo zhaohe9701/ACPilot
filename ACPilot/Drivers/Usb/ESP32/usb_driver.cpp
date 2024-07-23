@@ -15,6 +15,18 @@
 
 #define USB_FREE_DELAY_US 1000
 
+static char debug_buf[2048] = {0};
+static int usbPrintf(const char *__restrict fmt, ...)
+{
+    va_list args;
+    int32_t length;
+
+    va_start(args, fmt);
+    length = vsnprintf((char *)debug_buf, 2048, (char *)fmt, args);
+    va_end(args);
+    usb_serial_jtag_write_bytes(debug_buf, length, AC_FOREVER);
+    return length;
+}
 Usb::Usb(uint8_t port_num) : Com(port_num)
 {
 }
@@ -29,7 +41,7 @@ AC_RET Usb::init()
     {
         return AC_ERROR;
     }
-
+    acPrintf = usbPrintf;
     _timer = new HardwareTimer("usb", _timer_callback, this);
     _timer->init();
     _usb_task = new AcThread("usb", USB_RECEIVE_TASK_STACK, USB_RECEIVE_TASK_PRIO, USB_RECEIVE_TASK_CORE);
@@ -44,7 +56,6 @@ AC_RET Usb::send(uint8_t *buf, uint16_t length, uint32_t timeout)
         return AC_ERROR;
     }
     usb_serial_jtag_write_bytes(buf, length, AC_FOREVER);
-    usb_serial_jtag_ll_txfifo_flush();
     return AC_OK;
 }
 

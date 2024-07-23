@@ -18,4 +18,5 @@ void taskInit()
     registerSensorCalibrateTask();
     registerMonitorTask();
     registerControlTask();
+    BASE_INFO("TASK INIT FINISH");
 }

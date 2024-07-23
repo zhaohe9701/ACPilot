@@ -6,12 +6,15 @@
 #define DEFAULT_DEBUG_H_
 
 #include "config.h"
+#include "esp_log.h"
 #include <stdio.h>
 
+extern int (*acPrintf)(const char *__restrict, ...);
+
 #ifdef BASE_DEBUG
-#define BASE_INFO(fmt, args...) printf("\033[1;32mINFO :" fmt "\033[0m\n", ## args)
-#define BASE_WARNING(fmt, args...) printf("\033[1;33mWARN (%s:%s:%d):" fmt "\033[0m\n", __FILE__, __func__, __LINE__, ## args)
-#define BASE_ERROR(fmt, args...) printf("\033[1;31mERROR(%s:%s:%d):" fmt "\033[0m\n", __FILE__, __func__, __LINE__, ## args)
+#define BASE_INFO(fmt, args...) acPrintf("\033[1;32mINFO :" fmt "\033[0m\n", ## args)
+#define BASE_WARNING(fmt, args...) acPrintf("\033[1;33mWARN (%s:%s:%d):" fmt "\033[0m\n", __FILE__, __func__, __LINE__, ## args)
+#define BASE_ERROR(fmt, args...) acPrintf("\033[1;31mERROR(%s:%s:%d):" fmt "\033[0m\n", __FILE__, __func__, __LINE__, ## args)
 #else
 #define BASE_INFO(fmt, args...)
 #define BASE_WARNING(fmt, args...)

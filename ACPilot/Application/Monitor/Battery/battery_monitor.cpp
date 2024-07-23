@@ -23,7 +23,7 @@ AC_RET BatteryMonitor::step()
 {
     VolData vol_data;
     voltmeter->read(vol_data);
-    if (vol_data.x < 3.5)
+    if (vol_data.x < 3.5 && vol_data.x > 1.5)
     {
         LightMessage msg;
         msg.id = 0x01;

@@ -119,7 +119,7 @@ void createComponent()
     //-----------------------------------------------------------------------------------
     //|         |init       |lock         |manual         |height        |calibrate     |
     //-----------------------------------------------------------------------------------
-    //|init     | *         |INIT_FINISH  | -             | -            | -            |
+    //|init     | *         |INIT_FINISH  | -             | -            | CALI_COMMAND |
     //-----------------------------------------------------------------------------------
     //|lock     | -         | *           |MANUAL_EVENT   |HEIGHT_COMMAND| CALI_COMMAND |
     //-----------------------------------------------------------------------------------
@@ -131,6 +131,7 @@ void createComponent()
     //-----------------------------------------------------------------------------------
 
     state_init->addNextState(state_lock, INIT_FINISH_EVENT);
+    state_init->addNextState(state_calibrate, CALI_COMMAND_EVENT);
 
     state_lock->addNextState(state_manual, MANUAL_COMMAND_EVENT);
     state_lock->addNextState(state_height, HEIGHT_COMMAND_EVENT);
@@ -193,6 +194,7 @@ void lightControlInit()
     Notify::sub(ENTER_MANUAL_EVENT, eventHandle, nullptr);
     Notify::sub(ENTER_HEIGHT_EVENT, eventHandle, nullptr);
     Notify::sub(ENTER_CALI_EVENT, eventHandle, nullptr);
+    BASE_INFO("LIGHT CONTROL INIT FINISH");
 }
 
 
@@ -203,6 +205,7 @@ void frameworkInit()
     initFramework();
 
     addFrameworkInstance();
+    BASE_INFO("FRAMEWORK INIT FINISH");
 }
 
 void serviceInit()
@@ -212,4 +215,5 @@ void serviceInit()
     createComponent();
 
     startService();
+    BASE_INFO("SERVICE INIT FINISH");
 }

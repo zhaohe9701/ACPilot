@@ -14,8 +14,8 @@
       <config projectName="ACPilot" targetName="__idf_freertos" />
       <config projectName="ACPilot" targetName="menuconfig" />
       <config projectName="ACPilot" targetName="efuse_test_table" />
-      <config projectName="ACPilot" targetName="partition_table-flash" />
       <config projectName="ACPilot" targetName="__idf_sdmmc" />
+      <config projectName="ACPilot" targetName="partition_table-flash" />
       <config projectName="ACPilot" targetName="__idf_esp_local_ctrl" />
       <config projectName="ACPilot" targetName="confserver" />
       <config projectName="ACPilot" targetName="size-files" />
@@ -37,40 +37,47 @@
       <config projectName="ACPilot" targetName="__idf_esp_wifi" />
       <config projectName="ACPilot" targetName="app_check_size" />
       <config projectName="ACPilot" targetName="show-efuse-table" />
+      <config projectName="ACPilot" targetName="__idf_Interface" />
+      <config projectName="ACPilot" targetName="__idf_nvs_sec_provider" />
       <config projectName="ACPilot" targetName="flash" />
       <config projectName="ACPilot" targetName="__idf_esp_pm" />
       <config projectName="ACPilot" targetName="__idf_protobuf-c" />
       <config projectName="ACPilot" targetName="__idf_nvs_flash" />
       <config projectName="ACPilot" targetName="__idf_perfmon" />
       <config projectName="ACPilot" targetName="__idf_esp_app_format" />
+      <config projectName="ACPilot" targetName="everest" />
       <config projectName="ACPilot" targetName="__idf_Common" />
-      <config projectName="ACPilot" targetName="memory_ld" />
+      <config projectName="ACPilot" targetName="memory.ld" />
+      <config projectName="ACPilot" targetName="__idf_Component" />
       <config projectName="ACPilot" targetName="__idf_app_update" />
+      <config projectName="ACPilot" targetName="__idf_Framework" />
       <config projectName="ACPilot" targetName="encrypted-bootloader-flash" />
-      <config projectName="ACPilot" targetName="show_efuse_table" />
       <config projectName="ACPilot" targetName="__idf_esp_gdbstub" />
+      <config projectName="ACPilot" targetName="show_efuse_table" />
       <config projectName="ACPilot" targetName="lib" />
       <config projectName="ACPilot" targetName="__idf_esp_timer" />
       <config projectName="ACPilot" targetName="__idf_Osal" />
       <config projectName="ACPilot" targetName="__idf_log" />
       <config projectName="ACPilot" targetName="__idf_console" />
       <config projectName="ACPilot" targetName="partition_table" />
+      <config projectName="ACPilot" targetName="__idf_Service" />
       <config projectName="ACPilot" targetName="__idf_esp_netif" />
       <config projectName="ACPilot" targetName="__idf_pthread" />
-      <config projectName="ACPilot" targetName="__idf_efuse" />
       <config projectName="ACPilot" targetName="partition-table-flash" />
+      <config projectName="ACPilot" targetName="__idf_efuse" />
       <config projectName="ACPilot" targetName="__idf_esp_common" />
       <config projectName="ACPilot" targetName="__idf_mqtt" />
       <config projectName="ACPilot" targetName="mbedtls" />
-      <config projectName="ACPilot" targetName="save-defconfig" />
-      <config projectName="ACPilot" targetName="__idf_cxx" />
       <config projectName="ACPilot" targetName="mbedx509" />
+      <config projectName="ACPilot" targetName="__idf_cxx" />
+      <config projectName="ACPilot" targetName="save-defconfig" />
       <config projectName="ACPilot" targetName="__idf_unity" />
       <config projectName="ACPilot" targetName="efuse-common-table" />
       <config projectName="ACPilot" targetName="__idf_esp_system" />
-      <config projectName="ACPilot" targetName="ACPilot.elf" />
       <config projectName="ACPilot" targetName="__idf_fatfs" />
+      <config projectName="ACPilot" targetName="ACPilot.elf" />
       <config projectName="ACPilot" targetName="efuse-custom-table" />
+      <config projectName="ACPilot" targetName="sections.ld.in" />
       <config projectName="ACPilot" targetName="erase_flash" />
       <config projectName="ACPilot" targetName="__idf_cmock" />
       <config projectName="ACPilot" targetName="__idf_hal" />
@@ -106,24 +113,26 @@
       <config projectName="ACPilot" targetName="__idf_newlib" />
       <config projectName="ACPilot" targetName="__idf_spiffs" />
       <config projectName="ACPilot" targetName="efuse_common_table" />
+      <config projectName="ACPilot" targetName="p256m" />
+      <config projectName="ACPilot" targetName="__idf_esp_bootloader_format" />
       <config projectName="ACPilot" targetName="__idf_esp-tls" />
       <config projectName="ACPilot" targetName="__idf_esp_event" />
       <config projectName="ACPilot" targetName="__idf_esp_mm" />
       <config projectName="ACPilot" targetName="__idf_protocomm" />
       <config projectName="ACPilot" targetName="__idf_http_parser" />
       <config projectName="ACPilot" targetName="__idf_vfs" />
-      <config projectName="ACPilot" targetName="__idf_esp_phy" />
       <config projectName="ACPilot" targetName="partition-table" />
+      <config projectName="ACPilot" targetName="__idf_esp_phy" />
+      <config projectName="ACPilot" targetName="__idf_Utils" />
       <config projectName="ACPilot" targetName="__idf_esp_hid" />
-      <config projectName="ACPilot" targetName="size-components" />
       <config projectName="ACPilot" targetName="__idf_main" />
+      <config projectName="ACPilot" targetName="size-components" />
       <config projectName="ACPilot" targetName="__idf_esp_hw_support" />
       <config projectName="ACPilot" targetName="efuse_custom_table" />
-      <config projectName="ACPilot" targetName="__idf_ulp" />
       <config projectName="ACPilot" targetName="dfu-list" />
       <config projectName="ACPilot" targetName="__idf_driver" />
-      <config projectName="ACPilot" targetName="encrypted-partition-table-flash" />
       <config projectName="ACPilot" targetName="__idf_spi_flash" />
+      <config projectName="ACPilot" targetName="encrypted-partition-table-flash" />
       <config projectName="ACPilot" targetName="monitor" />
       <config projectName="ACPilot" targetName="app-flash" />
     </generated>
@@ -135,87 +144,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5da128cc-e3a6-4f7e-82ed-2896990737d8" name="更改" comment="适配ESP32">
-      <change afterPath="$PROJECT_DIR$/Application/Control/PoseControl/pose_control.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Application/Control/PoseControl/pose_control.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Application/Control/Remote/remote.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Application/Control/Remote/remote.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Application/Control/control.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Application/Control/control.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Common/dm_template.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Component/Controller/PID/pid.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Component/Controller/PID/pid.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Component/Controller/expect_state.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Component/Filter/IIR/lpf.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Component/Filter/IIR/lpf.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Component/RemoteMap/remote_mapper.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Component/RemoteMap/remote_mapper.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Service/dm.json" afterDir="false" />
+      <change beforePath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/components/bt/host/nimble/nimble" beforeDir="false" afterPath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/components/bt/host/nimble/nimble" afterDir="false" />
+      <change beforePath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/build-esp32.sh" beforeDir="false" afterPath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/build-esp32.sh" afterDir="false" />
+      <change beforePath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/build-esp32c2.sh" beforeDir="false" afterPath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/build-esp32c2.sh" afterDir="false" />
+      <change beforePath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/build-esp32c3.sh" beforeDir="false" afterPath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/build-esp32c3.sh" afterDir="false" />
+      <change beforePath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/build-esp32c6.sh" beforeDir="false" afterPath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/build-esp32c6.sh" afterDir="false" />
+      <change beforePath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/build-esp32h2.sh" beforeDir="false" afterPath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/build-esp32h2.sh" afterDir="false" />
+      <change beforePath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/build-esp32s2.sh" beforeDir="false" afterPath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/build-esp32s2.sh" afterDir="false" />
+      <change beforePath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/build-esp32s3.sh" beforeDir="false" afterPath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/build-esp32s3.sh" afterDir="false" />
+      <change beforePath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/run-esp32c2.sh" beforeDir="false" afterPath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/run-esp32c2.sh" afterDir="false" />
+      <change beforePath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/run-esp32c3.sh" beforeDir="false" afterPath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/run-esp32c3.sh" afterDir="false" />
+      <change beforePath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/run-esp32c6.sh" beforeDir="false" afterPath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/run-esp32c6.sh" afterDir="false" />
+      <change beforePath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/run-esp32h2.sh" beforeDir="false" afterPath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/run-esp32h2.sh" afterDir="false" />
+      <change beforePath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/run-esp32s2.sh" beforeDir="false" afterPath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/run-esp32s2.sh" afterDir="false" />
+      <change beforePath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/run-esp32s3.sh" beforeDir="false" afterPath="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2/examples/build_system/cmake/idf_as_lib/run-esp32s3.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/ACPilot_ESP.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Board/board_esp32_mini.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Board/board_esp32_mini.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Board/board_esp32_mini.h" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Board/board_esp32_mini.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ACPilot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ACPilot.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/Board/board_esp32.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Board/board_esp32.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/Board/board_esp32.h" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Board/board_esp32.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Application/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Application/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Control/AltitudeControl/altitude_control.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Controller/AltitudeControl/altitude_control.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Control/AttitudeControl/attitude_controller.h" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Controller/AttitudeControl/attitude_controller.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Control/AttitudeControl/default_attitude_controller.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Controller/AttitudeControl/default_attitude_controller.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Control/AttitudeControl/default_attitude_controller.h" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Controller/AttitudeControl/default_attitude_controller.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Control/AttitudeControl/rtwtypes.h" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Controller/AttitudeControl/rtwtypes.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Control/control_input.h" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Controller/control_input.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Control/control_output.h" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Controller/control_output.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Control/pid_core.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Controller/pid_core.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Control/pid_core.h" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Controller/pid_core.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Filter/filter.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Filter/filter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Component/Filter/filter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/PoseCalculating/pose_calculating.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Control/PoseCalculating/pose_calculating.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/PoseCalculating/pose_calculating.h" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Control/PoseCalculating/pose_calculating.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Protocol/Crsf/crsf.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Component/Receive/Crsf/crsf.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Protocol/Crsf/crsf.h" beforeDir="false" afterPath="$PROJECT_DIR$/Component/Receive/Crsf/crsf.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Protocol/Ibus/ibus.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Component/Receive/Ibus/ibus.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Protocol/Ibus/ibus.h" beforeDir="false" afterPath="$PROJECT_DIR$/Component/Receive/Ibus/ibus.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Remote/remote_data.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/SensorCalibrate/sensor_calibrate.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Application/SensorCalibrate/sensor_calibrate.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/Control/control.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Control/control.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Application/SysTask/sys_init.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Application/SysTask/sys_init.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/SysTask/task_init.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Application/SysTask/task_init.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Common/config.h" beforeDir="false" afterPath="$PROJECT_DIR$/Common/config.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Common/data.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Common/default_debug.h" beforeDir="false" afterPath="$PROJECT_DIR$/Common/default_debug.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Common/event_list.h" beforeDir="false" afterPath="$PROJECT_DIR$/Common/event_list.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Common/message.h" beforeDir="false" afterPath="$PROJECT_DIR$/Common/message.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Common/type.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Common/type.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Common/type.h" beforeDir="false" afterPath="$PROJECT_DIR$/Common/type.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Component/AHRS/attitude.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Component/AHRS/attitude.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Component/AHRS/attitude.h" beforeDir="false" afterPath="$PROJECT_DIR$/Component/AHRS/attitude.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Component/Algorithm/RotaryTrans/rotary_trans.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Component/Algorithm/RotaryTrans/rotary_trans.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Component/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Component/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Component/Command/DataModule/data_module_command.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Component/Command/DataModule/data_module_command.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Component/Light/Led/led.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Component/Light/Led/led.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Component/Light/Led/led.h" beforeDir="false" afterPath="$PROJECT_DIR$/Component/Light/Led/led.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Component/Sensor/Imu/icm42688.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Component/Sensor/Imu/icm42688.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Drivers/HardTimer/ESP32/hard_timer_driver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Drivers/HardTimer/ESP32/hard_timer_driver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Drivers/HardTimer/hard_timer_driver.h" beforeDir="false" afterPath="$PROJECT_DIR$/Drivers/HardTimer/hard_timer_driver.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Drivers/Interrupt/ESP32/interrupt_driver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Drivers/Interrupt/ESP32/interrupt_driver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Drivers/Interrupt/ESP32/interrupt_driver_param.h" beforeDir="false" afterPath="$PROJECT_DIR$/Drivers/Interrupt/ESP32/interrupt_driver_param.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Drivers/Interrupt/interrupt_driver.h" beforeDir="false" afterPath="$PROJECT_DIR$/Drivers/Interrupt/interrupt_driver.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Drivers/Pwm/ESP32/pwm_driver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Drivers/Pwm/ESP32/pwm_driver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Drivers/Pwm/ESP32/pwm_driver_param.h" beforeDir="false" afterPath="$PROJECT_DIR$/Drivers/Pwm/ESP32/pwm_driver_param.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Drivers/Pwm/pwm_driver.h" beforeDir="false" afterPath="$PROJECT_DIR$/Drivers/Pwm/pwm_driver.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Drivers/Uart/ESP32/uart_driver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Drivers/Uart/ESP32/uart_driver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Drivers/Usb/ESP32/usb_driver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Drivers/Usb/ESP32/usb_driver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Drivers/Wlan/udp.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Drivers/Wlan/udp.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Framework/DataModule/data_module.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Framework/DataModule/data_module.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Framework/DataModule/data_module.h" beforeDir="false" afterPath="$PROJECT_DIR$/Framework/DataModule/data_module.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Framework/Motor/motor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Framework/Motor/motor.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Framework/Motor/motor.h" beforeDir="false" afterPath="$PROJECT_DIR$/Framework/Motor/motor.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Osal/Semaphore/ac_semaphore.h" beforeDir="false" afterPath="$PROJECT_DIR$/Osal/Semaphore/ac_semaphore.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Osal/Thread/ac_thread.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Osal/Thread/ac_thread.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Service/Command/command_server.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Service/Command/command_server.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Service/Light/light_server.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Service/Light/light_server.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Service/Receive/receive_server.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Service/Receive/receive_server.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Service/StateMachine/state_machine.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Service/StateMachine/state_machine.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Service/Transmit/transmit_server.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Service/Transmit/transmit_server.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Utils/DataTree/data_tree.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Utils/DataTree/data_tree.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Utils/DataTree/data_tree.h" beforeDir="false" afterPath="$PROJECT_DIR$/Utils/DataTree/data_tree.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Utils/MemoryPool/memory_pool.h" beforeDir="false" afterPath="$PROJECT_DIR$/Utils/MemoryPool/memory_pool.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/esp_main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main/esp_main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sdkconfig" beforeDir="false" afterPath="$PROJECT_DIR$/sdkconfig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -227,7 +182,7 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="D:/Espressif/Espressif/frameworks/esp-idf-v5.2.2" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -241,9 +196,9 @@
     <option name="majorVersion" value="2023" />
     <option name="minorVersion" value="1.1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="2YlO0PpbY0k3Fv49iIn1JqMtA5V" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -251,6 +206,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "CMake 调试.ACPilot.executor": "Debug",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
@@ -258,14 +214,15 @@
     "WebServerToolWindowFactoryState": "false",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "3b8741b1",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "F:/ACPilot_ESP",
+    "last_opened_file_path": "E:/ACPilot_ESP/ACPilot",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+    "settings.editor.selected.configurable": "CPPToolchains",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -281,7 +238,15 @@
       <recent name="F:\ACPilot_ESP\ACPilot\Application" />
     </key>
   </component>
-  <component name="RunManager" selected="CMake 应用程序.ACPilot.elf">
+  <component name="RunManager" selected="CMake 调试.ACPilot">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ACPilot" type="CMakeListConfigurationType" factoryName="CMakeListConfigurationFactory" temporary="true">
+      <method v="2" />
+    </configuration>
     <configuration name="ACPilot.elf" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="ACPilot.elf" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="ACPilot" RUN_TARGET_NAME="ACPilot.elf">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -297,12 +262,37 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="__idf_Component" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="__idf_Component" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="__idf_Drivers" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="__idf_Drivers" CONFIG_NAME="Debug">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="__idf_Framework" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="__idf_Framework" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="__idf_Interface" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="__idf_Interface" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="__idf_Osal" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="__idf_Osal" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="__idf_Service" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="__idf_Service" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="__idf_Utils" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="__idf_Utils" CONFIG_NAME="Debug">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -358,6 +348,11 @@
       </method>
     </configuration>
     <configuration name="__idf_esp_app_format" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="__idf_esp_app_format" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="__idf_esp_bootloader_format" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="__idf_esp_bootloader_format" CONFIG_NAME="Debug">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -542,6 +537,11 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="__idf_nvs_sec_provider" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="__idf_nvs_sec_provider" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="__idf_perfmon" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="__idf_perfmon" CONFIG_NAME="Debug">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -588,11 +588,6 @@
       </method>
     </configuration>
     <configuration name="__idf_touch_element" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="__idf_touch_element" CONFIG_NAME="Debug">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="__idf_ulp" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="__idf_ulp" CONFIG_NAME="Debug">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -747,6 +742,11 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="everest" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="everest" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="flash" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="flash" CONFIG_NAME="Debug">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -777,7 +777,7 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="memory_ld" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="memory_ld" CONFIG_NAME="Debug">
+    <configuration name="memory.ld" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="memory.ld" CONFIG_NAME="Debug">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -788,6 +788,11 @@
       </method>
     </configuration>
     <configuration name="monitor" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="monitor" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="p256m" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="p256m" CONFIG_NAME="Debug">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -818,6 +823,11 @@
       </method>
     </configuration>
     <configuration name="save-defconfig" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="save-defconfig" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="sections.ld.in" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ACPilot" TARGET_NAME="sections.ld.in" CONFIG_NAME="Debug">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -858,22 +868,50 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="CMake 应用程序.ACPilot.elf" />
-      <item itemvalue="CMake 应用程序.__idf_Application" />
-      <item itemvalue="CMake 应用程序.__idf_Common" />
-      <item itemvalue="CMake 应用程序.__idf_Drivers" />
-      <item itemvalue="CMake 应用程序.__idf_Osal" />
+      <item itemvalue="CMake 应用程序.bootloader" />
+      <item itemvalue="CMake 应用程序.efuse-common-table" />
+      <item itemvalue="CMake 应用程序.efuse-custom-table" />
+      <item itemvalue="CMake 应用程序.efuse_test_table" />
+      <item itemvalue="CMake 应用程序.show-efuse-table" />
+      <item itemvalue="CMake 应用程序.memory.ld" />
+      <item itemvalue="CMake 应用程序.sections.ld.in" />
+      <item itemvalue="CMake 应用程序.app" />
+      <item itemvalue="CMake 应用程序.app-flash" />
+      <item itemvalue="CMake 应用程序.bootloader-flash" />
+      <item itemvalue="CMake 应用程序.erase_flash" />
+      <item itemvalue="CMake 应用程序.flash" />
+      <item itemvalue="CMake 应用程序.gen_project_binary" />
+      <item itemvalue="CMake 应用程序.monitor" />
+      <item itemvalue="CMake 应用程序.partition-table-flash" />
+      <item itemvalue="CMake 应用程序.uf2" />
+      <item itemvalue="CMake 应用程序.uf2-app" />
+      <item itemvalue="CMake 应用程序.custom_bundle" />
+      <item itemvalue="CMake 应用程序.apidoc" />
+      <item itemvalue="CMake 应用程序.everest" />
+      <item itemvalue="CMake 应用程序.p256m" />
+      <item itemvalue="CMake 应用程序.lib" />
+      <item itemvalue="CMake 应用程序.mbedcrypto" />
+      <item itemvalue="CMake 应用程序.mbedtls" />
+      <item itemvalue="CMake 应用程序.mbedx509" />
+      <item itemvalue="CMake 应用程序.partition-table" />
+      <item itemvalue="CMake 应用程序.partition_table_bin" />
+      <item itemvalue="CMake 应用程序.app_check_size" />
       <item itemvalue="CMake 应用程序.__idf_app_trace" />
       <item itemvalue="CMake 应用程序.__idf_app_update" />
+      <item itemvalue="CMake 应用程序.__idf_Application" />
       <item itemvalue="CMake 应用程序.__idf_bootloader_support" />
       <item itemvalue="CMake 应用程序.__idf_cmock" />
+      <item itemvalue="CMake 应用程序.__idf_Common" />
+      <item itemvalue="CMake 应用程序.__idf_Component" />
       <item itemvalue="CMake 应用程序.__idf_console" />
       <item itemvalue="CMake 应用程序.__idf_cxx" />
       <item itemvalue="CMake 应用程序.__idf_driver" />
+      <item itemvalue="CMake 应用程序.__idf_Drivers" />
       <item itemvalue="CMake 应用程序.__idf_efuse" />
       <item itemvalue="CMake 应用程序.__idf_esp-tls" />
       <item itemvalue="CMake 应用程序.__idf_esp_adc" />
       <item itemvalue="CMake 应用程序.__idf_esp_app_format" />
+      <item itemvalue="CMake 应用程序.__idf_esp_bootloader_format" />
       <item itemvalue="CMake 应用程序.__idf_esp_coex" />
       <item itemvalue="CMake 应用程序.__idf_esp_common" />
       <item itemvalue="CMake 应用程序.__idf_esp_eth" />
@@ -898,10 +936,12 @@
       <item itemvalue="CMake 应用程序.__idf_esp_wifi" />
       <item itemvalue="CMake 应用程序.__idf_espcoredump" />
       <item itemvalue="CMake 应用程序.__idf_fatfs" />
+      <item itemvalue="CMake 应用程序.__idf_Framework" />
       <item itemvalue="CMake 应用程序.__idf_freertos" />
       <item itemvalue="CMake 应用程序.__idf_hal" />
       <item itemvalue="CMake 应用程序.__idf_heap" />
       <item itemvalue="CMake 应用程序.__idf_http_parser" />
+      <item itemvalue="CMake 应用程序.__idf_Interface" />
       <item itemvalue="CMake 应用程序.__idf_json" />
       <item itemvalue="CMake 应用程序.__idf_log" />
       <item itemvalue="CMake 应用程序.__idf_lwip" />
@@ -910,70 +950,55 @@
       <item itemvalue="CMake 应用程序.__idf_mqtt" />
       <item itemvalue="CMake 应用程序.__idf_newlib" />
       <item itemvalue="CMake 应用程序.__idf_nvs_flash" />
+      <item itemvalue="CMake 应用程序.__idf_nvs_sec_provider" />
+      <item itemvalue="CMake 应用程序.__idf_Osal" />
       <item itemvalue="CMake 应用程序.__idf_perfmon" />
       <item itemvalue="CMake 应用程序.__idf_protobuf-c" />
       <item itemvalue="CMake 应用程序.__idf_protocomm" />
       <item itemvalue="CMake 应用程序.__idf_pthread" />
       <item itemvalue="CMake 应用程序.__idf_sdmmc" />
+      <item itemvalue="CMake 应用程序.__idf_Service" />
       <item itemvalue="CMake 应用程序.__idf_soc" />
       <item itemvalue="CMake 应用程序.__idf_spi_flash" />
       <item itemvalue="CMake 应用程序.__idf_spiffs" />
       <item itemvalue="CMake 应用程序.__idf_tcp_transport" />
       <item itemvalue="CMake 应用程序.__idf_touch_element" />
-      <item itemvalue="CMake 应用程序.__idf_ulp" />
       <item itemvalue="CMake 应用程序.__idf_unity" />
       <item itemvalue="CMake 应用程序.__idf_usb" />
+      <item itemvalue="CMake 应用程序.__idf_Utils" />
       <item itemvalue="CMake 应用程序.__idf_vfs" />
       <item itemvalue="CMake 应用程序.__idf_wear_levelling" />
       <item itemvalue="CMake 应用程序.__idf_wifi_provisioning" />
       <item itemvalue="CMake 应用程序.__idf_wpa_supplicant" />
       <item itemvalue="CMake 应用程序.__idf_xtensa" />
-      <item itemvalue="CMake 应用程序.__ldgen_output_sections.ld" />
-      <item itemvalue="CMake 应用程序._project_elf_src" />
-      <item itemvalue="CMake 应用程序.apidoc" />
-      <item itemvalue="CMake 应用程序.app-flash" />
-      <item itemvalue="CMake 应用程序.app" />
-      <item itemvalue="CMake 应用程序.app_check_size" />
-      <item itemvalue="CMake 应用程序.bootloader-flash" />
-      <item itemvalue="CMake 应用程序.bootloader" />
-      <item itemvalue="CMake 应用程序.confserver" />
-      <item itemvalue="CMake 应用程序.custom_bundle" />
+      <item itemvalue="CMake 应用程序.dfu" />
       <item itemvalue="CMake 应用程序.dfu-flash" />
       <item itemvalue="CMake 应用程序.dfu-list" />
-      <item itemvalue="CMake 应用程序.dfu" />
-      <item itemvalue="CMake 应用程序.efuse-common-table" />
-      <item itemvalue="CMake 应用程序.efuse-custom-table" />
+      <item itemvalue="CMake 应用程序.confserver" />
+      <item itemvalue="CMake 应用程序.menuconfig" />
+      <item itemvalue="CMake 应用程序.save-defconfig" />
+      <item itemvalue="CMake 应用程序.__ldgen_output_sections.ld" />
+      <item itemvalue="CMake 应用程序._project_elf_src" />
+      <item itemvalue="CMake 应用程序.ACPilot.elf" />
+      <item itemvalue="CMake 应用程序.size" />
+      <item itemvalue="CMake 应用程序.size-components" />
+      <item itemvalue="CMake 应用程序.size-files" />
       <item itemvalue="CMake 应用程序.efuse_common_table" />
       <item itemvalue="CMake 应用程序.efuse_custom_table" />
-      <item itemvalue="CMake 应用程序.efuse_test_table" />
       <item itemvalue="CMake 应用程序.encrypted-app-flash" />
       <item itemvalue="CMake 应用程序.encrypted-bootloader-flash" />
       <item itemvalue="CMake 应用程序.encrypted-flash" />
       <item itemvalue="CMake 应用程序.encrypted-partition-table-flash" />
-      <item itemvalue="CMake 应用程序.erase_flash" />
-      <item itemvalue="CMake 应用程序.flash" />
-      <item itemvalue="CMake 应用程序.gen_project_binary" />
-      <item itemvalue="CMake 应用程序.lib" />
-      <item itemvalue="CMake 应用程序.mbedcrypto" />
-      <item itemvalue="CMake 应用程序.mbedtls" />
-      <item itemvalue="CMake 应用程序.mbedx509" />
-      <item itemvalue="CMake 应用程序.memory_ld" />
-      <item itemvalue="CMake 应用程序.menuconfig" />
-      <item itemvalue="CMake 应用程序.monitor" />
-      <item itemvalue="CMake 应用程序.partition-table-flash" />
-      <item itemvalue="CMake 应用程序.partition-table" />
-      <item itemvalue="CMake 应用程序.partition_table-flash" />
       <item itemvalue="CMake 应用程序.partition_table" />
-      <item itemvalue="CMake 应用程序.partition_table_bin" />
-      <item itemvalue="CMake 应用程序.save-defconfig" />
-      <item itemvalue="CMake 应用程序.show-efuse-table" />
+      <item itemvalue="CMake 应用程序.partition_table-flash" />
       <item itemvalue="CMake 应用程序.show_efuse_table" />
-      <item itemvalue="CMake 应用程序.size-components" />
-      <item itemvalue="CMake 应用程序.size-files" />
-      <item itemvalue="CMake 应用程序.size" />
-      <item itemvalue="CMake 应用程序.uf2-app" />
-      <item itemvalue="CMake 应用程序.uf2" />
+      <item itemvalue="CMake 调试.ACPilot" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="CMake 调试.ACPilot" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -989,6 +1014,10 @@
       <workItem from="1701877329087" duration="675000" />
       <workItem from="1701878021561" duration="130000" />
       <workItem from="1714989941044" duration="24000" />
+      <workItem from="1716194439310" duration="36000" />
+      <workItem from="1717140490508" duration="29000" />
+      <workItem from="1719378304069" duration="197000" />
+      <workItem from="1721742415205" duration="659000" />
     </task>
     <servers />
   </component>
@@ -996,10 +1025,9 @@
     <option name="version" value="3" />
   </component>
   <component name="VCPKGProject">
-    <isAutomaticEditVcpkgJson value="false" />
     <isAutomaticCheckingOnLaunch value="false" />
     <isAutomaticFoundErrors value="true" />
-    <isAutomaticFoundErrors value="true" />
+    <isAutomaticReloadCMake value="true" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -1016,5 +1044,12 @@
     <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="适配ESP32" />
     <option name="LAST_COMMIT_MESSAGE" value="适配ESP32" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint type="CMakeExceptionBreakpoint" />
+      </default-breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

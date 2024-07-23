@@ -72,6 +72,7 @@ static void collectAccBias(Vec3 &acc_bias)
     Vec3 *acc = new Vec3[1000];
     Vec3 acc_variance;
     do{
+        BASE_INFO("acc bias collect......");
         for (int i = 0; i < 1000; i++)
         {
             Board::imu_interrupt->waitNotify();
@@ -79,7 +80,7 @@ static void collectAccBias(Vec3 &acc_bias)
             acc[i] = state.earth_acc;
         }
         Variance::calculate(acc, 1000, acc_variance);
-    } while (acc_variance.x > 2.0 || acc_variance.y > 2.0 || acc_variance.z > 2.0);
+    } while (acc_variance.x > 3.0 || acc_variance.y > 3.0 || acc_variance.z > 3.0);
     BASE_INFO("acc bias collect finish");
     for (int i = 0; i < 1000; i++)
     {

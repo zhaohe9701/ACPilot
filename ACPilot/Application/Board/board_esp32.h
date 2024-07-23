@@ -10,32 +10,32 @@
 #include "Usb/usb_driver.h"
 #include "Light/light.h"
 #include "Interrupt/interrupt_driver.h"
-#include "Sensor/Baro/dps310.h"
 #include "Wlan/udp.h"
 #include "Iic/iic_driver.h"
+#include "Pwm/pwm_driver.h"
+#include "AdConverter/ad_converter_driver.h"
 
 class Board
-        {
-                public:
-                static Gpio *imu_cs_pin;
-                static Gpio *baro_cs_pin;
-                static Gpio *flash_cs_pin;
-                static Gpio *led_pin;
-                static Gpio *imu_interrupt_pin;
-
-                static SpiBus *spi1_bus;
-                static IicBus *iic1_bus;
-                static Iic *iic1;
-                static Uart *uart1;
-                static Usb *usb;
-                static Udp *udp;
-                static ExtInterrupt *imu_interrupt;
-
-                static Led *led;
-                static Dps310 *baro;
-        };
+{
+public:
+    static Gpio *led_pin;
+    static AdConverterUnit *adc_unit;
+    static AdConverterChannel *adc_channel0;
+    static ExtInterrupt *imu_interrupt;
+    static SpiBus *spi_bus_1;
+    static Spi *spi1;
+    static Spi *spi2;
+    static Uart *uart1;
+    static Usb *usb;
+    static Udp *udp;
+    static Pwm *pwm0;
+    static Pwm *pwm1;
+    static Pwm *pwm2;
+    static Pwm *pwm3;
+};
 
 extern "C" void boardInit();
+
 extern "C" void deviceInit();
 
-#endif //BOARD_ESP32_H_
+#endif //BOARD_ESP32_MINI_H_

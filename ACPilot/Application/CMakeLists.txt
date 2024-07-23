@@ -1,6 +1,6 @@
 set(APP_SOURCES
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/Board/board_esp32_mini.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Board/board_esp32.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Debug/ac_debug.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Control/control.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Control/AltitudeControl/altitude_control.cpp

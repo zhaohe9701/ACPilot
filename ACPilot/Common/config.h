@@ -29,14 +29,14 @@
 #define PER_GENERAL_MEMORY_POOL_NUM     {10, 3, 3, 3}
 #define PER_GENERAL_MEMORY_POOL_SIZE    {128, 256, 1024, 2048};
 
-#define USP_PORT_ID                     0x01
+#define USB_PORT_ID                     0x01
 #define UART0_PORT_ID                   0x02
 #define UART1_PORT_ID                   0x03
 #define UART2_PORT_ID                   0x04
 #define UDP_PORT_ID                     0x05
 #define TCP_PORT_ID                     0x06
 
-#define DEBUG_PORT_ID                   USP_PORT_ID
+#define DEBUG_PORT_ID                   USB_PORT_ID
 
 #define MAX_MESSAGE_BUF_LEN             2048
 #define MAX_UART_BUF_LEN                MAX_MESSAGE_BUF_LEN
@@ -72,11 +72,11 @@
 #define LED_TASK_STACK_SIZE             2000
 
 #define UART_RECEIVE_TASK_CORE          1
-#define UART_RECEIVE_TASK_PRIO          24
+#define UART_RECEIVE_TASK_PRIO          21
 #define UART_RECEIVE_TASK_STACK         2000
 
 #define USB_RECEIVE_TASK_CORE           1
-#define USB_RECEIVE_TASK_PRIO           24
+#define USB_RECEIVE_TASK_PRIO           21
 #define USB_RECEIVE_TASK_STACK          2000
 
 #define UDP_RECEIVE_TASK_CORE           1
