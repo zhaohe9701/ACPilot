@@ -7,10 +7,12 @@
 #include <nvs_flash.h>
 #include "wlan_driver.h"
 #include "esp_wifi.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 #include "Notify/notify.h"
 
 #define CONNECT_MAXIMUM_RETRY 10
+
+using namespace Driver;
 
 WlanHandle::WlanHandle()
 {
@@ -117,7 +119,7 @@ void WlanDriver::_event_handler(void *arg, esp_event_base_t event_base, int32_t 
     } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_CONNECTED)
     {
         BASE_INFO("connect to the AP success");
-        Notify::notify(WIFI_CONNECT_SUCCESS_EVENT);
+        Utils::Notify::notify(WIFI_CONNECT_SUCCESS_EVENT);
     } else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP)
     {
         ip_event_got_ip_t *event = static_cast<ip_event_got_ip_t *>(event_data);
@@ -125,7 +127,7 @@ void WlanDriver::_event_handler(void *arg, esp_event_base_t event_base, int32_t 
     } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_AP_STACONNECTED)
     {
         BASE_INFO("station connected");
-        Notify::notify(WIFI_CONNECT_SUCCESS_EVENT);
+        Utils::Notify::notify(WIFI_CONNECT_SUCCESS_EVENT);
     } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_AP_STADISCONNECTED)
     {
         BASE_INFO("station disconnected");

@@ -15,38 +15,39 @@
 
 #endif
 
-#include "type.h"
-#include "Com/com_interface.h"
-#include "Thread/ac_thread.h"
+#include "Type/type.h"
+#include "Com/com.h"
+#include "Thread/thread.h"
 #include "HardTimer/hard_timer_driver.h"
 
-#define USB_EVENT_TASK_PRIO 12
-
-class Usb : virtual public Com
+namespace Driver
 {
-public:
-    explicit Usb(uint8_t port_num);
 
-    AC_RET init();
+    class Usb : virtual public Interface::Com
+    {
+    public:
+        explicit Usb(uint8_t port_num);
 
-    AC_RET send(uint8_t *buf, uint16_t length, uint32_t timeout) override;
+        AC_RET init();
 
-    AC_RET open() override;
+        AC_RET send(uint8_t *buf, uint16_t length, uint32_t timeout) override;
 
-private:
+        AC_RET open() override;
+
+    private:
 
 #ifdef C_ESP32
-    AcThread *_usb_task = nullptr;
-    HardwareTimer *_timer = nullptr;
-    uint32_t _current_len = 0;
-    char _buf[MAX_USB_BUF_LEN] = {0};
+        Osal::AcThread *_usb_task = nullptr;
+        HardwareTimer *_timer = nullptr;
+        uint32_t _current_len = 0;
+        char _buf[MAX_USB_BUF_LEN] = {0};
 
-    static void _receive_task(void *param);
+        static void _receive_task(void *param);
 
-    static void _timer_callback(void *param);
+        static void _timer_callback(void *param);
 
 #endif
-};
+    };
 
-
+}
 #endif //USB_DRIVER_H_

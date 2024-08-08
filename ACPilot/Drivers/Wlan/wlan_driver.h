@@ -6,39 +6,41 @@
 #define WLAN_DRIVER_H_
 
 #include <esp_wifi_types.h>
-#include "type.h"
+#include "Type/type.h"
 
-
-enum WlanMode
+namespace Driver
 {
-    WLAN_MODE_STA = 0,
-    WLAN_MODE_AP = 1,
-};
 
-class WlanHandle
-{
-public:
-    WlanHandle();
+    enum WlanMode
+    {
+        WLAN_MODE_STA = 0,
+        WLAN_MODE_AP = 1,
+    };
 
-    wifi_config_t config{};
-    WlanMode mode = WLAN_MODE_STA;
-};
+    class WlanHandle
+    {
+    public:
+        WlanHandle();
 
-class WlanDriver
-{
-public:
-    static AC_RET init(WlanHandle *handle);
+        wifi_config_t config{};
+        WlanMode mode = WLAN_MODE_STA;
+    };
 
-private:
-    static WlanHandle *_handle;
+    class WlanDriver
+    {
+    public:
+        static AC_RET init(WlanHandle *handle);
 
-    static AC_RET _staInit();
+    private:
+        static WlanHandle *_handle;
 
-    static AC_RET _apInit();
+        static AC_RET _staInit();
 
-    static void _event_handler(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data);
+        static AC_RET _apInit();
 
-    static uint16_t _retry_count;
-};
+        static void _event_handler(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data);
 
+        static uint16_t _retry_count;
+    };
+}
 #endif //WLAN_DRIVER_H_

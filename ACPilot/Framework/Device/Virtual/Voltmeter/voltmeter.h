@@ -8,15 +8,17 @@
 
 #include "Device/Virtual/virtual_device.h"
 
-class Voltmeter : public VirtualDevice
+namespace Framework
 {
-public:
-    explicit Voltmeter(const char *name);
+    class Voltmeter : public VirtualDevice
+    {
+    public:
+        explicit Voltmeter(const char *name);
 
-    AC_RET read(VolData &data);
+        AC_RET read(VolData &data);
 
-    ~Voltmeter() = default;
-};
-
+        ~Voltmeter() = default;
+    };
+}
 
 #endif //VOLTMETER_H_

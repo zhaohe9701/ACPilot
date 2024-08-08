@@ -4,9 +4,11 @@
 
 #include "virtual_device.h"
 #include "string.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 
-List<VirtualDevice *> VirtualDevice::_list;
+using namespace Framework;
+
+Common::List<VirtualDevice *> VirtualDevice::_list;
 
 AC_RET VirtualDevice::bind(PhysicalDevice *device)
 {
@@ -39,7 +41,7 @@ VirtualDevice::VirtualDevice(const char *name)
     add(this);
 }
 
-AC_RET VirtualDevice::cali(Vec3 *data, uint16_t num, DeviceCali *cali)
+AC_RET VirtualDevice::cali(Common::Vec3 *data, uint16_t num, DeviceCali *cali)
 {
     return AC_NOT_SUPPORT;
 }

@@ -11,6 +11,8 @@
 #include <string.h>
 #include "icm42688.h"
 
+using namespace Component;
+
 #define READ 0x80
 #define WRITE 0x7f
 
@@ -141,7 +143,7 @@
 
 /***********************************/
 
-Icm42688::Icm42688(IoInterface *interface)
+Icm42688::Icm42688(Interface::IO *interface)
 {
     _interface = interface;
     strncpy(_name, "ICM42688", sizeof(_name));
@@ -149,9 +151,9 @@ Icm42688::Icm42688(IoInterface *interface)
     _WRITE = WRITE;
     _REG_BANK_SEL = REG_BANK_SEL;
     _BANK0 = BANK0;
-    _ability = (1U << ACCELEROMETER_DEV) |
-               (1U << THERMOMETER_DEV) |
-               (1U << GYROSCOPE_DEV);
+    _ability = (1U << Framework::ACCELEROMETER_DEV) |
+               (1U << Framework::THERMOMETER_DEV) |
+               (1U << Framework::GYROSCOPE_DEV);
 }
 
 AC_RET Icm42688::init()
@@ -289,19 +291,19 @@ AC_RET Icm42688::updateAcc()
     return AC_OK;
 }
 
-AC_RET Icm42688::getTemp(TempData &data)
+AC_RET Icm42688::getTemp(Framework::TempData &data)
 {
     data = _tmp_data;
     return AC_OK;
 }
 
-AC_RET Icm42688::getGyro(GyroData &data)
+AC_RET Icm42688::getGyro(Framework::GyroData &data)
 {
     data = _gyro_data;
     return AC_OK;
 }
 
-AC_RET Icm42688::getAcc(AccData &data)
+AC_RET Icm42688::getAcc(Framework::AccData &data)
 {
     data = _acc_data;
     return AC_OK;

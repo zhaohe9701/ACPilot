@@ -12,8 +12,8 @@
 #define PRINT_H_
 
 #include <stdint.h>
-#include "Queue/ac_queue.h"
-#include "type.h"
+#include "Queue/queue.h"
+#include "Type/type.h"
 #include "Mail/mailbox.h"
 #include "message.h"
 #include "MemoryPool/memory_pool.h"

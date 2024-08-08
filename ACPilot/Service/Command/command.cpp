@@ -6,6 +6,7 @@
 #include <string.h>
 #include "Command/command_server.h"
 
+using namespace Service;
 
 Command::Command()
 {

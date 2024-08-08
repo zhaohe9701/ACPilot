@@ -15,23 +15,25 @@
 #define RAD2DEG 57.29578f
 #define DEG2RAD 0.01745329f
 
-void Mahony::update(MemsData &mems, Euler &euler, float dt)
+using namespace Component;
+
+void Mahony::update(MemsData &mems, Common::Euler &euler, float dt)
 {
     float normalise;
 
-    Vec3 e;
-    Vec3 g{mems.gyro.x * DEG2RAD, mems.gyro.y * DEG2RAD, mems.gyro.z * DEG2RAD};
-    Vec3 a{mems.acc.x, mems.acc.y, mems.acc.z};
-    Vec4 q;
+    Common::Vec3 e;
+    Common::Vec3 g{mems.gyro.x * DEG2RAD, mems.gyro.y * DEG2RAD, mems.gyro.z * DEG2RAD};
+    Common::Vec3 a{mems.acc.x, mems.acc.y, mems.acc.z};
+    Common::Vec4 q;
 
     float halfT = 0.5f * dt;
 
     if (mems.type() == MEMS_9_AXIS)
     {
-        Vec3 m{mems.mag.x, mems.mag.y, mems.mag.z};
-        Vec3 h;
-        Vec3 b;
-        Vec3 w;
+        Common::Vec3 m{mems.mag.x, mems.mag.y, mems.mag.z};
+        Common::Vec3 h;
+        Common::Vec3 b;
+        Common::Vec3 w;
 
         if (((m.x != 0.0f) || (m.y != 0.0f) || (m.z != 0.0f)) && ((a.x != 0.0f) || (a.y != 0.0f) || (a.z != 0.0f)))
         {

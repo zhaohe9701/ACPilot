@@ -7,11 +7,13 @@
 
 #include "Device/device_cali.h"
 
-class RotaryTrans : public DeviceCali
+namespace Component
 {
-public:
-    void cali(Vec3 *data, uint16_t num, DeviceCaliData &result) override;
-};
-
+    class RotaryTrans : public Framework::DeviceCali
+    {
+    public:
+        void cali(Common::Vec3 *data, uint16_t num, Framework::DeviceCaliData &result) override;
+    };
+}
 
 #endif //ROTARY_TRANS_H_

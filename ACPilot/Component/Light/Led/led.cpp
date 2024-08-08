@@ -3,28 +3,30 @@
 //
 
 #include "led.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 
-Led::Led(Gpio *pin, GpioState on, LightMode mode, uint8_t id) : Light(id)
+using namespace Component;
+
+Led::Led(Driver::Gpio *pin, Driver::GpioState on, Service::LightMode mode, uint8_t id) : Light(id)
 {
     char name[PARAM_NAME_LEN] = {0};
     snprintf(name, PARAM_NAME_LEN - 1, "led%d", _id);
     _pin = pin;
     _mode = mode;
-    if (GPIO_SET == on)
+    if (Driver::GPIO_SET == on)
     {
-        _on = GPIO_SET;
-        _off = GPIO_RESET;
+        _on = Driver::GPIO_SET;
+        _off = Driver::GPIO_RESET;
     } else
     {
-        _on = GPIO_RESET;
-        _off = GPIO_SET;
+        _on = Driver::GPIO_RESET;
+        _off = Driver::GPIO_SET;
     }
-    _thread = new AcThread(name, LED_TASK_STACK_SIZE, LED_TASK_PRIO, LED_TASK_CORE);
+    _thread = new Osal::AcThread(name, LED_TASK_STACK_SIZE, LED_TASK_PRIO, LED_TASK_CORE);
     _thread->run(_loop, this);
 }
 
-AC_RET Led::setMode(LightMode mode)
+AC_RET Led::setMode(Service::LightMode mode)
 {
     _mode = mode;
     return AC_OK;
@@ -57,25 +59,25 @@ void Led::_loop(void *param)
     {
         switch (led->_mode)
         {
-            case LIGHT_KEEP_OFF:
+            case Service::LIGHT_KEEP_OFF:
                 control(led, keep_off, sizeof(keep_off), i, 10);
                 break;
-            case LIGHT_KEEP_ON:
+            case Service::LIGHT_KEEP_ON:
                 control(led, keep_on, sizeof(keep_on), i, 10);
                 break;
-            case LIGHT_FAST_FLASHING:
+            case Service::LIGHT_FAST_FLASHING:
                 control(led, fast_flashing, sizeof(fast_flashing), i, 10);
                 break;
-            case LIGHT_SLOW_FLASHING:
+            case Service::LIGHT_SLOW_FLASHING:
                 control(led, slow_flashing, sizeof(slow_flashing), i, 40);
                 break;
-            case LIGHT_BREATHE:
+            case Service::LIGHT_BREATHE:
                 control(led, breathe, sizeof(breathe), i, 10);
                 break;
-            case LIGHT_PULSE_FLASHING:
+            case Service::LIGHT_PULSE_FLASHING:
                 control(led, pulse_flashing, sizeof(pulse_flashing), i, 10);
                 break;
-            case LIGHT_DOUBLE_PULSE_FLASHING:
+            case Service::LIGHT_DOUBLE_PULSE_FLASHING:
                 control(led, double_pulse_flashing, sizeof(double_pulse_flashing), i, 10);
                 break;
             default:

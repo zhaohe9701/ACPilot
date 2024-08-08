@@ -12,7 +12,7 @@
 #define UART_DRIVER_PARAM_H_
 
 #include "List/ac_list.h"
-#include "Semaphore/ac_semaphore.h"
+#include "Semaphore/semaphore.h"
 #include "Interface/com_interface.h"
 
 typedef UART_HandleTypeDef UartHandle;

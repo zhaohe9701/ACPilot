@@ -4,6 +4,8 @@
 
 #include "locator.h"
 
+using namespace Framework;
+
 Locator::Locator(const char *name) : VirtualDevice(name)
 {
     _type = LOCATOR_DEV;

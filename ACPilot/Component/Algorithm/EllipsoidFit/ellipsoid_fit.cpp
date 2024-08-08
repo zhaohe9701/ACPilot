@@ -7,12 +7,13 @@
 #include "ellipsoid_fit.h"
 #include "os.h"
 
+using namespace Component;
 EllipsoidFit::EllipsoidFit(float unit)
 {
     _unit = unit;
 }
 
-void EllipsoidFit::cali(Vec3 *data, uint16_t num, DeviceCaliData &result)
+void EllipsoidFit::cali(Common::Vec3 *data, uint16_t num, Framework::DeviceCaliData &result)
 {
     A_tmp = new float[6 * num];
     D = new float[6 * num];

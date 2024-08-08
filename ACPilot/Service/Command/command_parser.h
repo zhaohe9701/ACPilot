@@ -13,28 +13,31 @@
 
 #define COMMAND_HEAD 0x3E
 
-#include "Mail/mailbox.h"
+#include "Mailbox/mailbox.h"
 #include "Receive/receive_parser.h"
-#include "type.h"
+#include "Type/type.h"
 
-enum CommandMethod
+namespace Service
 {
-    AT_GET = 0,
-    AT_SET = 1,
-    AT_DOWNLOAD = 2,
-};
 
-class CommandParser : virtual public MessageReceiveParser
-{
-public:
-    CommandParser();
+    enum CommandMethod
+    {
+        AT_GET = 0,
+        AT_SET = 1,
+        AT_DOWNLOAD = 2,
+    };
 
-    bool match(ComMessage &messaged) override;
+    class CommandParser : virtual public MessageReceiveParser
+    {
+    public:
+        CommandParser();
 
-    AC_RET parse(ComMessage &message, bool &free_message) override;
+        bool match(ComMessage &messaged) override;
 
-private:
-    Mailbox<CommandMessage> *_manager = nullptr;
-};
+        AC_RET parse(ComMessage &message, bool &free_message) override;
 
+    private:
+        Utils::Mailbox<CommandMessage> *_manager = nullptr;
+    };
+}
 #endif

@@ -15,22 +15,25 @@
 
 #endif
 
-#include "type.h"
+#include "Type/type.h"
 
-class Pwm
+namespace Driver
 {
-public:
-    explicit Pwm(PwmHandle *handle);
 
-    AC_RET init();
+    class Pwm
+    {
+    public:
+        explicit Pwm(PwmHandle *handle);
 
-    static AC_RET timerInit(PwmTimerHandle *handle);
+        AC_RET init();
 
-    AC_RET set(float duty);
+        static AC_RET timerInit(PwmTimerHandle *handle);
 
-private:
-    PwmHandle *_handle = nullptr;
-    static uint32_t _resolution;
-};
+        AC_RET set(float duty);
 
+    private:
+        PwmHandle *_handle = nullptr;
+        static uint32_t _resolution;
+    };
+}
 #endif //PWM_DRIVER_H_

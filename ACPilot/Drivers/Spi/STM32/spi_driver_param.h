@@ -14,9 +14,9 @@
 #include "Interface/device_interface.h"
 #include "spi.h"
 #include "Gpio/gpio_driver.h"
-#include "ac_list.h"
-#include "Semaphore/ac_semaphore.h"
-#include "Mutex/ac_mutex.h"
+#include "List/ac_list.h"
+#include "Semaphore/semaphore.h"
+#include "Mutex/mutex.h"
 
 #define SPI_PRESCALER_2     SPI_BAUDRATEPRESCALER_2
 #define SPI_PRESCALER_4     SPI_BAUDRATEPRESCALER_4

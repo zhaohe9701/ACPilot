@@ -5,8 +5,10 @@
 #include <string.h>
 #include "data_module.h"
 #include "error_handing.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 #include "Nvs/nvs_driver.h"
+
+using namespace Framework;
 
 static uint16_t getArrayNum(char *key)
 {
@@ -24,50 +26,50 @@ static uint16_t getArrayNum(char *key)
     return 0;
 }
 
-class DataTreeStructToJson : public TreeVisit
+class DataTreeStructToJson : public Common::TreeVisit
 {
 public:
-    AC_RET operator()(Tree *node, TREE_VISIT_ORDER order) override;
+    AC_RET operator()(Common::Tree *node, Common::TREE_VISIT_ORDER order) override;
 
-    JsonTree *getRes();
+    Utils::JsonTree *getRes();
 
 private:
-    JsonTree *_root = nullptr;
-    JsonTree *_current_node = nullptr;
+    Utils::JsonTree *_root = nullptr;
+    Utils::JsonTree *_current_node = nullptr;
 };
 
-AC_RET DataTreeStructToJson::operator()(Tree *node, TREE_VISIT_ORDER order)
+AC_RET DataTreeStructToJson::operator()(Common::Tree *node, Common::TREE_VISIT_ORDER order)
 {
-    JsonTree *json_node = nullptr;
-    DataTree *data_node = static_cast<DataTree *>(node);
+    Utils::JsonTree *json_node = nullptr;
+    Utils::DataTree *data_node = static_cast<Utils::DataTree *>(node);
 
     if (nullptr == data_node)
     {
         return AC_ERROR;
     }
     /* 后序遍历, 回到当前节点 */
-    if (TREE_POST_ORDER == order)
+    if (Common::TREE_POST_ORDER == order)
     {
         /* 如果当前节点是数组, 则仅保留首个孩子节点 */
-        if (JSON_TYPE_ARRAY == _current_node->getType())
+        if (Utils::JSON_TYPE_ARRAY == _current_node->getType())
         {
-            JsonTree *child = _current_node->getFirstChild();
-            JsonTree *del_node = nullptr;
+            Utils::JsonTree *child = _current_node->getFirstChild();
+            Utils::JsonTree *del_node = nullptr;
             NULL_CHECK(child);
             while (nullptr != child->getNeighbor())
             {
                 del_node = child->getNeighbor();
                 _current_node->delChild(del_node);
-                Json::free(del_node);
+                Utils::Json::free(del_node);
             }
         }
         /* 回到父节点 */
         _current_node = _current_node->getParent();
         return AC_OK;
-    } else if (TREE_PRE_ORDER == order) /* 前序遍历, 建立新节点 */
+    } else if (Common::TREE_PRE_ORDER == order) /* 前序遍历, 建立新节点 */
     {
         /* 为当前节点分配空间 */
-        NULL_CHECK(json_node = Json::alloc());
+        NULL_CHECK(json_node = Utils::Json::alloc());
 
         data_node->singleNodeToStruct(json_node);
 
@@ -87,16 +89,16 @@ AC_RET DataTreeStructToJson::operator()(Tree *node, TREE_VISIT_ORDER order)
     return AC_ERROR;
 }
 
-JsonTree *DataTreeStructToJson::getRes()
+Utils::JsonTree *DataTreeStructToJson::getRes()
 {
     return _root;
 }
 
 /* 计算Data Module树(子)节点和数量的仿函数 */
-class CalcNodeSize : public TreeVisit
+class CalcNodeSize : public Common::TreeVisit
 {
 public:
-    AC_RET operator()(Tree *node, TREE_VISIT_ORDER order) override;
+    AC_RET operator()(Common::Tree *node, Common::TREE_VISIT_ORDER order) override;
 
     uint16_t getSize();
 
@@ -107,18 +109,18 @@ private:
     uint16_t _num = 0;
 };
 
-AC_RET CalcNodeSize::operator()(Tree *node, TREE_VISIT_ORDER order)
+AC_RET CalcNodeSize::operator()(Common::Tree *node, Common::TREE_VISIT_ORDER order)
 {
-    DataTree *data_node = static_cast<DataTree *>(node);
+    Utils::DataTree *data_node = static_cast<Utils::DataTree *>(node);
 
     if (nullptr == data_node)
     {
         return AC_ERROR;
     }
 
-    if (TREE_PRE_ORDER == order)
+    if (Common::TREE_PRE_ORDER == order)
     {
-        _size += sizeof(DataTree);
+        _size += sizeof(Utils::DataTree);
         _num++;
     }
 
@@ -136,22 +138,22 @@ uint16_t CalcNodeSize::getNum()
 }
 
 /* 创建Data Module树节点的仿函数 */
-class CreateDataTreeNode : public TreeVisit
+class CreateDataTreeNode : public Common::TreeVisit
 {
 public:
-    AC_RET operator()(Tree *node, TREE_VISIT_ORDER order) override;
+    AC_RET operator()(Common::Tree *node, Common::TREE_VISIT_ORDER order) override;
 
-    DataTree *getRes();
+    Utils::DataTree *getRes();
 
 private:
-    DataTree *_root = nullptr;
-    DataTree *_current_node = nullptr;
+    Utils::DataTree *_root = nullptr;
+    Utils::DataTree *_current_node = nullptr;
 };
 
-AC_RET CreateDataTreeNode::operator()(Tree *node, TREE_VISIT_ORDER order)
+AC_RET CreateDataTreeNode::operator()(Common::Tree *node, Common::TREE_VISIT_ORDER order)
 {
-    JsonTree *json_node = static_cast<JsonTree *>(node);
-    DataTree *data_node = nullptr;
+    Utils::JsonTree *json_node = static_cast<Utils::JsonTree *>(node);
+    Utils::DataTree *data_node = nullptr;
     uint16_t array_num = 0;
 
     if (nullptr == json_node)
@@ -159,7 +161,7 @@ AC_RET CreateDataTreeNode::operator()(Tree *node, TREE_VISIT_ORDER order)
         return AC_ERROR;
     }
     /* 后序遍历, 回到当前节点 */
-    if (TREE_POST_ORDER == order)
+    if (Common::TREE_POST_ORDER == order)
     {
         /* 如果当前节点是数组, 则补齐数组数量 */
         if (AC_ARRAY == _current_node->getType())
@@ -179,7 +181,7 @@ AC_RET CreateDataTreeNode::operator()(Tree *node, TREE_VISIT_ORDER order)
         /* 回到父节点 */
         _current_node = _current_node->getParent();
         return AC_OK;
-    } else if (TREE_PRE_ORDER == order) /* 前序遍历, 建立新节点 */
+    } else if (Common::TREE_PRE_ORDER == order) /* 前序遍历, 建立新节点 */
     {
         /* 为当前节点分配空间 */
         NULL_CHECK(data_node = DataModule::allocNode());
@@ -202,28 +204,28 @@ AC_RET CreateDataTreeNode::operator()(Tree *node, TREE_VISIT_ORDER order)
     return AC_ERROR;
 }
 
-DataTree *CreateDataTreeNode::getRes()
+Utils::DataTree *CreateDataTreeNode::getRes()
 {
     return _root;
 }
 
 /* 为Data Module树节点计算数据空间的仿函数 */
-class CalcDataSize : public TreeVisit
+class CalcDataSize : public Common::TreeVisit
 {
 public:
-    AC_RET operator()(Tree *node, TREE_VISIT_ORDER order) override;
+    AC_RET operator()(Common::Tree *node, Common::TREE_VISIT_ORDER order) override;
 };
 
-AC_RET CalcDataSize::operator()(Tree *node, TREE_VISIT_ORDER order)
+AC_RET CalcDataSize::operator()(Common::Tree *node, Common::TREE_VISIT_ORDER order)
 {
-    DataTree *data_node = static_cast<DataTree *>(node);
+    Utils::DataTree *data_node = static_cast<Utils::DataTree *>(node);
 
     if (nullptr == data_node)
     {
         return AC_ERROR;
     }
     /* 从下至上计算各层数据结构所占用的空间, 暂不考虑内存对齐 */
-    if (TREE_PRE_ORDER == order)
+    if (Common::TREE_PRE_ORDER == order)
     {
         return AC_OK;
     }
@@ -237,20 +239,20 @@ AC_RET CalcDataSize::operator()(Tree *node, TREE_VISIT_ORDER order)
     return AC_OK;
 }
 
-class AllocDataTreeData : public TreeVisit
+class AllocDataTreeData : public Common::TreeVisit
 {
 public:
-    AC_RET operator()(Tree *node, TREE_VISIT_ORDER order) override;
+    AC_RET operator()(Common::Tree *node, Common::TREE_VISIT_ORDER order) override;
 };
 
-AC_RET AllocDataTreeData::operator()(Tree *node, TREE_VISIT_ORDER order)
+AC_RET AllocDataTreeData::operator()(Common::Tree *node, Common::TREE_VISIT_ORDER order)
 {
-    DataTree *data_node = static_cast<DataTree *>(node);
+    Utils::DataTree *data_node = static_cast<Utils::DataTree *>(node);
     if (nullptr == data_node)
     {
         return AC_ERROR;
     }
-    if (TREE_POST_ORDER == order)
+    if (Common::TREE_POST_ORDER == order)
     {
         if (nullptr == data_node->getFirstChild())
         {
@@ -273,7 +275,7 @@ uint8_t *DataModule::_ptr = nullptr;
 uint32_t DataModule::_size = 0;
 uint32_t DataModule::_node_size = 0;
 uint32_t DataModule::_data_size = 0;
-DataTree *DataModule::_root = nullptr;
+Utils::DataTree *DataModule::_root = nullptr;
 
 AC_RET DataModule::init()
 {
@@ -299,7 +301,7 @@ AC_RET DataModule::deInit()
 
 AC_RET DataModule::load()
 {
-    Nvs *fd = Nvs::open(DATA_MODULE_NVS_NAMESPACE);
+    Driver::Nvs *fd = Driver::Nvs::open(DATA_MODULE_NVS_NAMESPACE);
     uint8_t *old_head = nullptr;
     int32_t offset = 0;
 
@@ -313,25 +315,25 @@ AC_RET DataModule::load()
     _node_head = _head + sizeof(uint8_t *) + sizeof(_node_size) + sizeof(_data_size);
     _data_head = _node_head + _node_size;
     _ptr = _data_head + _data_size;
-    _root = static_cast<DataTree *>((void *) _node_head);
+    _root = static_cast<Utils::DataTree *>((void *) _node_head);
 
-    Nvs::close(fd);
+    Driver::Nvs::close(fd);
 
     offset = _head - old_head;
 
-    for (uint32_t i = 0; i < _node_size / sizeof(DataTree); ++i)
+    for (uint32_t i = 0; i < _node_size / sizeof(Utils::DataTree); ++i)
     {
         if (nullptr != _root[i].getParent())
         {
-            _root[i].setParent((DataTree *) ((uint8_t *) _root[i].getParent() + offset));
+            _root[i].setParent((Utils::DataTree *) ((uint8_t *) _root[i].getParent() + offset));
         }
         if (nullptr != _root[i].getFirstChild())
         {
-            _root[i].setFirstChild((DataTree *) ((uint8_t *) _root[i].getFirstChild() + offset));
+            _root[i].setFirstChild((Utils::DataTree *) ((uint8_t *) _root[i].getFirstChild() + offset));
         }
         if (nullptr != _root[i].getNeighbor())
         {
-            _root[i].setNeighbor((DataTree *) ((uint8_t *) _root[i].getNeighbor() + offset));
+            _root[i].setNeighbor((Utils::DataTree *) ((uint8_t *) _root[i].getNeighbor() + offset));
         }
         if (nullptr != _root[i].getData())
         {
@@ -341,13 +343,13 @@ AC_RET DataModule::load()
     return AC_OK;
     error:
     BASE_ERROR("load data error");
-    Nvs::close(fd);
+    Driver::Nvs::close(fd);
     return AC_ERROR;
 }
 
 AC_RET DataModule::save()
 {
-    Nvs *fd = Nvs::open(DATA_MODULE_NVS_NAMESPACE);
+    Driver::Nvs *fd = Driver::Nvs::open(DATA_MODULE_NVS_NAMESPACE);
     NULL_CHECK(fd);
 
     memcpy(_head, &_head, sizeof(uint8_t *));
@@ -357,12 +359,12 @@ AC_RET DataModule::save()
     RETURN_CHECK(fd->write(DATA_MODULE_NVS_KEY, _head, DATA_MODULE_MEMORY_SIZE));
     RETURN_CHECK(fd->save());
 
-    Nvs::close(fd);
+    Driver::Nvs::close(fd);
 
     return AC_OK;
     error:
     BASE_ERROR("save data error");
-    Nvs::close(fd);
+    Driver::Nvs::close(fd);
     return AC_ERROR;
 }
 
@@ -377,7 +379,7 @@ AC_RET DataModule::reset()
     return AC_OK;
 }
 
-AC_RET DataModule::create(JsonTree *data)
+AC_RET DataModule::create(Utils::JsonTree *data)
 {
     CreateDataTreeNode create_node;
     CalcDataSize calc_size;
@@ -406,7 +408,7 @@ AC_RET DataModule::create(JsonTree *data)
 AC_RET DataModule::dumpStruct(char *buf, uint32_t len)
 {
     DataTreeStructToJson struct_to_json;
-    JsonTree *ret = nullptr;
+    Utils::JsonTree *ret = nullptr;
 
     NULL_CHECK(_root);
 
@@ -414,75 +416,75 @@ AC_RET DataModule::dumpStruct(char *buf, uint32_t len)
 
     NULL_CHECK(ret = struct_to_json.getRes());
 
-    RETURN_CHECK(Json::serialize(ret, buf, len));
+    RETURN_CHECK(Utils::Json::serialize(ret, buf, len));
 
-    Json::free(ret);
+    Utils::Json::free(ret);
 
     return AC_OK;
     error:
     BASE_ERROR("dump struct error");
     if (nullptr != ret)
     {
-        Json::free(ret);
+        Utils::Json::free(ret);
     }
     return AC_ERROR;
 }
 
 AC_RET DataModule::dumpData(char *buf, uint32_t len)
 {
-    JsonTree *ret = nullptr;
+    Utils::JsonTree *ret = nullptr;
 
     NULL_CHECK(_root);
 
-    NULL_CHECK(ret = DataTree::toJson(_root));
+    NULL_CHECK(ret = Utils::DataTree::toJson(_root));
 
-    RETURN_CHECK(Json::serialize(ret, buf, len));
+    RETURN_CHECK(Utils::Json::serialize(ret, buf, len));
 
-    Json::free(ret);
+    Utils::Json::free(ret);
 
     return AC_OK;
     error:
     BASE_ERROR("dump data error");
     if (nullptr != ret)
     {
-        Json::free(ret);
+        Utils::Json::free(ret);
     }
     return AC_ERROR;
 }
 
-AC_RET DataModule::set(const char *url, JsonTree *data)
+AC_RET DataModule::set(const char *url, Utils::JsonTree *data)
 {
     if (nullptr == _root || nullptr == data || nullptr == url)
     {
         BASE_ERROR("param error");
         return AC_ERROR;
     }
-    DataTree *node = DataTree::find(_root, url);
+    Utils::DataTree *node = Utils::DataTree::find(_root, url);
 
     if (nullptr == node)
     {
         return AC_ERROR;
     }
-    return DataTree::fromJson(node, data->getFirstChild());
+    return Utils::DataTree::fromJson(node, data->getFirstChild());
 }
 
-AC_RET DataModule::get(const char *url, JsonTree *data)
+AC_RET DataModule::get(const char *url, Utils::JsonTree *data)
 {
     if (nullptr == _root || nullptr == data || nullptr == url)
     {
         BASE_ERROR("param error");
         return AC_ERROR;
     }
-    DataTree *node = DataTree::find(_root, url);
+    Utils::DataTree *node = Utils::DataTree::find(_root, url);
     if (nullptr == node)
     {
         return AC_OK;
     }
-    data->addChild(DataTree::toJson(node));
+    data->addChild(Utils::DataTree::toJson(node));
     return AC_OK;
 }
 
-AC_RET DataModule::add(const char *url, JsonTree *data)
+AC_RET DataModule::add(const char *url, Utils::JsonTree *data)
 {
     if (nullptr == _root || nullptr == data || nullptr == url)
     {
@@ -490,10 +492,10 @@ AC_RET DataModule::add(const char *url, JsonTree *data)
         return AC_ERROR;
     }
 
-    JsonTree *json_node = data->getFirstChild();
-    DataTree *data_node = DataTree::find(_root, url);
-    JsonTree *json_child = nullptr;
-    DataTree *data_child = nullptr;
+    Utils::JsonTree *json_node = data->getFirstChild();
+    Utils::DataTree *data_node = Utils::DataTree::find(_root, url);
+    Utils::JsonTree *json_child = nullptr;
+    Utils::DataTree *data_child = nullptr;
 
     uint16_t index = 1;
 
@@ -507,7 +509,7 @@ AC_RET DataModule::add(const char *url, JsonTree *data)
         return AC_OK;
     }
 
-    if (AC_ARRAY != data_node->getType() || JSON_TYPE_ARRAY != json_node->getType())
+    if (AC_ARRAY != data_node->getType() || Utils::JSON_TYPE_ARRAY != json_node->getType())
     {
         BASE_ERROR("node is not array");
         return AC_ERROR;
@@ -520,7 +522,7 @@ AC_RET DataModule::add(const char *url, JsonTree *data)
     {
         while (nullptr != data_child)
         {
-            if (dataArrayNodeIsUsed(data_child))
+            if (Utils::DataTree::dataArrayNodeIsUsed(data_child))
             {
                 data_child = data_child->getNeighbor();
                 index++;
@@ -536,14 +538,14 @@ AC_RET DataModule::add(const char *url, JsonTree *data)
             return AC_ERROR;
         }
 
-        jsonArrayNodeSetIndex(json_child, 0);
-        if (AC_OK != DataTree::fromJson(data_child, json_child))
+        Utils::JsonTree::jsonArrayNodeSetIndex(json_child, 0);
+        if (AC_OK != Utils::DataTree::fromJson(data_child, json_child))
         {
             BASE_ERROR("fromJson error");
             data_child->clearData();
             return AC_ERROR;
         }
-        dataArrayNodeSetIndex(data_child, index);
+        Utils::DataTree::dataArrayNodeSetIndex(data_child, index);
         json_child = json_child->getNeighbor();
     }
     return AC_OK;
@@ -557,8 +559,8 @@ AC_RET DataModule::del(const char *url)
         return AC_ERROR;
     }
 
-    DataTree *data_node = DataTree::find(_root, url);
-    DataTree *data_neighbor = nullptr;
+    Utils::DataTree *data_node = Utils::DataTree::find(_root, url);
+    Utils::DataTree *data_neighbor = nullptr;
     uint16_t index = 0;
 
     if (data_node == nullptr || data_node->getParent() == nullptr || data_node->getParent()->getType() != AC_ARRAY)
@@ -567,21 +569,21 @@ AC_RET DataModule::del(const char *url)
         return AC_ERROR;
     }
 
-    index = dataArrayNodeGetIndex(data_node);
+    index = Utils::DataTree::dataArrayNodeGetIndex(data_node);
 
     data_neighbor = data_node->getNeighbor();
 
-    while (nullptr != data_neighbor && dataArrayNodeIsUsed(data_neighbor))
+    while (nullptr != data_neighbor && Utils::DataTree::dataArrayNodeIsUsed(data_neighbor))
     {
         RETURN_CHECK(data_node->copyData(data_neighbor));
-        dataArrayNodeSetIndex(data_node, index);
+        Utils::DataTree::dataArrayNodeSetIndex(data_node, index);
         index++;
         data_node = data_neighbor;
         data_neighbor = data_node->getNeighbor();
     }
 
     data_node->clearData();
-    dataArrayNodeSetIndex(data_node, 0);
+    Utils::DataTree::dataArrayNodeSetIndex(data_node, 0);
 
     return AC_OK;
     error:
@@ -591,10 +593,10 @@ AC_RET DataModule::del(const char *url)
 
 AC_RET DataModule::create(char *data)
 {
-    JsonTree *json = nullptr;
+    Utils::JsonTree *json = nullptr;
     AC_RET ret = AC_OK;
 
-    json = Json::deserialize(data);
+    json = Utils::Json::deserialize(data);
 
     if (nullptr == json)
     {
@@ -604,17 +606,17 @@ AC_RET DataModule::create(char *data)
 
     ret = create(json);
 
-    Json::free(json);
+    Utils::Json::free(json);
 
     return ret;
 }
 
 AC_RET DataModule::set(const char *url, char *data)
 {
-    JsonTree *json = nullptr;
+    Utils::JsonTree *json = nullptr;
     AC_RET ret = AC_OK;
 
-    json = Json::deserialize(data);
+    json = Utils::Json::deserialize(data);
 
     if (nullptr == json)
     {
@@ -624,16 +626,16 @@ AC_RET DataModule::set(const char *url, char *data)
 
     ret = set(url, json);
 
-    Json::free(json);
+    Utils::Json::free(json);
 
     return ret;
 }
 
 AC_RET DataModule::get(const char *url, char *data, uint32_t len)
 {
-    JsonTree *json = nullptr;
+    Utils::JsonTree *json = nullptr;
 
-    json = Json::alloc();
+    json = Utils::Json::alloc();
 
     if (nullptr == json)
     {
@@ -641,32 +643,32 @@ AC_RET DataModule::get(const char *url, char *data, uint32_t len)
         return AC_ERROR;
     }
 
-    json->setType(JSON_TYPE_ROOT);
+    json->setType(Utils::JSON_TYPE_ROOT);
 
     if (AC_OK != get(url, json))
     {
         BASE_ERROR("get error");
-        Json::free(json);
+        Utils::Json::free(json);
         return AC_ERROR;
     }
 
-    if (AC_OK != Json::serialize(json, data, len))
+    if (AC_OK != Utils::Json::serialize(json, data, len))
     {
         BASE_ERROR("serialize error");
-        Json::free(json);
+        Utils::Json::free(json);
         return AC_ERROR;
     }
 
-    Json::free(json);
+    Utils::Json::free(json);
     return AC_OK;
 }
 
 AC_RET DataModule::add(const char *url, char *data)
 {
-    JsonTree *json = nullptr;
+    Utils::JsonTree *json = nullptr;
     AC_RET ret = AC_OK;
 
-    json = Json::deserialize(data);
+    json = Utils::Json::deserialize(data);
 
     if (nullptr == json)
     {
@@ -676,14 +678,14 @@ AC_RET DataModule::add(const char *url, char *data)
 
     ret = add(url, json);
 
-    Json::free(json);
+    Utils::Json::free(json);
 
     return ret;
 }
 
 AC_RET DataModule::read(const char *url, void *data, uint16_t size)
 {
-    DataTree *node = nullptr;
+    Utils::DataTree *node = nullptr;
 
     if (nullptr == _root || nullptr == data || nullptr == url)
     {
@@ -691,7 +693,7 @@ AC_RET DataModule::read(const char *url, void *data, uint16_t size)
         return AC_ERROR;
     }
 
-    node = DataTree::find(_root, url);
+    node = Utils::DataTree::find(_root, url);
 
     if (nullptr == node)
     {
@@ -717,14 +719,14 @@ AC_RET DataModule::read(const char *url, void *data, uint16_t size)
 
 AC_RET DataModule::registerAction(const char *url, TaskFunction action)
 {
-    DataTree *node = nullptr;
+    Utils::DataTree *node = nullptr;
 
     if (nullptr == _root || nullptr == url || nullptr == action)
     {
         BASE_ERROR("param error");
         return AC_ERROR;
     }
-    node = DataTree::find(_root, url);
+    node = Utils::DataTree::find(_root, url);
 
     if (nullptr == node)
     {
@@ -738,14 +740,14 @@ AC_RET DataModule::registerAction(const char *url, TaskFunction action)
 
 AC_RET DataModule::doAction(const char *url)
 {
-    DataTree *node = nullptr;
+    Utils::DataTree *node = nullptr;
 
     if (nullptr == _root || nullptr == url)
     {
         BASE_ERROR("param error");
         return AC_ERROR;
     }
-    node = DataTree::find(_root, url);
+    node = Utils::DataTree::find(_root, url);
 
     if (nullptr == node)
     {
@@ -765,7 +767,7 @@ AC_RET DataModule::doAction(const char *url)
 
 AC_RET DataModule::write(const char *url, void *data, uint16_t size)
 {
-    DataTree *node = nullptr;
+    Utils::DataTree *node = nullptr;
 
     if (nullptr == _root || nullptr == data || nullptr == url)
     {
@@ -773,7 +775,7 @@ AC_RET DataModule::write(const char *url, void *data, uint16_t size)
         return AC_ERROR;
     }
 
-    node = DataTree::find(_root, url);
+    node = Utils::DataTree::find(_root, url);
 
     if (nullptr == node)
     {
@@ -809,18 +811,18 @@ AC_RET DataModule::info(char *buf, uint32_t len)
     return AC_OK;
 }
 
-DataTree *DataModule::allocNode()
+Utils::DataTree *DataModule::allocNode()
 {
-    DataTree *res = nullptr;
+    Utils::DataTree *res = nullptr;
 
-    if (_ptr + sizeof(DataTree) > _node_head + _size)
+    if (_ptr + sizeof(Utils::DataTree) > _node_head + _size)
     {
         BASE_ERROR("no space");
         return nullptr;
     }
 
-    res = new(_ptr) DataTree();
-    _ptr += sizeof(DataTree);
+    res = new(_ptr) Utils::DataTree();
+    _ptr += sizeof(Utils::DataTree);
     return res;
 }
 
@@ -839,9 +841,9 @@ void *DataModule::alloc(uint16_t size)
     return res;
 }
 
-DataTree *DataModule::copyTree(DataTree *src)
+Utils::DataTree *DataModule::copyTree(Utils::DataTree *src)
 {
-    DataTree *res = nullptr;
+    Utils::DataTree *res = nullptr;
     uint32_t offset = 0;
     uint16_t size = 0;
     uint16_t num = 0;
@@ -852,7 +854,7 @@ DataTree *DataModule::copyTree(DataTree *src)
     size = calc_size.getSize();
     num = calc_size.getNum();
     /* 为拷贝的新树申请内存 */
-    res = static_cast<DataTree *>(alloc(size));
+    res = static_cast<Utils::DataTree *>(alloc(size));
     if (nullptr == res)
     {
         return nullptr;

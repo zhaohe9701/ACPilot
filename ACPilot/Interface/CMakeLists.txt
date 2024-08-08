@@ -1,6 +1,6 @@
 set(LIBS_SOURCES
-        ${CMAKE_CURRENT_SOURCE_DIR}/Com/com_interface.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/IO/io_interface.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Com/com.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/IO/io.cpp
         )
 if(STM32)
         set(INCLUDES

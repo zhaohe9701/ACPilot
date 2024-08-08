@@ -8,6 +8,8 @@
 
 #include "Device/Physical/physical_device.h"
 
+namespace Framework
+{
 class Battery : public PhysicalDevice
 {
 public:
@@ -32,11 +34,13 @@ public:
     AC_RET readAmmeter(CurData &data) override;
 
     AC_RET readCoulometer(ElectricQuantityData &data) override;
+
 protected:
     VolData _vol_data;
     CurData _cur_data;
     ElectricQuantityData _electric_quantity_data;
 };
 
+}
 
 #endif //BATTERY_H_

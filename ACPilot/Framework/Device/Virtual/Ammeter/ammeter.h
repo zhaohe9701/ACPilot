@@ -8,15 +8,17 @@
 
 #include "Device/Virtual/virtual_device.h"
 
-class Ammeter : public VirtualDevice
+namespace Framework
 {
-public:
-    explicit Ammeter(const char *name);
+    class Ammeter : public VirtualDevice
+    {
+    public:
+        explicit Ammeter(const char *name);
 
-    AC_RET read(CurData &data);
+        AC_RET read(CurData &data);
 
-    ~Ammeter() = default;
-};
-
+        ~Ammeter() = default;
+    };
+}
 
 #endif //AMMETER_H_

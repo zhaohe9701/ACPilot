@@ -8,15 +8,17 @@
 #include "Device/device_data.h"
 #include "Device/Virtual/virtual_device.h"
 
-class Barometer : public VirtualDevice
+namespace Framework
 {
-public:
+    class Barometer : public VirtualDevice
+    {
+    public:
 
-    explicit Barometer(const char *name);
+        explicit Barometer(const char *name);
 
-    AC_RET read(AtaData &data);
+        AC_RET read(AtaData &data);
 
-    ~Barometer() = default;
-};
-
+        ~Barometer() = default;
+    };
+}
 #endif //BAROMETER_H_

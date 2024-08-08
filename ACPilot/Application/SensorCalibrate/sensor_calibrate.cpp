@@ -6,7 +6,7 @@
 #include "Algorithm/BiasDetect/bias_detect.h"
 #include "Algorithm/EllipsoidFit/ellipsoid_fit.h"
 #include "Algorithm/RotaryTrans/rotary_trans.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 #include "os.h"
 #include "Light/light_server.h"
 #include "Device/Virtual/Accelerometer/accelerometer.h"
@@ -15,13 +15,13 @@
 #include "Command/Calibrate/calibrate_command.h"
 #include "Nvs/nvs_driver.h"
 
-static AcThread *task = nullptr;
-static Mailbox<LightMessage> *light_mailbox = nullptr;
-static Mailbox<CaliMessage> *cali_mailbox = nullptr;
-static Mailbox<ComMessage> *send_mailbox = nullptr;
-static MemoryPool *memory_pool = nullptr;
-static Gyroscope *gyro = nullptr;
-static Accelerometer *acc = nullptr;
+static Osal::AcThread *task = nullptr;
+static Utils::Mailbox<Service::LightMessage> *light_mailbox = nullptr;
+static Utils::Mailbox<Component::CaliMessage> *cali_mailbox = nullptr;
+static Utils::Mailbox<ComMessage> *send_mailbox = nullptr;
+static Utils::MemoryPool *memory_pool = nullptr;
+static Framework::Gyroscope *gyro = nullptr;
+static Framework::Accelerometer *acc = nullptr;
 
 #define CALI_REPLY_LEN 128
 
@@ -40,30 +40,30 @@ static void reply(const char *buf, uint8_t port)
 
 void caliGyro(uint8_t port)
 {
-    LightMessage light_msg;
-    BiasDetect bias_detect;
-    CaliMessage cmd;
-    Vec3 *data = new Vec3[CALI_GYRO_SAMPLING_NUM];
+    Service::LightMessage light_msg;
+    Component::BiasDetect bias_detect;
+    Component::CaliMessage cmd;
+    Common::Vec3 *data = new Common::Vec3[CALI_GYRO_SAMPLING_NUM];
 
     reply("sampling start\n", port);
 
     light_msg.id = 0x01;
-    light_msg.mode = LIGHT_FAST_FLASHING;
+    light_msg.mode = Service::LIGHT_FAST_FLASHING;
     light_mailbox->push(&light_msg);
     while (1)
     {
         cali_mailbox->pop(&cmd);
-        if (cmd.cmd == CALI_CMD_STOP)
+        if (cmd.cmd == Component::CALI_CMD_STOP)
         {
             goto exit;
         }
-        if (cmd.cmd == CALI_CMD_SAMPLING)
+        if (cmd.cmd == Component::CALI_CMD_SAMPLING)
         {
             break;
         }
     }
     light_msg.id = 0x01;
-    light_msg.mode = LIGHT_KEEP_ON;
+    light_msg.mode = Service::LIGHT_KEEP_ON;
     light_mailbox->push(&light_msg);
 
     for (int i = 0; i < CALI_GYRO_SAMPLING_NUM; i++)
@@ -81,31 +81,31 @@ void caliGyro(uint8_t port)
 
 void caliAccEllipsoid(uint8_t port)
 {
-    LightMessage light_msg;
-    EllipsoidFit ellipsoid_fit{1000.0F};
-    CaliMessage cmd;
-    Vec3 *data = new Vec3[CALI_ACC_ELLIPSOID_SAMPLING_NUM];
+    Service::LightMessage light_msg;
+    Component::EllipsoidFit ellipsoid_fit{1000.0F};
+    Component::CaliMessage cmd;
+    Common::Vec3 *data = new Common::Vec3[CALI_ACC_ELLIPSOID_SAMPLING_NUM];
 
     reply("sampling start\n", port);
     for (int i = 0; i < 6; i++)
     {
         light_msg.id = 0x01;
-        light_msg.mode = LIGHT_FAST_FLASHING;
+        light_msg.mode = Service::LIGHT_FAST_FLASHING;
         light_mailbox->push(&light_msg);
         while (1)
         {
             cali_mailbox->pop(&cmd);
-            if (cmd.cmd == CALI_CMD_STOP)
+            if (cmd.cmd == Component::CALI_CMD_STOP)
             {
                 goto exit;
             }
-            if (cmd.cmd == CALI_CMD_SAMPLING)
+            if (cmd.cmd == Component::CALI_CMD_SAMPLING)
             {
                 break;
             }
         }
         light_msg.id = 0x01;
-        light_msg.mode = LIGHT_KEEP_ON;
+        light_msg.mode = Service::LIGHT_KEEP_ON;
         light_mailbox->push(&light_msg);
         for (int j = 0; j < CALI_ACC_ELLIPSOID_SAMPLING_NUM / 6; j++)
         {
@@ -124,31 +124,31 @@ void caliAccEllipsoid(uint8_t port)
 
 void caliRotary(uint8_t port)
 {
-    LightMessage light_msg;
-    RotaryTrans rotary_trans;
-    CaliMessage cmd;
-    Vec3 temp;
-    Vec3 *data = new Vec3[CALI_ACC_ROTARY_SAMPLING_NUM];
+    Service::LightMessage light_msg;
+    Component::RotaryTrans rotary_trans;
+    Component::CaliMessage cmd;
+    Common::Vec3 temp;
+    Common::Vec3 *data = new Common::Vec3[CALI_ACC_ROTARY_SAMPLING_NUM];
 
     for (int i = 0; i < CALI_ACC_ROTARY_SAMPLING_NUM; i++)
     {
         light_msg.id = 0x01;
-        light_msg.mode = LIGHT_FAST_FLASHING;
+        light_msg.mode = Service::LIGHT_FAST_FLASHING;
         light_mailbox->push(&light_msg);
         while (1)
         {
             cali_mailbox->pop(&cmd);
-            if (cmd.cmd == CALI_CMD_STOP)
+            if (cmd.cmd == Component::CALI_CMD_STOP)
             {
                 goto exit;
             }
-            if (cmd.cmd == CALI_CMD_SAMPLING)
+            if (cmd.cmd == Component::CALI_CMD_SAMPLING)
             {
                 break;
             }
         }
         light_msg.id = 0x01;
-        light_msg.mode = LIGHT_KEEP_ON;
+        light_msg.mode = Service::LIGHT_KEEP_ON;
         light_mailbox->push(&light_msg);
         for (int j = 0; j < 10; j++)
         {
@@ -171,24 +171,24 @@ void caliRotary(uint8_t port)
 
 void sensorCalibrateTask(void *param)
 {
-    CaliMessage cmd;
-    LightMessage light_msg;
+    Component::CaliMessage cmd;
+    Service::LightMessage light_msg;
 
     cali_mailbox->pop(&cmd);
-    if (cmd.cmd == CALI_CMD_SIMPLE)
+    if (cmd.cmd == Component::CALI_CMD_SIMPLE)
     {
         gyro->clearCali();
         reply("input '>cali sampling' to continue\n", cmd.port);
         caliGyro(cmd.port);
 
-    } else if (cmd.cmd == CALI_CMD_ADVANCED)
+    } else if (cmd.cmd == Component::CALI_CMD_ADVANCED)
     {
-        Nvs *fd = Nvs::open("calibration");
+        Driver::Nvs *fd = Driver::Nvs::open("calibration");
         if (fd == nullptr)
         {
             BASE_ERROR("open calibration data failed");
-            Notify::notify(CALI_FINISH_EVENT);
-            AcThread::killSelf();
+            Utils::Notify::notify(CALI_FINISH_EVENT);
+            Osal::AcThread::killSelf();
         }
         gyro->clearCali();
         reply("gyro cali. input '>cali sampling' to continue\n", cmd.port);
@@ -200,26 +200,26 @@ void sensorCalibrateTask(void *param)
         caliRotary(cmd.port);
         reply("rotary cali. input '>cali save' to save\n", cmd.port);
         light_msg.id = 0x01;
-        light_msg.mode = LIGHT_FAST_FLASHING;
+        light_msg.mode = Service::LIGHT_FAST_FLASHING;
         light_mailbox->push(&light_msg);
         cali_mailbox->pop(&cmd);
-        if (cmd.cmd == CALI_CMD_SAVE)
+        if (cmd.cmd == Component::CALI_CMD_SAVE)
         {
-            fd->write("gyro", gyro->getCali(), sizeof(DeviceCaliData));
-            fd->write("acc", acc->getCali(), sizeof(DeviceCaliData));
+            fd->write("gyro", gyro->getCali(), sizeof(Framework::DeviceCaliData));
+            fd->write("acc", acc->getCali(), sizeof(Framework::DeviceCaliData));
             fd->save();
             reply("calibrate data save success\n", cmd.port);
         } else
         {
             reply("calibrate data not save\n", cmd.port);
         }
-        Nvs::close(fd);
+        Driver::Nvs::close(fd);
     }
     light_msg.id = 0x01;
-    light_msg.mode = LIGHT_BREATHE;
+    light_msg.mode = Service::LIGHT_BREATHE;
     light_mailbox->push(&light_msg);
-    Notify::notify(CALI_FINISH_EVENT);
-    AcThread::killSelf();
+    Utils::Notify::notify(CALI_FINISH_EVENT);
+    Osal::AcThread::killSelf();
 }
 
 void startPoseCalculatingCb(void *param)
@@ -233,18 +233,18 @@ void startPoseCalculatingCb(void *param)
 
 void registerSensorCalibrateTask()
 {
-    light_mailbox = Mailbox<LightMessage>::find("light");
-    cali_mailbox = Mailbox<CaliMessage>::find("cali");
-    send_mailbox = Mailbox<ComMessage>::find("send");
-    memory_pool = MemoryPool::getGeneral(CALI_REPLY_LEN);
-    gyro = VirtualDevice::find<Gyroscope>("gyro", GYROSCOPE_DEV);
-    acc = VirtualDevice::find<Accelerometer>("acc", ACCELEROMETER_DEV);
+    light_mailbox = Utils::Mailbox<Service::LightMessage>::find("light");
+    cali_mailbox = Utils::Mailbox<Component::CaliMessage>::find("cali");
+    send_mailbox = Utils::Mailbox<ComMessage>::find("send");
+    memory_pool = Utils::MemoryPool::getGeneral(CALI_REPLY_LEN);
+    gyro = Framework::VirtualDevice::find<Framework::Gyroscope>("gyro", Framework::GYROSCOPE_DEV);
+    acc = Framework::VirtualDevice::find<Framework::Accelerometer>("acc", Framework::ACCELEROMETER_DEV);
     if (light_mailbox == nullptr || cali_mailbox == nullptr || send_mailbox == nullptr || memory_pool == nullptr ||
         gyro == nullptr || acc == nullptr)
     {
         BASE_ERROR("object is null");
         return;
     }
-    task = new AcThread("cali", CALI_TASK_STACK_SIZE, CALI_TASK_PRIO, CALI_TASK_CORE);
-    Notify::sub(ENTER_CALI_EVENT, startPoseCalculatingCb);
+    task = new Osal::AcThread("cali", CALI_TASK_STACK_SIZE, CALI_TASK_PRIO, CALI_TASK_CORE);
+    Utils::Notify::sub(ENTER_CALI_EVENT, startPoseCalculatingCb);
 }

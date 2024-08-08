@@ -11,6 +11,8 @@
 #include "icm20689.h"
 #include <string.h>
 
+using namespace Component;
+
 #define READ 0x80
 #define WRITE 0x7f
 
@@ -82,15 +84,15 @@
 
 /***********************************/
 
-Icm20689::Icm20689(IoInterface *interface)
+Icm20689::Icm20689(Interface::IO *interface)
 {
     _interface = interface;
     strncpy(_name, "ICM20689", sizeof(_name));
     _READ = READ;
     _WRITE = WRITE;
-    _ability = (1U << ACCELEROMETER_DEV) |
-               (1U << THERMOMETER_DEV) |
-               (1U << GYROSCOPE_DEV);
+    _ability = (1U << Framework::ACCELEROMETER_DEV) |
+               (1U << Framework::THERMOMETER_DEV) |
+               (1U << Framework::GYROSCOPE_DEV);
 }
 
 AC_RET Icm20689::init()
@@ -184,19 +186,19 @@ AC_RET Icm20689::updateAcc()
     return AC_OK;
 }
 
-AC_RET Icm20689::getTemp(TempData &data)
+AC_RET Icm20689::getTemp(Framework::TempData &data)
 {
     data = _tmp_data;
     return AC_OK;
 }
 
-AC_RET Icm20689::getGyro(GyroData &data)
+AC_RET Icm20689::getGyro(Framework::GyroData &data)
 {
     data = _gyro_data;
     return AC_OK;
 }
 
-AC_RET Icm20689::getAcc(AccData &data)
+AC_RET Icm20689::getAcc(Framework::AccData &data)
 {
     data = _acc_data;
     return AC_OK;

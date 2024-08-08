@@ -5,9 +5,11 @@
 #include "remote_mapper.h"
 #include "DataModule/data_module.h"
 #include "error_handing.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 
 #define SWITCH_TYPE_NUM 2
+
+using namespace Component;
 
 uint8_t RemoteMapper::_map[MAX_CHANNEL_NUM] = {0};
 uint8_t RemoteMapper::_sw[MAX_CHANNEL_NUM] = {0};
@@ -27,7 +29,7 @@ RemoteMapper::RemoteMapper(uint8_t id)
 AC_RET RemoteMapper::init(const char *url)
 {
     RemoteConfig config;
-    RETURN_CHECK(DataModule::read(url, &config, sizeof(RemoteConfig)));
+    RETURN_CHECK(Framework::DataModule::read(url, &config, sizeof(RemoteConfig)));
 
     for (int i = 0; i < MAX_CHANNEL_NUM; i++)
     {

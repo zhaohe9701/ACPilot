@@ -8,15 +8,18 @@
 #include "Device/device_data.h"
 #include "Device/Virtual/virtual_device.h"
 
-class Altimeter : public VirtualDevice
+namespace Framework
 {
-public:
 
-    explicit Altimeter(const char *name);
+    class Altimeter : public VirtualDevice
+    {
+    public:
 
-    AC_RET read(AltitudeData &data);
+        explicit Altimeter(const char *name);
 
-    ~Altimeter() = default;
-};
+        AC_RET read(AltitudeData &data);
 
+        ~Altimeter() = default;
+    };
+}
 #endif //ALTIMETER_H_

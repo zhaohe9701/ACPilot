@@ -11,6 +11,8 @@
 #include "imu.h"
 #include "error_handing.h"
 
+using namespace Framework;
+
 AC_RET Imu::init()
 {
     return AC_OK;

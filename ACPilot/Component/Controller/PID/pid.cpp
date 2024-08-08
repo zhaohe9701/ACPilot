@@ -3,7 +3,9 @@
 //
 
 #include "pid.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
+
+using namespace Component;
 
 void Proportion::init(float gain)
 {

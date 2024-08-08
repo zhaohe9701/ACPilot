@@ -7,11 +7,17 @@
 
 #include "Command/command.h"
 
-class MemoryCommand : public Command {
-public:
-    MemoryCommand();
-    int commandMain(int argc, char *argv[]) override;
-};
+namespace Component
+{
 
+    class MemoryCommand : public Service::Command
+    {
+    public:
+        MemoryCommand();
+
+        int commandMain(int argc, char *argv[]) override;
+    };
+
+}
 
 #endif //MEMORY_POOL_COMMAND_H_

@@ -4,6 +4,8 @@
 
 #include "barometer.h"
 
+using namespace Framework;
+
 Barometer::Barometer(const char *name) : VirtualDevice(name)
 {
     _type = BAROMETER_DEV;

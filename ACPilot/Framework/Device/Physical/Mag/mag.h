@@ -6,26 +6,28 @@
 #define MAG_H_
 
 #include "Device/Physical/physical_device.h"
-#include "IO/io_interface.h"
+#include "IO/io.h"
 
-class Mag : public PhysicalDevice
+namespace Framework
 {
-public:
-    Mag() = default;
+    class Mag : public PhysicalDevice
+    {
+    public:
+        Mag() = default;
 
-    virtual AC_RET init();
+        virtual AC_RET init();
 
-    virtual AC_RET getMag(MagData &data);
+        virtual AC_RET getMag(MagData &data);
 
-    virtual AC_RET updateMag();
+        virtual AC_RET updateMag();
 
-    AC_RET readMagnetometer(MagData &data) override;
+        AC_RET readMagnetometer(MagData &data) override;
 
-protected:
-    uint8_t _id = 0x00;
-    IoInterface *_interface = nullptr;
+    protected:
+        uint8_t _id = 0x00;
+        Interface::IO *_interface = nullptr;
 
-    MagData _mag_data;
-};
-
+        MagData _mag_data;
+    };
+}
 #endif //MAG_H_

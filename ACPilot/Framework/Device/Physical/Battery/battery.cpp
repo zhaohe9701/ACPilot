@@ -4,6 +4,8 @@
 
 #include "battery.h"
 
+using namespace Framework;
+
 AC_RET Battery::init()
 {
     return AC_OK;

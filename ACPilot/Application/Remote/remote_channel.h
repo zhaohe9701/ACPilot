@@ -12,7 +12,7 @@
 #define REMOTE_CHANNEL_H_
 
 #include "config.h"
-#include "type.h"
+#include "Type/type.h"
 #include "remote_data.h"
 #include "AircraftState/aircraft_state.h"
 

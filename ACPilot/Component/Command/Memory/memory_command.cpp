@@ -3,16 +3,18 @@
 //
 
 #include "memory_command.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 #include "MemoryPool/memory_pool_manager.h"
-#include "Memory/ac_memory.h"
+#include "Memory/memory.h"
 
 #define MAX_MEMORY_REPLY_BUF_LEN 1024
+
+using namespace Component;
 
 MemoryCommand::MemoryCommand()
 {
     strncpy(_cmd, "memory", CMD_MAX_LEN);
-    _pool = MemoryPool::getGeneral(MAX_MEMORY_REPLY_BUF_LEN);
+    _pool = Utils::MemoryPool::getGeneral(MAX_MEMORY_REPLY_BUF_LEN);
     if (nullptr == _pool)
     {
         BASE_ERROR("alloc error");
@@ -42,7 +44,7 @@ int MemoryCommand::commandMain(int argc, char **argv)
         }
     } else if (0 == strncmp(argv[1], "m_info", CMD_MAX_LEN))
     {
-        if (AC_OK != Memory::info(_res_buf, MAX_MEMORY_REPLY_BUF_LEN))
+        if (AC_OK != Osal::Memory::info(_res_buf, MAX_MEMORY_REPLY_BUF_LEN))
         {
             snprintf(_res_buf, MAX_MEMORY_REPLY_BUF_LEN, "info failed\n");
             return -1;

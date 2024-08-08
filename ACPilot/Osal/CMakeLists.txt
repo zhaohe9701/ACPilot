@@ -1,9 +1,9 @@
 set(OSAL_SOURCES
-        ${CMAKE_CURRENT_SOURCE_DIR}/Critical/ac_critical.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Memory/ac_memory.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Semaphore/ac_semaphore.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Thread/ac_thread.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Mutex/ac_mutex.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Critical/critical.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Memory/memory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Semaphore/semaphore.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Thread/thread.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Mutex/mutex.cpp
         )
 if(STM32)
         set(INCLUDES

@@ -8,25 +8,28 @@
 #include "Device/device_data.h"
 #include "Device/Virtual/virtual_device.h"
 
-class Magnetometer : public VirtualDevice
+namespace Framework
 {
-public:
-    explicit Magnetometer(const char *name);
+    class Magnetometer : public VirtualDevice
+    {
+    public:
+        explicit Magnetometer(const char *name);
 
-    AC_RET read(MagData &data);
+        AC_RET read(MagData &data);
 
-    AC_RET cali(Vec3 *data, uint16_t num, DeviceCali *cali) override;
+        AC_RET cali(Common::Vec3 *data, uint16_t num, DeviceCali *cali) override;
 
-    AC_RET clearCali() override;
+        AC_RET clearCali() override;
 
-    DeviceCaliData *getCali() override;
+        DeviceCaliData *getCali() override;
 
-    AC_RET setCali(DeviceCaliData &cali) override;
+        AC_RET setCali(DeviceCaliData &cali) override;
 
-    ~Magnetometer() = default;
-private:
-    DeviceCaliData _cali_data;
-};
+        ~Magnetometer() = default;
 
+    private:
+        DeviceCaliData _cali_data;
+    };
+}
 
 #endif //MAGNETOMETER_H_

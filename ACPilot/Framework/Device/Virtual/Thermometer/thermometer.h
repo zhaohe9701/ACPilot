@@ -8,15 +8,17 @@
 #include "Device/device_data.h"
 #include "Device/Virtual/virtual_device.h"
 
-class Thermometer : public VirtualDevice
+namespace Framework
 {
-public:
-    explicit Thermometer(const char *name);
+    class Thermometer : public VirtualDevice
+    {
+    public:
+        explicit Thermometer(const char *name);
 
-    AC_RET read(TempData &data);
+        AC_RET read(TempData &data);
 
-    ~Thermometer() = default;
-};
-
+        ~Thermometer() = default;
+    };
+}
 
 #endif //THERMOMETER_H_

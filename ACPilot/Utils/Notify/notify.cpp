@@ -4,6 +4,8 @@
 
 #include "notify.h"
 
+using namespace Utils;
+
 AC_RET NotifyToken::wait(uint32_t timeout)
 {
     return _semaphore.get(timeout);
@@ -50,11 +52,11 @@ NotifyToken *Notify::sub(Event event, TaskFunction func, void *param)
     return token;
 }
 
-List<NotifyToken *> Notify::_list[EVENT_NUM];
+Common::List<NotifyToken *> Notify::_list[EVENT_NUM];
 
 void Notify::notify(Event event)
 {
-    for (ListNode<NotifyToken *> *it = _list[event].begin(); it != _list[event].end(); it = it->getNext())
+    for (Common::ListNode<NotifyToken *> *it = _list[event].begin(); it != _list[event].end(); it = it->getNext())
     {
         (**it)->_callback();
         (**it)->_give();

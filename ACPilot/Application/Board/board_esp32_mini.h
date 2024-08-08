@@ -18,20 +18,20 @@
 class Board
 {
 public:
-    static Gpio *led_pin;
-    static AdConverterUnit *adc_unit;
-    static AdConverterChannel *adc_channel0;
-    static ExtInterrupt *imu_interrupt;
-    static SpiBus *spi_bus_1;
-    static Spi *spi1;
-    static Spi *spi2;
-    static Uart *uart1;
-    static Usb *usb;
-    static Udp *udp;
-    static Pwm *pwm0;
-    static Pwm *pwm1;
-    static Pwm *pwm2;
-    static Pwm *pwm3;
+    static Driver::Gpio *led_pin;
+    static Driver::AdConverterUnit *adc_unit;
+    static Driver::AdConverterChannel *adc_channel0;
+    static Driver::ExtInterrupt *imu_interrupt;
+    static Driver::SpiBus *spi_bus_1;
+    static Driver::Spi *spi1;
+    static Driver::Spi *spi2;
+    static Driver::Uart *uart1;
+    static Driver::Usb *usb;
+    static Driver::Udp *udp;
+    static Driver::Pwm *pwm0;
+    static Driver::Pwm *pwm1;
+    static Driver::Pwm *pwm2;
+    static Driver::Pwm *pwm3;
 };
 
 extern "C" void boardInit();

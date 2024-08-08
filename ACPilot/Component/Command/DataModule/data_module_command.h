@@ -7,12 +7,16 @@
 
 #include "Command/command.h"
 
-class DataModuleCommand : public Command
+namespace Component
 {
-public:
-    DataModuleCommand();
 
-    int commandMain(int argc, char *argv[]) override;
-};
+    class DataModuleCommand : public Service::Command
+    {
+    public:
+        DataModuleCommand();
+
+        int commandMain(int argc, char *argv[]) override;
+    };
+}
 
 #endif //DATA_MODULE_COMMAND_H_

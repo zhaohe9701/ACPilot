@@ -6,33 +6,36 @@
 #define LIGHT_SERVER_H_
 
 
-#include "type.h"
+#include "Type/type.h"
 #include "light.h"
-#include "ac_list.h"
-#include "Mail/mailbox.h"
-#include "Thread/ac_thread.h"
+#include "List/ac_list.h"
+#include "Mailbox/mailbox.h"
+#include "Thread/thread.h"
 
-struct LightMessage
+namespace Service
 {
-    uint8_t id = 0x0;
-    LightMode mode = LIGHT_KEEP_OFF;
-};
+    struct LightMessage
+    {
+        uint8_t id = 0x0;
+        LightMode mode = LIGHT_KEEP_OFF;
+    };
 
-class LightServer
-{
-public:
-    static AC_RET init();
+    class LightServer
+    {
+    public:
+        static AC_RET init();
 
-    static AC_RET start();
+        static AC_RET start();
 
-    static void add(Light *light);
-private:
-    static List<Light*> _list;
-    static Mailbox<LightMessage> *_mailbox;
-    static AcThread *_light_task;
+        static void add(Light *light);
 
-    static void _loop(void *param);
-};
+    private:
+        static Common::List<Light *> _list;
+        static Utils::Mailbox<LightMessage> *_mailbox;
+        static Osal::AcThread *_light_task;
 
+        static void _loop(void *param);
+    };
+}
 
 #endif //LIGHT_SERVER_H_

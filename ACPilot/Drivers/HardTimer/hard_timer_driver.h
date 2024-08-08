@@ -15,39 +15,41 @@
 
 #endif
 
-#include "type.h"
-#include "Semaphore/ac_semaphore.h"
-#include "Thread/ac_thread.h"
+#include "Type/type.h"
+#include "Semaphore/semaphore.h"
+#include "Thread/thread.h"
 
+namespace Driver
+{
 #define S_TO_US(s) ((s) * 1000000)
 #define US_TO_S(us) ((float)(us) / 1000000.f)
 
-enum TimerMode
-{
-    TIMER_MODE_SINGLE,
-    TIMER_MODE_PERIODIC
-};
+    enum TimerMode
+    {
+        TIMER_MODE_SINGLE,
+        TIMER_MODE_PERIODIC
+    };
 
-class HardwareTimer
-{
-public:
-    HardwareTimer(const char *name, TaskFunction cb, void *param);
+    class HardwareTimer
+    {
+    public:
+        HardwareTimer(const char *name, TaskFunction cb, void *param);
 
-    AC_RET init();
+        AC_RET init();
 
-    AC_RET start(uint32_t timeout_us, TimerMode mode);
+        AC_RET start(uint32_t timeout_us, TimerMode mode);
 
-    bool isActive();
+        bool isActive();
 
-    AC_RET stop();
+        AC_RET stop();
 
-    AC_RET del();
+        AC_RET del();
 
-    static uint64_t getCurrentTime();
+        static uint64_t getCurrentTime();
 
-private:
-    HardTimerHandle _handle{};
-    char _name[PARAM_NAME_LEN] = {0};
-};
-
+    private:
+        HardTimerHandle _handle{};
+        char _name[PARAM_NAME_LEN] = {0};
+    };
+}
 #endif //HARD_TIMER_DRIVER_H_

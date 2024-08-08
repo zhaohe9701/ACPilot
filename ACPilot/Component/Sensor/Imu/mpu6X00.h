@@ -13,26 +13,28 @@
 
 #include "tdk_imu.h"
 
-class Mpu6X00 : virtual public TdkImu
+namespace Component
 {
-public:
-    explicit Mpu6X00(IoInterface *interface);
+    class Mpu6X00 : virtual public TdkImu
+    {
+    public:
+        explicit Mpu6X00(Interface::IO *interface);
 
-    AC_RET init() override;
+        AC_RET init() override;
 
-    uint8_t getId() override;
+        uint8_t getId() override;
 
-    AC_RET getTemp(TempData &data) override;
+        AC_RET getTemp(Framework::TempData &data) override;
 
-    AC_RET getGyro(GyroData &data) override;
+        AC_RET getGyro(Framework::GyroData &data) override;
 
-    AC_RET getAcc(AccData &data) override;
+        AC_RET getAcc(Framework::AccData &data) override;
 
-    AC_RET updateTemp() override;
+        AC_RET updateTemp() override;
 
-    AC_RET updateGyro() override;
+        AC_RET updateGyro() override;
 
-    AC_RET updateAcc() override;
-};
-
+        AC_RET updateAcc() override;
+    };
+}
 #endif

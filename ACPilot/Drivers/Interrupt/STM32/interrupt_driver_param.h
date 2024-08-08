@@ -6,8 +6,8 @@
 
 #include "main.h"
 #include "Gpio/gpio_driver.h"
-#include "ac_list.h"
-#include "Semaphore/ac_semaphore.h"
+#include "List/ac_list.h"
+#include "Semaphore/semaphore.h"
 
 typedef IRQn_Type IrqType;
 

@@ -6,10 +6,10 @@
 #define ALTITUDE_CONTROL_H_
 
 
-#include "type.h"
+#include "Type/type.h"
 #include "Controller/expect_state.h"
-#include "Mail/mailbox.h"
-#include "Thread/ac_thread.h"
+#include "Mailbox/mailbox.h"
+#include "Thread/thread.h"
 #include "Device/device_data.h"
 #include "Algorithm/AltitudeEstimate/altitude_estimate.h"
 #include "AircraftState/aircraft_state.h"
@@ -20,9 +20,9 @@ class AltitudeControl
 public:
     static AC_RET init();
 
-    static void setAccBias(Vec3 &acc_bias);
+    static void setAccBias(Common::Vec3 &acc_bias);
 
-    static AC_RET step(ExpectState &expect_state, AircraftState &state);
+    static AC_RET step(Component::ExpectState &expect_state, AircraftState &state);
 
     static void reset();
 
@@ -31,17 +31,17 @@ public:
 private:
     static void _altitudeSensorUpdate(void *param);
 
-    static Mailbox<AltitudeData> *_baro_mailbox;
-    static AcThread *_baro_task;
-    static AltitudeEstimate *_estimator;
-    static Vec3 _acc_bias;
+    static Utils::Mailbox<Framework::AltitudeData> *_baro_mailbox;
+    static Osal::AcThread *_baro_task;
+    static Component::AltitudeEstimate *_estimator;
+    static Common::Vec3 _acc_bias;
     static float _height_bias;
     static float _aim_height;
     static float _base_throttle;
     static bool _isTakeOff;
     static uint64_t last_time;
-    static Pid *_vel_pid;
-    static Pid *_pos_pid;
+    static Component::Pid *_vel_pid;
+    static Component::Pid *_pos_pid;
 };
 
 

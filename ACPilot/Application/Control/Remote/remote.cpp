@@ -4,16 +4,16 @@
 
 #include "remote.h"
 #include "error_handing.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 #include "Notify/notify.h"
 
-Mailbox<RemoteData> *Remote::remote_mailbox = nullptr;
-RemoteMapper Remote::t_z{THROTTLE_OR_Z_AXIS_ID};
-RemoteMapper Remote::r_x{ROLL_OR_X_AXIS_ID};
-RemoteMapper Remote::p_y{PITCH_OR_Y_AXIS_ID};
-RemoteMapper Remote::y_w{YAW_OR_W_AXIS_ID};
-RemoteMapper Remote::l{LOCK_AXIS_ID};
-RemoteMapper Remote::m{MODE_AXIS_ID};
+Utils::Mailbox<RemoteData> *Remote::remote_mailbox = nullptr;
+Component::RemoteMapper Remote::t_z{THROTTLE_OR_Z_AXIS_ID};
+Component::RemoteMapper Remote::r_x{ROLL_OR_X_AXIS_ID};
+Component::RemoteMapper Remote::p_y{PITCH_OR_Y_AXIS_ID};
+Component::RemoteMapper Remote::y_w{YAW_OR_W_AXIS_ID};
+Component::RemoteMapper Remote::l{LOCK_AXIS_ID};
+Component::RemoteMapper Remote::m{MODE_AXIS_ID};
 
 #define POSE_LIMIT (40.f)
 #define YAW_LIMIT (90.f)
@@ -21,9 +21,9 @@ RemoteMapper Remote::m{MODE_AXIS_ID};
 
 AC_RET Remote::init()
 {
-    remote_mailbox = Mailbox<RemoteData>::find("remote");
+    remote_mailbox = Utils::Mailbox<RemoteData>::find("remote");
     NULL_CHECK(remote_mailbox);
-    RemoteMapper::init("/remote");
+    Component::RemoteMapper::init("/remote");
 
     return AC_OK;
     error:
@@ -31,7 +31,7 @@ AC_RET Remote::init()
     return AC_ERROR;
 }
 
-AC_RET Remote::analysis(ExpectState &expect_state)
+AC_RET Remote::analysis(Component::ExpectState &expect_state)
 {
     RemoteData remote_data;
     uint8_t key = 0;
@@ -43,7 +43,7 @@ AC_RET Remote::analysis(ExpectState &expect_state)
         switch (key)
         {
             case 0:
-                Notify::notify(LOCK_COMMAND_EVENT);
+                Utils::Notify::notify(LOCK_COMMAND_EVENT);
                 break;
             case 1:
                 if (t_z.map(remote_data) < 5)
@@ -51,10 +51,10 @@ AC_RET Remote::analysis(ExpectState &expect_state)
                     switch (m.map(remote_data))
                     {
                         case 0:
-                            Notify::notify(MANUAL_COMMAND_EVENT);
+                            Utils::Notify::notify(MANUAL_COMMAND_EVENT);
                             break;
                         case 1:
-                            Notify::notify(HEIGHT_COMMAND_EVENT);
+                            Utils::Notify::notify(HEIGHT_COMMAND_EVENT);
                             break;
                         default:
                             break;

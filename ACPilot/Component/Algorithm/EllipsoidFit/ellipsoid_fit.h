@@ -7,18 +7,20 @@
 
 #include "Device/device_cali.h"
 
-class EllipsoidFit : public DeviceCali
+namespace Component
 {
-public:
-    explicit EllipsoidFit(float unit);
+    class EllipsoidFit : public Framework::DeviceCali
+    {
+    public:
+        explicit EllipsoidFit(float unit);
 
-    void cali(Vec3 *data, uint16_t num, DeviceCaliData &result) override;
+        void cali(Common::Vec3 *data, uint16_t num, Framework::DeviceCaliData &result) override;
 
-private:
-    float *D = nullptr;
-    float *A_tmp = nullptr;
-    float _unit = 1.0f;
-};
-
+    private:
+        float *D = nullptr;
+        float *A_tmp = nullptr;
+        float _unit = 1.0f;
+    };
+}
 
 #endif //ELLIPSOID_FIT_H_

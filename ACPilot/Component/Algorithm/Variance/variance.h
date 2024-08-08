@@ -5,14 +5,15 @@
 #ifndef VARIANCE_H_
 #define VARIANCE_H_
 
+#include "Type/type.h"
 
-#include "type.h"
-
-class Variance
+namespace Component
 {
-public:
-    static AC_RET calculate(Vec3 *data, uint16_t num, Vec3 &variance);
-};
-
+    class Variance
+    {
+    public:
+        static AC_RET calculate(Common::Vec3 *data, uint16_t num, Common::Vec3 &variance);
+    };
+}
 
 #endif //VARIANCE_H_

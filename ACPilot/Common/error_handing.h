@@ -5,7 +5,7 @@
 #ifndef ERROR_HANDING_H_
 #define ERROR_HANDING_H_
 
-#include "type.h"
+#include "Type/type.h"
 
 #define RETURN_CHECK(ret) {if (AC_OK != ret) {goto error;}}
 #define RETURN_CHECK_WITH_LOG(ret, log) {if (AC_OK != ret) {log; goto error;}}

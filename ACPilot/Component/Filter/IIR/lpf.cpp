@@ -3,9 +3,12 @@
 //
 
 #include "lpf.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 #include <math.h>
+
 #define PI 3.1415927f
+
+using namespace Component;
 
 void SecondOrderLPF::init(float sample_freq, float cutoff_freq)
 {

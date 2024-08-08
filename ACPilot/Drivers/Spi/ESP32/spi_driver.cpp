@@ -3,6 +3,8 @@
 //
 #include "Spi/spi_driver.h"
 
+using namespace Driver;
+
 SpiBusHandle::SpiBusHandle()
 {
     memset(&config, 0, sizeof(spi_bus_config_t));

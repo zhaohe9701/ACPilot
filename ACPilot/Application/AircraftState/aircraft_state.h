@@ -11,15 +11,15 @@
 #ifndef AIRCRAFT_STATE_H_
 #define AIRCRAFT_STATE_H_
 
-#include "type.h"
+#include "Type/type.h"
 #include "AHRS/attitude.h"
 
 struct AircraftState
 {
-    PoseData pose;
-    Vec3 earth_acc;
-    Vec3 earth_vel;
-    Vec3 earth_pos;
+    Component::PoseData pose;
+    Common::Vec3 earth_acc;
+    Common::Vec3 earth_vel;
+    Common::Vec3 earth_pos;
 };
 
 #endif

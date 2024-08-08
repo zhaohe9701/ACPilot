@@ -12,41 +12,43 @@
 #define BARO_H_
 
 #include "Device/device_data.h"
-#include "IO/io_interface.h"
+#include "IO/io.h"
 #include "Device/Physical/physical_device.h"
 
-class Baro : public PhysicalDevice
+namespace Framework
 {
-public:
-    Baro() = default;
+    class Baro : public PhysicalDevice
+    {
+    public:
+        Baro() = default;
 
-    virtual AC_RET init();
+        virtual AC_RET init();
 
-    virtual AC_RET getTemp(TempData &data);
+        virtual AC_RET getTemp(TempData &data);
 
-    virtual AC_RET getPressure(AtaData &data);
+        virtual AC_RET getPressure(AtaData &data);
 
-    virtual AC_RET getAltitude(AltitudeData &data);
+        virtual AC_RET getAltitude(AltitudeData &data);
 
-    virtual AC_RET updateTemp();
+        virtual AC_RET updateTemp();
 
-    virtual AC_RET updatePressure();
+        virtual AC_RET updatePressure();
 
-    virtual AC_RET updateAltitude();
+        virtual AC_RET updateAltitude();
 
-    AC_RET readAltimeter(AltitudeData &data) override;
+        AC_RET readAltimeter(AltitudeData &data) override;
 
-    AC_RET readThermometer(TempData &data) override;
+        AC_RET readThermometer(TempData &data) override;
 
-    AC_RET readBarometer(AtaData &data) override;
+        AC_RET readBarometer(AtaData &data) override;
 
-protected:
-    uint8_t _id = 0x00;
-    IoInterface *_interface = nullptr;
+    protected:
+        uint8_t _id = 0x00;
+        Interface::IO *_interface = nullptr;
 
-    AltitudeData _altitude_data{0.0f};
-    TempData _temperature_data{0.0f};
-    AtaData _pressure_data{0.0f};
-};
-
+        AltitudeData _altitude_data{0.0f};
+        TempData _temperature_data{0.0f};
+        AtaData _pressure_data{0.0f};
+    };
+}
 #endif //BARO_H_

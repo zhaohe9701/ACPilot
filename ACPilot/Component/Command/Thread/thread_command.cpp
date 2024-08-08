@@ -3,15 +3,17 @@
 //
 
 #include "thread_command.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 #include "Thread/thread_manager.h"
 
 #define MAX_THREAD_REPLY_BUF_LEN 2048
 
+using namespace Component;
+
 ThreadCommand::ThreadCommand()
 {
     strncpy(_cmd, "task", CMD_MAX_LEN);
-    _pool = MemoryPool::getGeneral(MAX_THREAD_REPLY_BUF_LEN);
+    _pool = Utils::MemoryPool::getGeneral(MAX_THREAD_REPLY_BUF_LEN);
     if (nullptr == _pool)
     {
         BASE_ERROR("alloc error");

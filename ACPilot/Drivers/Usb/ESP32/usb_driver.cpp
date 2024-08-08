@@ -11,7 +11,9 @@
 #include <hal/usb_serial_jtag_ll.h>
 #include "Usb/usb_driver.h"
 #include "driver/usb_serial_jtag.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
+
+using namespace Driver;
 
 #define USB_FREE_DELAY_US 1000
 
@@ -41,10 +43,10 @@ AC_RET Usb::init()
     {
         return AC_ERROR;
     }
-    acPrintf = usbPrintf;
+    Common::acPrintf = usbPrintf;
     _timer = new HardwareTimer("usb", _timer_callback, this);
     _timer->init();
-    _usb_task = new AcThread("usb", USB_RECEIVE_TASK_STACK, USB_RECEIVE_TASK_PRIO, USB_RECEIVE_TASK_CORE);
+    _usb_task = new Osal::AcThread("usb", USB_RECEIVE_TASK_STACK, USB_RECEIVE_TASK_PRIO, USB_RECEIVE_TASK_CORE);
     _usb_task->run(_receive_task, this);
     return AC_OK;
 }
@@ -99,7 +101,7 @@ void Usb::_timer_callback(void *param)
     Usb *usb = static_cast<Usb *>(param);
     uint32_t len = usb->_current_len;
 
-    usb->_recv_pool = MemoryPool::getGeneral(len);
+    usb->_recv_pool = Utils::MemoryPool::getGeneral(len);
     usb->_recv_buffer = usb->_recv_pool->alloc();
     if (nullptr == usb->_recv_buffer)
     {

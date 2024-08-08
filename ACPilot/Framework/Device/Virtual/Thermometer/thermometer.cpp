@@ -4,6 +4,8 @@
 
 #include "thermometer.h"
 
+using namespace Framework;
+
 Thermometer::Thermometer(const char *name) : VirtualDevice(name)
 {
     _type = THERMOMETER_DEV;

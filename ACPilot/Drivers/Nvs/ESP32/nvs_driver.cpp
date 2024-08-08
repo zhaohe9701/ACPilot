@@ -2,8 +2,10 @@
 // Created by zhaohe on 2024/4/22.
 //
 #include "Nvs/nvs_driver.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 #include "error_handing.h"
+
+using namespace Driver;
 
 AC_RET Nvs::read(const char *name, void *data, uint32_t len) const
 {

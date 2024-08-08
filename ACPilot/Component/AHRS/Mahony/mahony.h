@@ -13,21 +13,26 @@
 
 #include "AHRS/attitude_solver.h"
 
-
-class Mahony : public AttitudeSolver
+namespace Component
 {
-public:
-    void update(MemsData &mems, Euler &euler, float dt) override;
-    void reset() override;
-private:
-    static float _invSqrt(float x);
-    void _computeRotationMatrix();
 
-    float _kp = 0.4f;	
-    float _ki = 0.001f;
-    Vec3 _e_int;
+    class Mahony : public AttitudeSolver
+    {
+    public:
+        void update(MemsData &mems, Common::Euler &euler, float dt) override;
 
-    Vec4 _q{1.0f, 0.0f, 0.0f, 0.0f};
-};
+        void reset() override;
 
+    private:
+        static float _invSqrt(float x);
+
+        void _computeRotationMatrix();
+
+        float _kp = 0.4f;
+        float _ki = 0.001f;
+        Common::Vec3 _e_int;
+
+        Common::Vec4 _q{1.0f, 0.0f, 0.0f, 0.0f};
+    };
+}
 #endif

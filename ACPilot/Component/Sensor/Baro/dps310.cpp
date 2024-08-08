@@ -20,14 +20,14 @@
 #define DPS310_TMPCOEFSRCE  0x28    ///< Temperature calibration src
 
 /* 524288, 1572864, 3670016, 7864320, 253952, 516096, 1040384, 2088960 */
-
-Dps310::Dps310(IoInterface *interface)
+using namespace Component;
+Dps310::Dps310(Interface::IO *interface)
 {
     _interface = interface;
     strncpy(_name, "DPS310", sizeof(_name));
-    _ability = (1U << BAROMETER_DEV) |
-               (1U << ALTIMETER_DEV) |
-               (1U << THERMOMETER_DEV);
+    _ability = (1U << Framework::BAROMETER_DEV) |
+               (1U << Framework::ALTIMETER_DEV) |
+               (1U << Framework::THERMOMETER_DEV);
 }
 
 AC_RET Dps310::init()
@@ -59,19 +59,19 @@ AC_RET Dps310::init()
     return AC_OK;
 }
 
-AC_RET Dps310::getTemp(TempData &data)
+AC_RET Dps310::getTemp(Framework::TempData &data)
 {
     data = _temperature_data;
     return AC_OK;
 }
 
-AC_RET Dps310::getPressure(AtaData &data)
+AC_RET Dps310::getPressure(Framework::AtaData &data)
 {
     data = _pressure_data;
     return AC_OK;
 }
 
-AC_RET Dps310::getAltitude(AltitudeData &data)
+AC_RET Dps310::getAltitude(Framework::AltitudeData &data)
 {
     data = _altitude_data;
     return AC_OK;

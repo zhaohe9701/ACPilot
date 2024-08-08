@@ -7,10 +7,14 @@
 
 #include "Command/command.h"
 
-class MailboxCommand : public Command {
-public:
-    MailboxCommand();
-    int commandMain(int argc, char *argv[]) override;
-};
+namespace Component
+{
+    class MailboxCommand : public Service::Command
+    {
+    public:
+        MailboxCommand();
 
+        int commandMain(int argc, char *argv[]) override;
+    };
+}
 #endif //MAILBOX_COMMAND_H_

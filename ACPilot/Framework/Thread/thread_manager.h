@@ -5,7 +5,7 @@
 #ifndef THREAD_MANAGER_H_
 #define THREAD_MANAGER_H_
 
-#include "Thread/ac_thread.h"
+#include "Thread/thread.h"
 
 class ThreadManager
 {

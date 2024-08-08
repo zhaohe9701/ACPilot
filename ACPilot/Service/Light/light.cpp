@@ -5,6 +5,8 @@
 #include "light.h"
 #include "light_server.h"
 
+using namespace Service;
+
 AC_RET Light::setMode(LightMode mode)
 {
     return AC_NOT_SUPPORT;

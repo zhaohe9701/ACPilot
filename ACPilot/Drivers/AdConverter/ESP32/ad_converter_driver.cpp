@@ -2,7 +2,9 @@
 // Created by zhaohe on 2023/12/5.
 //
 #include "AdConverter/ad_converter_driver.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
+
+using namespace Driver;
 
 AdConverterUnitHandle::AdConverterUnitHandle()
 {

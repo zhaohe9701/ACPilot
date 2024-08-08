@@ -5,19 +5,21 @@
 #ifndef PWM_MOTOR_H_
 #define PWM_MOTOR_H_
 
-
 #include "Motor/motor.h"
 #include "Pwm/pwm_driver.h"
 
-class PwmMotor : public Motor
+namespace Component
 {
-public:
-    PwmMotor(Pwm *pwm, uint8_t id);
+    class PwmMotor : public Motor
+    {
+    public:
+        PwmMotor(Driver::Pwm *pwm, uint8_t id);
 
-    AC_RET set(float value) override;
-private:
-    Pwm *_pwm = nullptr;
-};
+        AC_RET set(float value) override;
 
+    private:
+        Driver::Pwm *_pwm = nullptr;
+    };
+}
 
 #endif //PWM_MOTOR_H_

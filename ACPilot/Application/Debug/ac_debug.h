@@ -5,11 +5,11 @@
 #ifndef DEBUG_H_
 #define DEBUG_H_
 
-#include "type.h"
+#include "Type/type.h"
 #include "message.h"
-#include "Mail/mailbox.h"
+#include "Mailbox/mailbox.h"
 #include "MemoryPool/memory_pool.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 
 class Debug
 {
@@ -18,8 +18,8 @@ public:
     static void print(const char *format, ...);
 private:
     static uint8_t _port;
-    static Mailbox<ComMessage> *_mail;
-    static MemoryPool *_buffer_pool;
+    static Utils::Mailbox<ComMessage> *_mail;
+    static Utils::MemoryPool *_buffer_pool;
 };
 
 #define AC_INFO(fmt, args...) Debug::print("\033[1;32m  ERROR(%s:%d):\t\033[0m" fmt "/n", __func__, __LINE__, ## args)

@@ -4,13 +4,13 @@
 
 #include "battery_monitor.h"
 
-Mailbox<LightMessage> *BatteryMonitor::light_mailbox = nullptr;
-Voltmeter *BatteryMonitor::voltmeter = nullptr;
+Utils::Mailbox<Service::LightMessage> *BatteryMonitor::light_mailbox = nullptr;
+Framework::Voltmeter *BatteryMonitor::voltmeter = nullptr;
 
 AC_RET BatteryMonitor::init()
 {
-    light_mailbox = Mailbox<LightMessage>::find("light");
-    voltmeter = VirtualDevice::find<Voltmeter>("voltmeter", VOLTMETER_DEV);
+    light_mailbox = Utils::Mailbox<Service::LightMessage>::find("light");
+    voltmeter = Framework::VirtualDevice::find<Framework::Voltmeter>("voltmeter", Framework::VOLTMETER_DEV);
     if (light_mailbox == nullptr || voltmeter == nullptr)
     {
         BASE_ERROR("BatteryMonitor init failed");
@@ -21,13 +21,13 @@ AC_RET BatteryMonitor::init()
 
 AC_RET BatteryMonitor::step()
 {
-    VolData vol_data;
+    Framework::VolData vol_data;
     voltmeter->read(vol_data);
     if (vol_data.x < 3.5 && vol_data.x > 1.5)
     {
-        LightMessage msg;
+        Service::LightMessage msg;
         msg.id = 0x01;
-        msg.mode = LIGHT_FAST_FLASHING;
+        msg.mode = Service::LIGHT_FAST_FLASHING;
         light_mailbox->push(&msg);
     }
     return AC_OK;

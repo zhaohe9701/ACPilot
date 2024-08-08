@@ -4,9 +4,11 @@
 
 #include "variance.h"
 
-AC_RET Variance::calculate(Vec3 *data, uint16_t num, Vec3 &variance)
+using namespace Component;
+
+AC_RET Variance::calculate(Common::Vec3 *data, uint16_t num, Common::Vec3 &variance)
 {
-    Vec3 avg;
+    Common::Vec3 avg;
     if (nullptr == data)
     {
         return AC_ERROR;

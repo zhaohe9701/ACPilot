@@ -8,27 +8,30 @@
 #include "Device/device_data.h"
 #include "Device/Virtual/virtual_device.h"
 
-class Gyroscope : public VirtualDevice
+namespace Framework
 {
-public:
-    explicit Gyroscope(const char *name);
+    class Gyroscope : public VirtualDevice
+    {
+    public:
+        explicit Gyroscope(const char *name);
 
-    AC_RET read(GyroData &data);
+        AC_RET read(GyroData &data);
 
-    AC_RET cali(Vec3 *data, uint16_t num, DeviceCali *cali) override;
+        AC_RET cali(Common::Vec3 *data, uint16_t num, DeviceCali *cali) override;
 
-    AC_RET copyRot(DeviceCaliData *cali);
+        AC_RET copyRot(DeviceCaliData *cali);
 
-    AC_RET clearCali() override;
+        AC_RET clearCali() override;
 
-    DeviceCaliData *getCali() override;
+        DeviceCaliData *getCali() override;
 
-    AC_RET setCali(DeviceCaliData &cali) override;
+        AC_RET setCali(DeviceCaliData &cali) override;
 
-    ~Gyroscope() = default;
-private:
-    DeviceCaliData _cali_data;
-};
+        ~Gyroscope() = default;
 
+    private:
+        DeviceCaliData _cali_data;
+    };
+}
 
 #endif //GYROSCOPE_H_

@@ -7,12 +7,14 @@
 
 #include "Command/command.h"
 
-class ThreadCommand : public Command
+namespace Component
 {
-public:
-    ThreadCommand();
+    class ThreadCommand : public Service::Command
+    {
+    public:
+        ThreadCommand();
 
-    int commandMain(int argc, char *argv[]) override;
-};
-
+        int commandMain(int argc, char *argv[]) override;
+    };
+}
 #endif //THREAD_COMMAND_H_

@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 #include "command_parser.h"
-#include "Mail/mailbox.h"
-#include "type.h"
+#include "Mailbox/mailbox.h"
+#include "Type/type.h"
+
+using namespace Service;
 
 CommandParser::CommandParser()
 {
-    _manager = Mailbox<CommandMessage>::find("command");
+    _manager = Utils::Mailbox<CommandMessage>::find("command");
 }
 
 bool CommandParser::match(ComMessage &message)

@@ -11,24 +11,25 @@
 
 
 #include "receive_parser.h"
-#include "type.h"
+#include "Type/type.h"
 #include "receive_server.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 
-Mailbox<ComMessage> *MessageReceiveServer::_mailbox = nullptr;
-AcThread *MessageReceiveServer::_receive_task = nullptr;
-List<MessageReceiveParser *> MessageReceiveServer::_parser_list;
+using namespace Service;
 
+Utils::Mailbox<ComMessage> *MessageReceiveServer::_mailbox = nullptr;
+Osal::AcThread *MessageReceiveServer::_receive_task = nullptr;
+Common::List<MessageReceiveParser *> MessageReceiveServer::_parser_list;
 
 AC_RET MessageReceiveServer::init()
 {
-    _mailbox = Mailbox<ComMessage>::find("receive");
+    _mailbox = Utils::Mailbox<ComMessage>::find("receive");
     if (nullptr == _mailbox)
     {
         BASE_ERROR("object can't find");
         return AC_ERROR;
     }
-    _receive_task = new AcThread("receive", RECEIVE_TASK_STACK_SIZE, RECEIVE_TASK_PRIO, RECEIVE_TASK_CORE);
+    _receive_task = new Osal::AcThread("receive", RECEIVE_TASK_STACK_SIZE, RECEIVE_TASK_PRIO, RECEIVE_TASK_CORE);
     return AC_OK;
 }
 
@@ -53,7 +54,7 @@ void MessageReceiveServer::_loop(void *param)
     if (nullptr == _mailbox)
     {
         BASE_ERROR("NULL ptr");
-        AcThread::killSelf();
+        Osal::AcThread::killSelf();
     }
     for (;;)
     {
@@ -63,7 +64,7 @@ void MessageReceiveServer::_loop(void *param)
         {
             continue;
         }
-        for (ListNode<MessageReceiveParser *> *it = _parser_list.begin(); it != _parser_list.end(); it = it->getNext())
+        for (Common::ListNode<MessageReceiveParser *> *it = _parser_list.begin(); it != _parser_list.end(); it = it->getNext())
         {
             if ((*(*it))->match(message))
             {
@@ -75,7 +76,7 @@ void MessageReceiveServer::_loop(void *param)
         {
             if (nullptr != message.pool)
             {
-                static_cast<MemoryPool *>(message.pool)->free(message.buf);
+                static_cast<Utils::MemoryPool *>(message.pool)->free(message.buf);
             } else
             {
                 BASE_ERROR("pool is null");

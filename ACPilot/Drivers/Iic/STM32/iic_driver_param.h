@@ -14,9 +14,9 @@
 #include "Interface/device_interface.h"
 #include "i2c.h"
 #include "Gpio/gpio_driver.h"
-#include "ac_list.h"
-#include "Semaphore/ac_semaphore.h"
-#include "Mutex/ac_mutex.h"
+#include "List/ac_list.h"
+#include "Semaphore/semaphore.h"
+#include "Mutex/mutex.h"
 
 #define IIC_100KHZ  0x10C0ECFF
 #define IIC_400KHZ  0x009034B6

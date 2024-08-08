@@ -15,32 +15,38 @@
 
 #endif
 
-#include "type.h"
+#include "Type/type.h"
 
-class AdConverterUnit
+namespace Driver
 {
-public:
-    explicit AdConverterUnit(AdConverterUnitHandle *handle);
 
-    AC_RET init();
+    class AdConverterUnit
+    {
+    public:
+        explicit AdConverterUnit(AdConverterUnitHandle *handle);
 
-    AdConverterUnitHandle *handle = nullptr;
-private:
+        AC_RET init();
 
-};
+        AdConverterUnitHandle *handle = nullptr;
+    private:
 
-class AdConverterChannel
-{
-public:
-    explicit AdConverterChannel(AdConverterUnit *unit, AdConverterChannelHandle *handle);
+    };
 
-    AC_RET init();
+    class AdConverterChannel
+    {
+    public:
+        explicit AdConverterChannel(AdConverterUnit *unit, AdConverterChannelHandle *handle);
 
-    AC_RET read(int32_t &value);
+        AC_RET init();
 
-private:
-    AdConverterChannelHandle *_handle = nullptr;
-    AdConverterUnit *_unit = nullptr;
-};
+        AC_RET read(int32_t &value);
+
+    private:
+        AdConverterChannelHandle *_handle = nullptr;
+        AdConverterUnit *_unit = nullptr;
+    };
+
+}
+
 
 #endif //AD_CONVERTER_DRIVER_H_

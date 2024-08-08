@@ -5,6 +5,8 @@
 #include <math.h>
 #include "altitude_estimate.h"
 
+using namespace Component;
+
 AC_RET AltitudeEstimate::init(float r00, float r11, float q00, float q11, float q22)
 {
     R[0] = r00;

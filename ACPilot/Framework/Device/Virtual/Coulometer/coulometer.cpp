@@ -4,6 +4,8 @@
 
 #include "coulometer.h"
 
+using namespace Framework;
+
 Coulometer::Coulometer(const char *name) : VirtualDevice(name)
 {
     _type = COULOMETER_DEV;

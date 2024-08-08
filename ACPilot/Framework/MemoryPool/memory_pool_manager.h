@@ -5,7 +5,7 @@
 #ifndef MEMORY_POOL_MANAGER_H_
 #define MEMORY_POOL_MANAGER_H_
 
-#include "type.h"
+#include "Type/type.h"
 #include "MemoryPool/memory_pool.h"
 
 class MemoryPoolManager

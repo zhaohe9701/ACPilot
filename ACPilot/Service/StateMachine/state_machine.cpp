@@ -3,7 +3,9 @@
 //
 #include <string.h>
 #include "state_machine.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
+
+using namespace Service;
 
 State::State(const char *name, Event enter_action, Event leave_action)
 {
@@ -30,17 +32,17 @@ State *State::trans(Event event)
 
 void State::enterAction()
 {
-    Notify::notify(_enter_action);
+    Utils::Notify::notify(_enter_action);
 }
 
 void State::leaveAction()
 {
-    Notify::notify(_leave_action);
+    Utils::Notify::notify(_leave_action);
 }
 
-List<State *> StateMachine::_state_list;
-AcQueue<Event> StateMachine::_event_queue{5};
-AcThread *StateMachine::_state_machine_task = nullptr;
+Common::List<State *> StateMachine::_state_list;
+Osal::Queue<Event> StateMachine::_event_queue{5};
+Osal::AcThread *StateMachine::_state_machine_task = nullptr;
 State *StateMachine::_current_state = nullptr;
 
 AC_RET StateMachine::init()
@@ -48,10 +50,10 @@ AC_RET StateMachine::init()
     /* 监听所有事件 */
     for (int i = 0; i < EVENT_NUM; ++i)
     {
-        Notify::sub((Event)i, _monitor);
+        Utils::Notify::sub((Event)i, _monitor);
     }
 
-    _state_machine_task = new AcThread("fsm", FSM_TASK_STACK_SIZE, FSM_TASK_PRIO, FSM_TASK_CORE);
+    _state_machine_task = new Osal::AcThread("fsm", FSM_TASK_STACK_SIZE, FSM_TASK_PRIO, FSM_TASK_CORE);
     return AC_OK;
 }
 
@@ -87,7 +89,7 @@ AC_RET StateMachine::start()
 
 void StateMachine::_monitor(void *arg)
 {
-    NotifyToken *token = (NotifyToken *) arg;
+    Utils::NotifyToken *token = (Utils::NotifyToken *) arg;
     if (nullptr == token)
     {
         return;
@@ -102,7 +104,7 @@ void StateMachine::_loop(void *param)
     if (nullptr == _current_state)
     {
         BASE_ERROR("NULL ptr");
-        AcThread::killSelf();
+        Osal::AcThread::killSelf();
     }
     for (;;)
     {

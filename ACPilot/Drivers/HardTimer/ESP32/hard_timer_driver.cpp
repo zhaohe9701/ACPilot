@@ -3,6 +3,8 @@
 //
 #include "HardTimer/hard_timer_driver.h"
 
+using namespace Driver;
+
 HardTimerHandle::HardTimerHandle()
 {
     memset(&config, 0, sizeof(esp_timer_create_args_t));

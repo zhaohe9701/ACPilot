@@ -5,18 +5,19 @@
 #ifndef COULOMETER_H_
 #define COULOMETER_H_
 
-
 #include "Device/Virtual/virtual_device.h"
 
-class Coulometer : public VirtualDevice
+namespace Framework
 {
-public:
-    explicit Coulometer(const char *name);
+    class Coulometer : public VirtualDevice
+    {
+    public:
+        explicit Coulometer(const char *name);
 
-    AC_RET read(ElectricQuantityData &data);
+        AC_RET read(ElectricQuantityData &data);
 
-    ~Coulometer() = default;
-};
-
+        ~Coulometer() = default;
+    };
+}
 
 #endif //COULOMETER_H_

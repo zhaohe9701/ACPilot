@@ -10,6 +10,7 @@
  */
 #include "Iic/iic_driver.h"
 
+using namespace Driver;
 IicBusHandle::IicBusHandle()
 {
     memset(&config, 0, sizeof(i2c_config_t));

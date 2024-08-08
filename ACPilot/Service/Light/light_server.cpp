@@ -3,23 +3,23 @@
 //
 
 #include "light_server.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 
+using namespace Service;
 
-
-List<Light *> LightServer::_list;
-AcThread *LightServer::_light_task = nullptr;
-Mailbox<LightMessage> *LightServer::_mailbox = nullptr;
+Common::List<Light *> LightServer::_list;
+Osal::AcThread *LightServer::_light_task = nullptr;
+Utils::Mailbox<LightMessage> *LightServer::_mailbox = nullptr;
 
 AC_RET LightServer::init()
 {
-    _mailbox = Mailbox<LightMessage>::find("light");
+    _mailbox = Utils::Mailbox<LightMessage>::find("light");
     if (nullptr == _mailbox)
     {
         BASE_ERROR("object can't find");
         return AC_ERROR;
     }
-    _light_task = new AcThread("light", LIGHT_TASK_STACK_SIZE, LIGHT_TASK_PRIO, LIGHT_TASK_CORE);
+    _light_task = new Osal::AcThread("light", LIGHT_TASK_STACK_SIZE, LIGHT_TASK_PRIO, LIGHT_TASK_CORE);
     return AC_OK;
 }
 
@@ -44,7 +44,7 @@ void LightServer::_loop(void *param)
     if (nullptr == _mailbox)
     {
         BASE_ERROR("NULL ptr");
-        AcThread::killSelf();
+        Osal::AcThread::killSelf();
     }
     for (;;)
     {
@@ -53,7 +53,7 @@ void LightServer::_loop(void *param)
         {
             continue;
         }
-        for (ListNode<Light *> *it = _list.begin(); it != _list.end(); it = it->getNext())
+        for (Common::ListNode<Light *> *it = _list.begin(); it != _list.end(); it = it->getNext())
         {
             if ((*(*it))->match(msg.id))
             {

@@ -3,11 +3,11 @@
 //
 
 #include "monitor.h"
-#include "Thread/ac_thread.h"
+#include "Thread/thread.h"
 #include "config.h"
 #include "Monitor/Battery/battery_monitor.h"
 
-static AcThread *task = nullptr;
+static Osal::AcThread *task = nullptr;
 
 
 void monitorTask(void *param)
@@ -21,7 +21,7 @@ void monitorTask(void *param)
 
 void registerMonitorTask()
 {
-    task = new AcThread("monitor", MONITOR_TASK_STACK_SIZE, MONITOR_TASK_PRIO, MONITOR_TASK_CORE);
+    task = new Osal::AcThread("monitor", MONITOR_TASK_STACK_SIZE, MONITOR_TASK_PRIO, MONITOR_TASK_CORE);
 
     BatteryMonitor::init();
 

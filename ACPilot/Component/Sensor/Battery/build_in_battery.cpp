@@ -7,7 +7,9 @@
 #define PARTIAL_VOLTAGE_RESISTANCE_RATIO 0.5f
 #define CURRENT_SAMPLING_RESISTANCE 0.1f
 
-BuildInBattery::BuildInBattery(AdConverterChannel *vol_adc, AdConverterChannel *cur_adc)
+using namespace Component;
+
+BuildInBattery::BuildInBattery(Driver::AdConverterChannel *vol_adc, Driver::AdConverterChannel *cur_adc)
 {
     if (vol_adc == nullptr)
     {
@@ -17,22 +19,22 @@ BuildInBattery::BuildInBattery(AdConverterChannel *vol_adc, AdConverterChannel *
     _vol_adc = vol_adc;
     _cur_adc = cur_adc;
 
-    _ability = 1U << VOLTMETER_DEV;
+    _ability = 1U << Framework::VOLTMETER_DEV;
 
     if (_cur_adc != nullptr)
     {
-        _ability |= (1U << AMMETER_DEV);
+        _ability |= (1U << Framework::AMMETER_DEV);
     }
     strncpy(_name, "BuildInBattery", sizeof(_name));
 }
 
-AC_RET BuildInBattery::getVoltage(VolData &data)
+AC_RET BuildInBattery::getVoltage(Framework::VolData &data)
 {
     data = _vol_data;
     return AC_OK;
 }
 
-AC_RET BuildInBattery::getCurrent(CurData &data)
+AC_RET BuildInBattery::getCurrent(Framework::CurData &data)
 {
     if (_cur_adc == nullptr)
     {
@@ -42,7 +44,7 @@ AC_RET BuildInBattery::getCurrent(CurData &data)
     return AC_OK;
 }
 
-AC_RET BuildInBattery::getElectricQuantity(ElectricQuantityData &data)
+AC_RET BuildInBattery::getElectricQuantity(Framework::ElectricQuantityData &data)
 {
     data = _electric_quantity_data;
     return AC_OK;

@@ -1,24 +1,25 @@
 #include "command_server.h"
-#include "Mail/mailbox.h"
-#include "type.h"
-#include "default_debug.h"
+#include "Mailbox/mailbox.h"
+#include "Type/type.h"
+#include "Debug/default_debug.h"
 
+using namespace Service;
 
-Mailbox<CommandMessage> *CommandServer::_cmd_mailbox = nullptr;
-Mailbox<ComMessage> *CommandServer::_send_mailbox = nullptr;
-List<Command *> CommandServer::_list;
-AcThread *CommandServer::_command_task = nullptr;
+Utils::Mailbox<CommandMessage> *CommandServer::_cmd_mailbox = nullptr;
+Utils::Mailbox<ComMessage> *CommandServer::_send_mailbox = nullptr;
+Common::List<Command *> CommandServer::_list;
+Osal::AcThread *CommandServer::_command_task = nullptr;
 
 AC_RET CommandServer::init()
 {
-    _cmd_mailbox = Mailbox<CommandMessage>::find("command");
-    _send_mailbox = Mailbox<ComMessage>::find("send");
+    _cmd_mailbox = Utils::Mailbox<CommandMessage>::find("command");
+    _send_mailbox = Utils::Mailbox<ComMessage>::find("send");
     if (nullptr == _cmd_mailbox || nullptr == _send_mailbox)
     {
         BASE_ERROR("object can't find");
         return AC_ERROR;
     }
-    _command_task = new AcThread("command", COMMAND_TASK_STACK_SIZE, COMMAND_TASK_PRIO, COMMAND_TASK_CORE);
+    _command_task = new Osal::AcThread("command", COMMAND_TASK_STACK_SIZE, COMMAND_TASK_PRIO, COMMAND_TASK_CORE);
     return AC_OK;
 }
 
@@ -43,7 +44,7 @@ void CommandServer::_loop(void *param)
     if (nullptr == _cmd_mailbox || nullptr == _send_mailbox)
     {
         BASE_ERROR("NULL ptr");
-        AcThread::killSelf();
+        Osal::AcThread::killSelf();
     }
     for (;;)
     {
@@ -52,7 +53,7 @@ void CommandServer::_loop(void *param)
 
         _cmd_mailbox->pop(&cmd);
 
-        for (ListNode<Command *> *it = _list.begin(); it != _list.end(); it = it->getNext())
+        for (Common::ListNode<Command *> *it = _list.begin(); it != _list.end(); it = it->getNext())
         {
             if ((*(*it))->match(cmd))
             {
@@ -66,14 +67,14 @@ void CommandServer::_loop(void *param)
                 {
                     if (nullptr != replay_msg.pool)
                     {
-                        static_cast<MemoryPool *>(replay_msg.pool)->free(replay_msg.buf);
+                        static_cast<Utils::MemoryPool *>(replay_msg.pool)->free(replay_msg.buf);
                     }
                 }
             }
         }
         if (nullptr != cmd.message.pool)
         {
-            static_cast<MemoryPool *>(cmd.message.pool)->free(cmd.message.buf);
+            static_cast<Utils::MemoryPool *>(cmd.message.pool)->free(cmd.message.buf);
         } else
         {
             BASE_ERROR("pool is null");

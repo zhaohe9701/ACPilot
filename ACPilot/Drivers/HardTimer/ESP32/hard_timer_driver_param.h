@@ -8,12 +8,15 @@
 #include "esp_timer.h"
 #include "string.h"
 
-struct HardTimerHandle
+namespace Driver
 {
-    HardTimerHandle();
+    struct HardTimerHandle
+    {
+        HardTimerHandle();
 
-    esp_timer_create_args_t config{};
-    esp_timer_handle_t handle = nullptr;
-};
+        esp_timer_create_args_t config{};
+        esp_timer_handle_t handle = nullptr;
+    };
+}
 
 #endif //HARD_TIMER_DRIVER_PARAM_H_

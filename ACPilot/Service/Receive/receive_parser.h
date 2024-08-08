@@ -12,17 +12,22 @@
 #define RECEIVE_PARSER_H_
 
 #include <stdint.h>
-#include "Com/com_interface.h"
-#include "type.h"
+#include "Com/com.h"
+#include "Type/type.h"
 #include "message.h"
 
-class MessageReceiveParser
+namespace Service
 {
-public:
-    MessageReceiveParser();
-    virtual AC_RET parse(ComMessage &message, bool &free_message) = 0;
-    virtual bool match(ComMessage &message) = 0;
-    virtual ~MessageReceiveParser()= default;
-};
+    class MessageReceiveParser
+    {
+    public:
+        MessageReceiveParser();
 
+        virtual AC_RET parse(ComMessage &message, bool &free_message) = 0;
+
+        virtual bool match(ComMessage &message) = 0;
+
+        virtual ~MessageReceiveParser() = default;
+    };
+}
 #endif

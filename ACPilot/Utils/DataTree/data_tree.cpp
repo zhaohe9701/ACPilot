@@ -4,12 +4,15 @@
 
 #include <string.h>
 #include "data_tree.h"
-#include "type.h"
+#include "Type/type.h"
 #include "error_handing.h"
 #include "Url/url.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 
-bool jsonArrayNodeIsUsed(JsonTree *node)
+using namespace Utils;
+
+
+bool DataTree::dataArrayNodeIsUsed(DataTree *node)
 {
     if (nullptr == node)
     {
@@ -24,51 +27,26 @@ bool jsonArrayNodeIsUsed(JsonTree *node)
     return true;
 }
 
-bool dataArrayNodeIsUsed(DataTree *node)
-{
-    if (nullptr == node)
-    {
-        return false;
-    }
-
-    if (0 == strncmp(node->getKey(), "0", PARAM_NAME_LEN))
-    {
-        return false;
-    }
-
-    return true;
-}
-
-void dataArrayNodeSetIndex(DataTree *node, uint16_t index)
+void DataTree::dataArrayNodeSetIndex(DataTree *node, uint16_t index)
 {
     snprintf(node->getKey(), PARAM_NAME_LEN, "%u", index);
 }
 
-uint16_t dataArrayNodeGetIndex(DataTree *node)
+uint16_t DataTree::dataArrayNodeGetIndex(DataTree *node)
 {
     return strtol(node->getKey(), nullptr, 10);
 }
 
-void jsonArrayNodeSetIndex(JsonTree *node, uint16_t index)
-{
-    snprintf(node->getKey(), PARAM_NAME_LEN, "%u", index);
-}
-
-uint16_t jsonArrayNodeGetIndex(JsonTree *node)
-{
-    return strtol(node->getKey(), nullptr, 10);
-}
-
-class DataTreeDataFromJson : public TreeVisit
+class DataTreeDataFromJson : public Common::TreeVisit
 {
 public:
     explicit DataTreeDataFromJson(DataTree *node);
 
-    AC_RET operator()(Tree *node, TREE_VISIT_ORDER order) override;
+    AC_RET operator()(Common::Tree *node, Common::TREE_VISIT_ORDER order) override;
 
 private:
     DataTree *_data_root = nullptr;
-    Url _url;
+    Common::Url _url;
 };
 
 DataTreeDataFromJson::DataTreeDataFromJson(DataTree *node)
@@ -76,7 +54,7 @@ DataTreeDataFromJson::DataTreeDataFromJson(DataTree *node)
     _data_root = node;
 }
 
-AC_RET DataTreeDataFromJson::operator()(Tree *node, TREE_VISIT_ORDER order)
+AC_RET DataTreeDataFromJson::operator()(Common::Tree *node, Common::TREE_VISIT_ORDER order)
 {
     JsonTree *json_node = static_cast<JsonTree *>(node);
     DataTree *data_node = nullptr;
@@ -86,7 +64,7 @@ AC_RET DataTreeDataFromJson::operator()(Tree *node, TREE_VISIT_ORDER order)
         BASE_ERROR("Array is not supported to set");
         return AC_ERROR;
     }
-    if (TREE_PRE_ORDER == order)
+    if (Common::TREE_PRE_ORDER == order)
     {
         _url.push(json_node->getKey());
 
@@ -99,7 +77,7 @@ AC_RET DataTreeDataFromJson::operator()(Tree *node, TREE_VISIT_ORDER order)
             }
             data_node->singleNodeFromJson(json_node);
         }
-    } else if (TREE_POST_ORDER == order)
+    } else if (Common::TREE_POST_ORDER == order)
     {
         _url.pop();
     }
@@ -107,10 +85,10 @@ AC_RET DataTreeDataFromJson::operator()(Tree *node, TREE_VISIT_ORDER order)
     return AC_OK;
 }
 
-class DataTreeDataToJson : public TreeVisit
+class DataTreeDataToJson : public Common::TreeVisit
 {
 public:
-    AC_RET operator()(Tree *node, TREE_VISIT_ORDER order) override;
+    AC_RET operator()(Common::Tree *node, Common::TREE_VISIT_ORDER order) override;
 
     JsonTree *getRes();
 
@@ -119,7 +97,7 @@ private:
     JsonTree *_current_node = nullptr;
 };
 
-AC_RET DataTreeDataToJson::operator()(Tree *node, TREE_VISIT_ORDER order)
+AC_RET DataTreeDataToJson::operator()(Common::Tree *node, Common::TREE_VISIT_ORDER order)
 {
     JsonTree *json_node = nullptr;
     DataTree *data_node = static_cast<DataTree *>(node);
@@ -129,7 +107,7 @@ AC_RET DataTreeDataToJson::operator()(Tree *node, TREE_VISIT_ORDER order)
         return AC_ERROR;
     }
     /* 后序遍历, 回到当前节点 */
-    if (TREE_POST_ORDER == order)
+    if (Common::TREE_POST_ORDER == order)
     {
         /* 如果当前节点是数组, 则仅保留已使用节点 */
         if (JSON_TYPE_ARRAY == _current_node->getType())
@@ -140,7 +118,7 @@ AC_RET DataTreeDataToJson::operator()(Tree *node, TREE_VISIT_ORDER order)
             while (nullptr != child)
             {
                 next_child = child->getNeighbor();
-                if (!jsonArrayNodeIsUsed(child))
+                if (!JsonTree::jsonArrayNodeIsUsed(child))
                 {
                     _current_node->delChild(child);
                     Json::free(child);
@@ -151,7 +129,7 @@ AC_RET DataTreeDataToJson::operator()(Tree *node, TREE_VISIT_ORDER order)
         /* 回到父节点 */
         _current_node = _current_node->getParent();
         return AC_OK;
-    } else if (TREE_PRE_ORDER == order) /* 前序遍历, 建立新节点 */
+    } else if (Common::TREE_PRE_ORDER == order) /* 前序遍历, 建立新节点 */
     {
         /* 为当前节点分配空间 */
         NULL_CHECK(json_node = Json::alloc());
@@ -262,7 +240,7 @@ AC_RET DataTree::singleNodeFromJson(JsonTree *json)
     {
         return AC_ERROR;
     }
-    Type::transStrToData(json->getVal(), _size, _data, _type);
+    Common::Type::transStrToData(json->getVal(), _size, _data, _type);
     return AC_OK;
 }
 
@@ -280,7 +258,7 @@ AC_RET DataTree::singleNodeToJson(JsonTree *json)
     } else
     {
         json->setType(JSON_TYPE_DATA);
-        RETURN_CHECK(Type::transDataToStr(json->getVal(), JSON_VAL_LEN, _data, _type));
+        RETURN_CHECK(Common::Type::transDataToStr(json->getVal(), JSON_VAL_LEN, _data, _type));
     }
     return AC_OK;
     error:
@@ -291,7 +269,7 @@ AC_RET DataTree::singleNodeFromStruct(JsonTree *json)
 {
     if (JSON_TYPE_DATA == json->getType())
     {
-        if (AC_OK != Type::transStrToType(json->getVal(), _type, _size))
+        if (AC_OK != Common::Type::transStrToType(json->getVal(), _type, _size))
         {
             BASE_ERROR("Invalid data type:%s", json->getVal());
             return AC_ERROR;
@@ -303,7 +281,7 @@ AC_RET DataTree::singleNodeFromStruct(JsonTree *json)
     }
     if (nullptr != json->getParent() && JSON_TYPE_ARRAY == json->getParent()->getType())
     {
-        dataArrayNodeSetIndex(this, 0);
+        DataTree::dataArrayNodeSetIndex(this, 0);
     } else
     {
         setKey(json->getKey());
@@ -326,7 +304,7 @@ AC_RET DataTree::singleNodeToStruct(JsonTree *json)
     } else
     {
         json->setType(JSON_TYPE_DATA);
-        RETURN_CHECK(Type::transTypeToStr(json->getVal(), _type));
+        RETURN_CHECK(Common::Type::transTypeToStr(json->getVal(), _type));
         if (AC_STRING == _type)
         {
             snprintf(json->getVal(), JSON_VAL_LEN, "%s[%u]", json->getVal(), _size);
@@ -380,7 +358,7 @@ AC_RET DataTree::delChild(DataTree *child)
     return _delChild(child);
 }
 
-AC_RET DataTree::traverse(TreeVisit &visit)
+AC_RET DataTree::traverse(Common::TreeVisit &visit)
 {
     return _traverse(visit);
 }
@@ -393,12 +371,12 @@ DataTree *DataTree::find(DataTree *tree, const char *url)
         return nullptr;
     }
 
-    Url url_obj(url);
+    Common::Url url_obj(url);
 
     return find(tree, url_obj);
 }
 
-DataTree *DataTree::find(DataTree *tree, Url &url)
+DataTree *DataTree::find(DataTree *tree, Common::Url &url)
 {
     uint16_t index = 0;
     DataTree *ret = tree;

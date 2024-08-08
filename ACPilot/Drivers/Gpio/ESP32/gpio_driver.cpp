@@ -4,6 +4,8 @@
 #include <string.h>
 #include "Gpio/gpio_driver.h"
 
+using namespace Driver;
+
 GpioHandle::GpioHandle()
 {
     memset(&config, 0, sizeof(gpio_config_t));

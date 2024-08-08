@@ -4,6 +4,8 @@
 
 #include "tdk_imu.h"
 
+using namespace Component;
+
 void TdkImu::_imuWriteRag(uint8_t address, uint8_t value)
 {
     _interface->writeReg(address & _WRITE, value, IO_DEFAULT_TIMEOUT);

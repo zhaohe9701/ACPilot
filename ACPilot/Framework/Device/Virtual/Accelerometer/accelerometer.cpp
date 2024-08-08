@@ -5,6 +5,8 @@
 #include <string.h>
 #include "accelerometer.h"
 
+using namespace Framework;
+
 Accelerometer::Accelerometer(const char *name) : VirtualDevice(name)
 {
     _type = ACCELEROMETER_DEV;
@@ -34,7 +36,7 @@ AC_RET Accelerometer::read(AccData &data)
     return AC_ERROR;
 }
 
-AC_RET Accelerometer::cali(Vec3 *data, uint16_t num, DeviceCali *cali)
+AC_RET Accelerometer::cali(Common::Vec3 *data, uint16_t num, DeviceCali *cali)
 {
     cali->cali(data, num, _cali_data);
     _cali_data.calcTrans();

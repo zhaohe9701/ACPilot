@@ -5,14 +5,16 @@
 #ifndef EXPECT_STATE_H_
 #define EXPECT_STATE_H_
 
-#include "type.h"
+#include "Type/type.h"
 
-struct ExpectState
+namespace Component
 {
-    Euler euler{};
-    Vec3 ang_v{};
-    float throttle = 0.f;
-    float height_rate = 0.f;
-};
-
+    struct ExpectState
+    {
+        Common::Euler euler{};
+        Common::Vec3 ang_v{};
+        float throttle = 0.f;
+        float height_rate = 0.f;
+    };
+}
 #endif //EXPECT_STATE_H_

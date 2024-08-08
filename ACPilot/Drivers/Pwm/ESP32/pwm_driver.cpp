@@ -4,6 +4,7 @@
 #include "Pwm/pwm_driver.h"
 #include "pwm_driver_param.h"
 
+using namespace Driver;
 
 PwmHandle::PwmHandle()
 {

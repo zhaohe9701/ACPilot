@@ -3,9 +3,9 @@
 //
 
 #include "udp.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 
-
+using namespace Driver;
 
 Udp::Udp(UdpHandle *handle, uint8_t port_num) : Com(port_num)
 {
@@ -14,13 +14,13 @@ Udp::Udp(UdpHandle *handle, uint8_t port_num) : Com(port_num)
 
 AC_RET Udp::init()
 {
-    _wifi_connect_token = Notify::sub(WIFI_CONNECT_SUCCESS_EVENT);
+    _wifi_connect_token = Utils::Notify::sub(WIFI_CONNECT_SUCCESS_EVENT);
     if (nullptr == _wifi_connect_token)
     {
         BASE_ERROR("sub wifi connect success event fail");
         return AC_ERROR;
     }
-    _udp_task = new AcThread("udp", UDP_RECEIVE_TASK_STACK, UDP_RECEIVE_TASK_PRIO, UDP_RECEIVE_TASK_CORE);
+    _udp_task = new Osal::AcThread("udp", UDP_RECEIVE_TASK_STACK, UDP_RECEIVE_TASK_PRIO, UDP_RECEIVE_TASK_CORE);
     _udp_task->run(Udp::_receive_task, this);
     return AC_OK;
 }
@@ -73,7 +73,7 @@ void Udp::_receive_task(void *param)
             {
                 udp->_buf[len] = '\0';
                 udp->_is_connected = true;
-                udp->_recv_pool = MemoryPool::getGeneral(len);
+                udp->_recv_pool = Utils::MemoryPool::getGeneral(len);
                 if (nullptr == udp->_recv_pool)
                 {
                     continue;
@@ -92,7 +92,7 @@ void Udp::_receive_task(void *param)
             close(udp->_sock);
         }
     }
-    AcThread::killSelf();
+    Osal::AcThread::killSelf();
 }
 
 AC_RET Udp::send(uint8_t *buf, uint16_t length, uint32_t timeout)

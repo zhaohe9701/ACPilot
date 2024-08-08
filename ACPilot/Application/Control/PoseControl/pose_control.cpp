@@ -7,23 +7,23 @@
 #include "dm_template.h"
 #include "DataModule/data_module.h"
 #include "error_handing.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 #include "AHRS/attitude.h"
-#include "Mail/mailbox.h"
+#include "Mailbox/mailbox.h"
 #include "Filter/IIR/lpf.h"
 #include "HardTimer/hard_timer_driver.h"
 
-Pid *PoseControl::o_pitch = nullptr;
-Pid *PoseControl::o_roll = nullptr;
-Pid *PoseControl::o_yaw = nullptr;
+Component::Pid *PoseControl::o_pitch = nullptr;
+Component::Pid *PoseControl::o_roll = nullptr;
+Component::Pid *PoseControl::o_yaw = nullptr;
 
-Pid *PoseControl::i_pitch = nullptr;
-Pid *PoseControl::i_roll = nullptr;
-Pid *PoseControl::i_yaw = nullptr;
+Component::Pid *PoseControl::i_pitch = nullptr;
+Component::Pid *PoseControl::i_roll = nullptr;
+Component::Pid *PoseControl::i_yaw = nullptr;
 
-Filter *PoseControl::pitch_filter = nullptr;
-Filter *PoseControl::roll_filter = nullptr;
-Filter *PoseControl::yaw_filter = nullptr;
+Component::Filter *PoseControl::pitch_filter = nullptr;
+Component::Filter *PoseControl::roll_filter = nullptr;
+Component::Filter *PoseControl::yaw_filter = nullptr;
 
 uint64_t PoseControl::last_time = 0;
 
@@ -32,7 +32,7 @@ static void poseControlReset(void *arg)
     PoseControl::reset();
 }
 
-void PoseControl::innerRing(ExpectState &expect_state, PoseData &attitude, Vec3 &out, float dt)
+void PoseControl::innerRing(Component::ExpectState &expect_state, Component::PoseData &attitude, Common::Vec3 &out, float dt)
 {
 
     out.y = i_pitch->output(expect_state.ang_v.y - attitude.ang_v.y, dt);
@@ -40,7 +40,7 @@ void PoseControl::innerRing(ExpectState &expect_state, PoseData &attitude, Vec3 
     out.z = i_yaw->output(expect_state.ang_v.z - attitude.ang_v.z, dt);
 }
 
-void PoseControl::outerRing(ExpectState &expect_state, PoseData &attitude, float dt)
+void PoseControl::outerRing(Component::ExpectState &expect_state, Component::PoseData &attitude, float dt)
 {
     expect_state.ang_v.y = o_pitch->output(expect_state.euler.pitch - attitude.euler.pitch, dt);
     expect_state.ang_v.x = o_roll->output(expect_state.euler.roll - attitude.euler.roll, dt);
@@ -56,36 +56,36 @@ AC_RET PoseControl::init()
 {
     PidConfig config;
 
-    pitch_filter = new FirstOrderLPF();
-    roll_filter = new FirstOrderLPF();
-    yaw_filter = new FirstOrderLPF();
+    pitch_filter = new Component::FirstOrderLPF();
+    roll_filter = new Component::FirstOrderLPF();
+    yaw_filter = new Component::FirstOrderLPF();
 
-    o_pitch = new Pid();
-    o_roll = new Pid();
-    o_yaw = new Pid();
+    o_pitch = new Component::Pid();
+    o_roll = new Component::Pid();
+    o_yaw = new Component::Pid();
 
-    i_pitch = new Pid(pitch_filter);
-    i_roll = new Pid(roll_filter);
-    i_yaw = new Pid(yaw_filter);
+    i_pitch = new Component::Pid(pitch_filter);
+    i_roll = new Component::Pid(roll_filter);
+    i_yaw = new Component::Pid(yaw_filter);
 
-    RETURN_CHECK(DataModule::read("/controller/pose[4]/1", &config, sizeof(PidConfig)));
+    RETURN_CHECK(Framework::DataModule::read("/controller/pose[4]/1", &config, sizeof(PidConfig)));
     o_pitch->init(config.kp, config.ki, config.kd, config.out_limit, config.int_limit);
-    RETURN_CHECK(DataModule::read("/controller/pose[4]/1", &config, sizeof(PidConfig)));
+    RETURN_CHECK(Framework::DataModule::read("/controller/pose[4]/1", &config, sizeof(PidConfig)));
     o_roll->init(config.kp, config.ki, config.kd, config.out_limit, config.int_limit);
-    RETURN_CHECK(DataModule::read("/controller/pose[4]/2", &config, sizeof(PidConfig)));
+    RETURN_CHECK(Framework::DataModule::read("/controller/pose[4]/2", &config, sizeof(PidConfig)));
     o_yaw->init(config.kp, config.ki, config.kd, config.out_limit, config.int_limit);
 
-    RETURN_CHECK(DataModule::read("/controller/pose[4]/3", &config, sizeof(PidConfig)));
+    RETURN_CHECK(Framework::DataModule::read("/controller/pose[4]/3", &config, sizeof(PidConfig)));
     i_pitch->init(config.kp, config.ki, config.kd, config.out_limit, config.int_limit);
     pitch_filter->init(1000, config.d_filter_cut_freq);
-    RETURN_CHECK(DataModule::read("/controller/pose[4]/3", &config, sizeof(PidConfig)));
+    RETURN_CHECK(Framework::DataModule::read("/controller/pose[4]/3", &config, sizeof(PidConfig)));
     i_roll->init(config.kp, config.ki, config.kd, config.out_limit, config.int_limit);
     roll_filter->init(1000, config.d_filter_cut_freq);
-    RETURN_CHECK(DataModule::read("/controller/pose[4]/4", &config, sizeof(PidConfig)));
+    RETURN_CHECK(Framework::DataModule::read("/controller/pose[4]/4", &config, sizeof(PidConfig)));
     i_yaw->init(config.kp, config.ki, config.kd, config.out_limit, config.int_limit);
     yaw_filter->init(1000, config.d_filter_cut_freq);
 
-    RETURN_CHECK(DataModule::registerAction("/controller/pose_reset", poseControlReset));
+    RETURN_CHECK(Framework::DataModule::registerAction("/controller/pose_reset", poseControlReset));
 
     return AC_OK;
 
@@ -94,9 +94,9 @@ AC_RET PoseControl::init()
     return AC_ERROR;
 }
 
-AC_RET PoseControl::step(ExpectState &expect_state, PoseData &attitude, Vec3 &out)
+AC_RET PoseControl::step(Component::ExpectState &expect_state, Component::PoseData &attitude, Common::Vec3 &out)
 {
-    uint64_t current_time = HardwareTimer::getCurrentTime();
+    uint64_t current_time = Driver::HardwareTimer::getCurrentTime();
     if (last_time == 0)
     {
         last_time = current_time;
@@ -112,20 +112,20 @@ AC_RET PoseControl::step(ExpectState &expect_state, PoseData &attitude, Vec3 &ou
 void PoseControl::reset()
 {
     PidConfig config;
-    RETURN_CHECK(DataModule::read("/controller/pose[4]/1", &config, sizeof(PidConfig)));
+    RETURN_CHECK(Framework::DataModule::read("/controller/pose[4]/1", &config, sizeof(PidConfig)));
     o_pitch->init(config.kp, config.ki, config.kd, config.out_limit, config.int_limit);
-    RETURN_CHECK(DataModule::read("/controller/pose[4]/1", &config, sizeof(PidConfig)));
+    RETURN_CHECK(Framework::DataModule::read("/controller/pose[4]/1", &config, sizeof(PidConfig)));
     o_roll->init(config.kp, config.ki, config.kd, config.out_limit, config.int_limit);
-    RETURN_CHECK(DataModule::read("/controller/pose[4]/2", &config, sizeof(PidConfig)));
+    RETURN_CHECK(Framework::DataModule::read("/controller/pose[4]/2", &config, sizeof(PidConfig)));
     o_yaw->init(config.kp, config.ki, config.kd, config.out_limit, config.int_limit);
 
-    RETURN_CHECK(DataModule::read("/controller/pose[4]/3", &config, sizeof(PidConfig)));
+    RETURN_CHECK(Framework::DataModule::read("/controller/pose[4]/3", &config, sizeof(PidConfig)));
     i_pitch->init(config.kp, config.ki, config.kd, config.out_limit, config.int_limit);
     pitch_filter->init(1000, config.d_filter_cut_freq);
-    RETURN_CHECK(DataModule::read("/controller/pose[4]/3", &config, sizeof(PidConfig)));
+    RETURN_CHECK(Framework::DataModule::read("/controller/pose[4]/3", &config, sizeof(PidConfig)));
     i_roll->init(config.kp, config.ki, config.kd, config.out_limit, config.int_limit);
     roll_filter->init(1000, config.d_filter_cut_freq);
-    RETURN_CHECK(DataModule::read("/controller/pose[4]/4", &config, sizeof(PidConfig)));
+    RETURN_CHECK(Framework::DataModule::read("/controller/pose[4]/4", &config, sizeof(PidConfig)));
     i_yaw->init(config.kp, config.ki, config.kd, config.out_limit, config.int_limit);
     yaw_filter->init(1000, config.d_filter_cut_freq);
     return;

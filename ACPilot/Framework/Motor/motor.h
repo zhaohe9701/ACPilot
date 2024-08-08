@@ -6,7 +6,7 @@
 #define MOTOR_H_
 
 
-#include "type.h"
+#include "Type/type.h"
 
 #define MAX_MOTOR_NUM 4
 

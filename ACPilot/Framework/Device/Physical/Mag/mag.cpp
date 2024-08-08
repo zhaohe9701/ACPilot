@@ -5,6 +5,8 @@
 #include "mag.h"
 #include "error_handing.h"
 
+using namespace Framework;
+
 AC_RET Mag::init()
 {
     return AC_OK;

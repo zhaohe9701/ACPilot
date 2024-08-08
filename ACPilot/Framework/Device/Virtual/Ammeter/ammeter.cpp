@@ -4,6 +4,8 @@
 
 #include "ammeter.h"
 
+using namespace Framework;
+
 Ammeter::Ammeter(const char *name) : VirtualDevice(name)
 {
     _type = AMMETER_DEV;

@@ -5,7 +5,7 @@
 #ifndef BATTERY_MONITOR_H_
 #define BATTERY_MONITOR_H_
 
-#include "type.h"
+#include "Type/type.h"
 #include "Light/light_server.h"
 #include "Device/Virtual/Voltmeter/voltmeter.h"
 
@@ -17,8 +17,8 @@ public:
     static AC_RET step();
 
 private:
-    static Mailbox<LightMessage> *light_mailbox;
-    static Voltmeter *voltmeter;
+    static Utils::Mailbox<Service::LightMessage> *light_mailbox;
+    static Framework::Voltmeter *voltmeter;
 };
 
 #endif //BATTERY_MONITOR_H_

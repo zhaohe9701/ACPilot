@@ -5,91 +5,86 @@
 #ifndef DATA_TREE_H_
 #define DATA_TREE_H_
 
-#include "Tree/ac_tree.h"
-#include "Json/ac_json.h"
+#include "Tree/tree.h"
+#include "Json/json.h"
 #include "Url/url.h"
 
-class DataTree : public Tree
+namespace Utils
 {
-public:
-    AC_RET setKey(const char *key);
 
-    char *getKey();
+    class DataTree : public Common::Tree
+    {
+    public:
+        AC_RET setKey(const char *key);
 
-    AC_RET allocData(void *ptr);
+        char *getKey();
 
-    AC_RET setData(void *data, uint16_t size);
+        AC_RET allocData(void *ptr);
 
-    AC_RET setData(void *data);
+        AC_RET setData(void *data, uint16_t size);
 
-    AC_RET copyData(DataTree *tree);
+        AC_RET setData(void *data);
 
-    void *getData();
+        AC_RET copyData(DataTree *tree);
 
-    void clearData();
+        void *getData();
 
-    uint16_t getSize();
+        void clearData();
 
-    void setSize(uint16_t size);
+        uint16_t getSize();
 
-    AC_DATA_TYPE getType();
+        void setSize(uint16_t size);
 
-    void setType(AC_DATA_TYPE type);
+        AC_DATA_TYPE getType();
 
-    AC_RET singleNodeFromJson(JsonTree *json);
+        void setType(AC_DATA_TYPE type);
 
-    AC_RET singleNodeToJson(JsonTree *json);
+        AC_RET singleNodeFromJson(JsonTree *json);
 
-    AC_RET singleNodeFromStruct(JsonTree *json);
+        AC_RET singleNodeToJson(JsonTree *json);
 
-    AC_RET singleNodeToStruct(JsonTree *json);
+        AC_RET singleNodeFromStruct(JsonTree *json);
 
-    DataTree *getFirstChild();
+        AC_RET singleNodeToStruct(JsonTree *json);
 
-    void setFirstChild(DataTree *child);
+        DataTree *getFirstChild();
 
-    DataTree *getNeighbor();
+        void setFirstChild(DataTree *child);
 
-    void setNeighbor(DataTree *neighbor);
+        DataTree *getNeighbor();
 
-    DataTree *getParent();
+        void setNeighbor(DataTree *neighbor);
 
-    void setParent(DataTree *child);
+        DataTree *getParent();
 
-    void addChild(DataTree *child);
+        void setParent(DataTree *child);
 
-    AC_RET delChild(DataTree *child);
+        void addChild(DataTree *child);
 
-    DataTree *findChild(const char *key);
+        AC_RET delChild(DataTree *child);
 
-    AC_RET traverse(TreeVisit &visit);
+        DataTree *findChild(const char *key);
 
-    static DataTree *find(DataTree *tree, const char *url);
+        AC_RET traverse(Common::TreeVisit &visit);
 
-    static DataTree *find(DataTree *tree, Url &url);
+        static DataTree *find(DataTree *tree, const char *url);
 
-    static AC_RET fromJson(DataTree *tree, JsonTree *json);
+        static DataTree *find(DataTree *tree, Common::Url &url);
 
-    static JsonTree *toJson(DataTree *tree);
+        static AC_RET fromJson(DataTree *tree, JsonTree *json);
 
-private:
-    char _key[PARAM_NAME_LEN] = {0};
-    AC_DATA_TYPE _type = AC_UNKNOWN;
-    uint16_t _size = 0;
-    void *_data = nullptr;
-};
+        static JsonTree *toJson(DataTree *tree);
 
+        static bool dataArrayNodeIsUsed(DataTree *node);
 
-bool dataArrayNodeIsUsed(DataTree *node);
+        static void dataArrayNodeSetIndex(DataTree *node, uint16_t index);
 
-bool jsonArrayNodeIsUsed(JsonTree *node);
-
-void dataArrayNodeSetIndex(DataTree *node, uint16_t index);
-
-void jsonArrayNodeSetIndex(JsonTree *node, uint16_t index);
-
-uint16_t dataArrayNodeGetIndex(DataTree *node);
-
-uint16_t jsonArrayNodeGetIndex(JsonTree *node);
-
+        static uint16_t dataArrayNodeGetIndex(DataTree *node);
+    private:
+        char _key[PARAM_NAME_LEN] = {0};
+        AC_DATA_TYPE _type = AC_UNKNOWN;
+        uint16_t _size = 0;
+        void *_data = nullptr;
+    };
+}
 #endif //DATA_TREE_H_

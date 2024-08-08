@@ -14,6 +14,8 @@
 
 #define UART_FREE_DELAY_US 300
 
+using namespace Driver;
+
 UartHandle::UartHandle()
 {
     memset(&config, 0, sizeof(uart_config_t));
@@ -28,7 +30,7 @@ Uart::Uart(UartHandle *handle, uint8_t port_num) : Com(port_num)
 AC_RET Uart::init()
 {
     char name[PARAM_NAME_LEN] = {0};
-    QueueHandle queue = nullptr;
+    Osal::QueueHandle queue = nullptr;
     if (ESP_OK !=
         uart_driver_install(_handle->index,
                             MAX_UART_BUF_LEN * 2,
@@ -39,7 +41,7 @@ AC_RET Uart::init()
     {
         return AC_ERROR;
     }
-    _event_queue = new AcQueue<uart_event_t>(queue);
+    _event_queue = new Osal::Queue<uart_event_t>(queue);
     if (ESP_OK != uart_param_config(_handle->index, &_handle->config))
     {
         return AC_ERROR;
@@ -52,7 +54,7 @@ AC_RET Uart::init()
     snprintf(name, PARAM_NAME_LEN, "uart_%d", _handle->index);
     _timer = new HardwareTimer(name, _timer_callback, this);
     _timer->init();
-    _uart_task = new AcThread(name, UART_RECEIVE_TASK_STACK, UART_RECEIVE_TASK_PRIO, UART_RECEIVE_TASK_CORE);
+    _uart_task = new Osal::AcThread(name, UART_RECEIVE_TASK_STACK, UART_RECEIVE_TASK_PRIO, UART_RECEIVE_TASK_CORE);
     _uart_task->run(_receive_task, this);
     return AC_OK;
 }
@@ -135,7 +137,7 @@ void Uart::_timer_callback(void *param)
     Uart *uart = static_cast<Uart *>(param);
     size_t len = 0;
     uart_get_buffered_data_len(uart->_handle->index, &len);
-    uart->_recv_pool = MemoryPool::getGeneral(len);
+    uart->_recv_pool = Utils::MemoryPool::getGeneral(len);
     uart->_recv_buffer = uart->_recv_pool->alloc();
 
     if (nullptr == uart->_recv_buffer)

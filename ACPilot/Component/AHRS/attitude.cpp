@@ -3,6 +3,8 @@
 //
 #include "attitude.h"
 
+using namespace Component;
+
 Attitude::Attitude(AttitudeSolver *solver, Filter *gx_filter
                                          , Filter *gy_filter
                                          , Filter *gz_filter

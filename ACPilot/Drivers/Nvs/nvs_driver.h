@@ -6,33 +6,36 @@
 #define NVS_DRIVER_H_
 
 #include <nvs_flash.h>
-#include "type.h"
+#include "Type/type.h"
 
-class Nvs
+namespace Driver
 {
-public:
-    AC_RET read(const char *name, void *data, uint32_t len) const;
+    class Nvs
+    {
+    public:
+        AC_RET read(const char *name, void *data, uint32_t len) const;
 
-    AC_RET write(const char *name, void *data, uint32_t len) const;
+        AC_RET write(const char *name, void *data, uint32_t len) const;
 
-    AC_RET save() const;
+        AC_RET save() const;
 
-    AC_RET erase(const char *name) const;
+        AC_RET erase(const char *name) const;
 
-    static Nvs *open(const char *name);
+        static Nvs *open(const char *name);
 
-    static void close(Nvs *nvs);
+        static void close(Nvs *nvs);
 
-    static AC_RET eraseAll(const char *name);
+        static AC_RET eraseAll(const char *name);
 
-    static AC_RET eraseAll(Nvs *nvs);
+        static AC_RET eraseAll(Nvs *nvs);
 
-    static AC_RET info(char *buf, uint32_t len);
+        static AC_RET info(char *buf, uint32_t len);
 
-private:
+    private:
 #ifdef C_ESP32
-    nvs_handle_t _handle;
+        nvs_handle_t _handle;
 #endif
-};
+    };
+}
 
 #endif //NVS_DRIVER_H_

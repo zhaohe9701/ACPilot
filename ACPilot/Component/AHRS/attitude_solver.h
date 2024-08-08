@@ -13,17 +13,24 @@
 
 #include "ahrs.h"
 
-class AttitudeSolver
+namespace Component
 {
-public:
-    virtual void update(MemsData &mems, Euler &euler, float dt) = 0;
-    virtual void reset() = 0;
-    virtual void transformBodyToEarth(Vec3 &vec);
-    virtual void transformEarthToBody(Vec3 &vec);
-    virtual ~AttitudeSolver()= default;
 
-protected:
-    float _r_mat[3][3] = {{0}};
-};
+    class AttitudeSolver
+    {
+    public:
+        virtual void update(MemsData &mems, Common::Euler &euler, float dt) = 0;
 
+        virtual void reset() = 0;
+
+        virtual void transformBodyToEarth(Common::Vec3 &vec);
+
+        virtual void transformEarthToBody(Common::Vec3 &vec);
+
+        virtual ~AttitudeSolver() = default;
+
+    protected:
+        float _r_mat[3][3] = {{0}};
+    };
+}
 #endif

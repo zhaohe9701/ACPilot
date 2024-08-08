@@ -6,8 +6,8 @@
 #define MAILBOX_MANAGER_H_
 
 
-#include "type.h"
-#include "Mail/mailbox.h"
+#include "Type/type.h"
+#include "Mailbox/mailbox.h"
 
 class MailboxManager
 {

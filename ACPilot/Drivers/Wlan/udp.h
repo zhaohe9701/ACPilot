@@ -5,44 +5,47 @@
 #ifndef UDP_H_
 #define UDP_H_
 
-#include "type.h"
-#include "Com/com_interface.h"
-#include "Thread/ac_thread.h"
+#include "Type/type.h"
+#include "Com/com.h"
+#include "Thread/thread.h"
 #include "Notify/notify.h"
 #include <lwip/sockets.h>
 
-class UdpHandle
+namespace Driver
 {
-public:
-    int port;
-};
 
-class Udp : public Com
-{
-public:
-    Udp(UdpHandle *handle, uint8_t port_num);
+    class UdpHandle
+    {
+    public:
+        int port;
+    };
 
-    AC_RET init() override;
+    class Udp : public Interface::Com
+    {
+    public:
+        Udp(UdpHandle *handle, uint8_t port_num);
 
-    AC_RET send(uint8_t *buf, uint16_t length, uint32_t timeout) override;
+        AC_RET init() override;
 
-private:
-    UdpHandle *_handle;
+        AC_RET send(uint8_t *buf, uint16_t length, uint32_t timeout) override;
 
-    AcThread *_udp_task = nullptr;
+    private:
+        UdpHandle *_handle;
 
-    NotifyToken *_wifi_connect_token = nullptr;
+        Osal::AcThread *_udp_task = nullptr;
 
-    sockaddr_storage _source_addr{};
+        Utils::NotifyToken *_wifi_connect_token = nullptr;
 
-    bool _is_connected = false;
+        sockaddr_storage _source_addr{};
 
-    int _sock = -1;
+        bool _is_connected = false;
 
-    uint8_t _buf[MAX_UDP_BUF_LEN] = {0};
+        int _sock = -1;
 
-    static void _receive_task(void *param);
-};
+        uint8_t _buf[MAX_UDP_BUF_LEN] = {0};
 
+        static void _receive_task(void *param);
+    };
 
+}
 #endif //UDP_H_

@@ -5,6 +5,8 @@
 #include <string.h>
 #include "physical_device.h"
 
+using namespace Framework;
+
 PhysicalDevice::PhysicalDevice()
 {
     add(this);
@@ -69,7 +71,7 @@ bool PhysicalDevice::haveAbility(VirtualDeviceType type)
     return false;
 }
 
-List<PhysicalDevice *> PhysicalDevice::_list;
+Common::List<PhysicalDevice *> PhysicalDevice::_list;
 
 void PhysicalDevice::add(PhysicalDevice *device)
 {
@@ -78,7 +80,7 @@ void PhysicalDevice::add(PhysicalDevice *device)
 
 PhysicalDevice *PhysicalDevice::find(const char *name)
 {
-    for (ListNode<PhysicalDevice *> *it = _list.begin(); it != _list.end(); it = it->getNext())
+    for (Common::ListNode<PhysicalDevice *> *it = _list.begin(); it != _list.end(); it = it->getNext())
     {
         if ((**it)->match(name))
         {

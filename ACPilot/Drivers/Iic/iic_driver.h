@@ -15,65 +15,67 @@
 
 #endif
 
-#include "type.h"
-#include "Mutex/ac_mutex.h"
-#include "ac_list.h"
-#include "Io/io_interface.h"
+#include "Type/type.h"
+#include "Mutex/mutex.h"
+#include "List/ac_list.h"
+#include "Io/io.h"
 
-class IicBus
+namespace Driver
 {
-    friend class IicBusManager;
+    class IicBus
+    {
+        friend class IicBusManager;
 
-public:
-    explicit IicBus(IicBusHandle *handle);
+    public:
+        explicit IicBus(IicBusHandle *handle);
 
-    AC_RET init() const;
+        AC_RET init() const;
 
-    bool matchHandle(IicBusHandle *handle) const;
+        bool matchHandle(IicBusHandle *handle) const;
 
-    AC_RET lock(uint32_t timeout = AC_FOREVER);
+        AC_RET lock(uint32_t timeout = AC_FOREVER);
 
-    void unlock();
+        void unlock();
 
-    IicBusHandle *handle = nullptr;
-protected:
+        IicBusHandle *handle = nullptr;
+    protected:
 #ifdef C_STM32
-    AC_RET waitWriteFinish(uint32_t timeout = AC_FOREVER);
-    AC_RET waitReadFinish(uint32_t timeout = AC_FOREVER);
-    void writeFinishNotify();
-    void readFinishNotify();
+        AC_RET waitWriteFinish(uint32_t timeout = AC_FOREVER);
+        AC_RET waitReadFinish(uint32_t timeout = AC_FOREVER);
+        void writeFinishNotify();
+        void readFinishNotify();
 #endif
-private:
+    private:
 #ifdef C_STM32
-    AcBinSemaphore _read_sem;
-    AcBinSemaphore _write_sem;
+        AcBinSemaphore _read_sem;
+        AcBinSemaphore _write_sem;
 #endif
-    AcMutex _mutex;
-};
+        Osal::Mutex _mutex;
+    };
 
-class Iic : public IoInterface
-{
-public:
-    Iic(IicBus *bus, IicHandle *handle);
+    class Iic : public Interface::IO
+    {
+    public:
+        Iic(IicBus *bus, IicHandle *handle);
 
-    AC_RET init();
+        AC_RET init();
 
-    AC_RET readReg(uint8_t address, uint8_t &value, uint32_t timeout) override;
+        AC_RET readReg(uint8_t address, uint8_t &value, uint32_t timeout) override;
 
-    AC_RET readBytes(uint8_t address, uint8_t len, uint8_t *dataBuf, uint32_t timeout) override;
+        AC_RET readBytes(uint8_t address, uint8_t len, uint8_t *dataBuf, uint32_t timeout) override;
 
-    AC_RET readBytesDMA(uint8_t address, uint8_t len, uint8_t *dataBuf, uint32_t timeout) override;
+        AC_RET readBytesDMA(uint8_t address, uint8_t len, uint8_t *dataBuf, uint32_t timeout) override;
 
-    AC_RET writeReg(uint8_t address, uint8_t value, uint32_t timeout) override;
+        AC_RET writeReg(uint8_t address, uint8_t value, uint32_t timeout) override;
 
-    AC_RET writeBytes(uint8_t address, uint8_t len, uint8_t *value, uint32_t timeout) override;
+        AC_RET writeBytes(uint8_t address, uint8_t len, uint8_t *value, uint32_t timeout) override;
 
-    AC_RET writeBytesDMA(uint8_t address, uint8_t len, uint8_t *value, uint32_t timeout) override;
+        AC_RET writeBytesDMA(uint8_t address, uint8_t len, uint8_t *value, uint32_t timeout) override;
 
-private:
-    IicBus *_bus = nullptr;
-    IicHandle *_handle = nullptr;
-};
-
+    private:
+        IicBus *_bus = nullptr;
+        IicHandle *_handle = nullptr;
+    };
+}
 
 #endif //IIC_DRIVER_H_

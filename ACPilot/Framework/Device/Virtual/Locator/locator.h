@@ -8,14 +8,16 @@
 #include "Device/device_data.h"
 #include "Device/Virtual/virtual_device.h"
 
-class Locator : public VirtualDevice
+namespace Framework
 {
-public:
-    explicit Locator(const char *name);
+    class Locator : public VirtualDevice
+    {
+    public:
+        explicit Locator(const char *name);
 
-    AC_RET read(PosData &data);
+        AC_RET read(PosData &data);
 
-    ~Locator() = default;
-};
-
+        ~Locator() = default;
+    };
+}
 #endif //LOCATOR_H_

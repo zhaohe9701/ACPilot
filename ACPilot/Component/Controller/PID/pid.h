@@ -7,74 +7,78 @@
 
 #include "Filter/filter.h"
 
-class Proportion
+namespace Component
 {
-public:
-    void init(float gain);
+    class Proportion
+    {
+    public:
+        void init(float gain);
 
-    void reset(float gain);
+        void reset(float gain);
 
-    float calculate(float error);
+        float calculate(float error);
 
-private:
-    float _gain = 1.0f;
-};
+    private:
+        float _gain = 1.0f;
+    };
 
-class Integral
-{
-public:
-    void init(float gain, float limit);
+    class Integral
+    {
+    public:
+        void init(float gain, float limit);
 
-    void reset(float gain, float limit);
+        void reset(float gain, float limit);
 
-    void clear();
+        void clear();
 
-    float calculate(float error, float dt);
+        float calculate(float error, float dt);
 
-private:
-    float _gain = 0.0f;
-    float _limit = 1.0f;
-    float _sum = 0.0f;
-};
+    private:
+        float _gain = 0.0f;
+        float _limit = 1.0f;
+        float _sum = 0.0f;
+    };
 
-class Differential
-{
-public:
-    void init(float gain);
+    class Differential
+    {
+    public:
+        void init(float gain);
 
-    void reset(float gain);
+        void reset(float gain);
 
-    float calculate(float error, float dt);
+        float calculate(float error, float dt);
 
-    float getGain();
-private:
-    float _gain = 0.0f;
-    float _last_error = 0.0f;
-};
+        float getGain();
+
+    private:
+        float _gain = 0.0f;
+        float _last_error = 0.0f;
+    };
 
 
-class Pid
-{
-public:
-    Pid() = default;
+    class Pid
+    {
+    public:
+        Pid() = default;
 
-    explicit Pid(Filter *diff_filter);
+        explicit Pid(Filter *diff_filter);
 
-    void init(float kp, float ki, float kd, float out_limit, float int_limit);
+        void init(float kp, float ki, float kd, float out_limit, float int_limit);
 
-    float output(float error, float d_error, float dt);
+        float output(float error, float d_error, float dt);
 
-    float output(float error, float dt);
+        float output(float error, float dt);
 
-    void reset(float kp, float ki, float kd, float out_limit, float int_limit);
+        void reset(float kp, float ki, float kd, float out_limit, float int_limit);
 
-    void clear();
-private:
-    Proportion _proportion;
-    Integral _integral;
-    Differential _differential;
-    Filter *_diff_filter = nullptr;
-    float _out_limit = 0.0f;
-};
+        void clear();
 
+    private:
+        Proportion _proportion;
+        Integral _integral;
+        Differential _differential;
+        Filter *_diff_filter = nullptr;
+        float _out_limit = 0.0f;
+    };
+}
 #endif //PID_H_

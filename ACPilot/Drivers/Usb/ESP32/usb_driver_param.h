@@ -15,6 +15,10 @@
 #include <stdint.h>
 #include "Interface/com_interface.h"
 #include "config.h"
-#include "type.h"
+#include "Type/type.h"
 
+namespace Driver
+{
+
+}
 #endif

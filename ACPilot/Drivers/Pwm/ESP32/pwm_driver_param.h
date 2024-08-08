@@ -14,16 +14,20 @@
 #include "driver/ledc.h"
 #include <string.h>
 
-struct PwmHandle
+namespace Driver
 {
-    PwmHandle();
+    struct PwmHandle
+    {
+        PwmHandle();
 
-    ledc_channel_config_t channel_config{};
-};
+        ledc_channel_config_t channel_config{};
+    };
 
-struct PwmTimerHandle
-{
-    PwmTimerHandle();
-    ledc_timer_config_t timer_config{};
-};
+    struct PwmTimerHandle
+    {
+        PwmTimerHandle();
+
+        ledc_timer_config_t timer_config{};
+    };
+}
 #endif

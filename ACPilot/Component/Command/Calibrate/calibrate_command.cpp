@@ -3,20 +3,22 @@
 //
 
 #include "calibrate_command.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 #include "Notify/notify.h"
 
 #define MAX_CALI_REPLY_BUF_LEN 128
 
+using namespace Component;
+
 CalibrateCommand::CalibrateCommand()
 {
     strncpy(_cmd, "cali", CMD_MAX_LEN);
-    _pool = MemoryPool::getGeneral(MAX_CALI_REPLY_BUF_LEN);
+    _pool = Utils::MemoryPool::getGeneral(MAX_CALI_REPLY_BUF_LEN);
     if (nullptr == _pool)
     {
         BASE_ERROR("alloc error");
     }
-    _cali_cmd_mailbox = Mailbox<CaliMessage>::find("cali");
+    _cali_cmd_mailbox = Utils::Mailbox<CaliMessage>::find("cali");
     if (nullptr == _cali_cmd_mailbox)
     {
         BASE_ERROR("cali mailbox not find");
@@ -47,12 +49,12 @@ int CalibrateCommand::commandMain(int argc, char **argv)
 
     if (0 == strncmp(argv[1], "advanced", CMD_MAX_LEN))
     {
-        Notify::notify(CALI_COMMAND_EVENT);
+        Utils::Notify::notify(CALI_COMMAND_EVENT);
         cali_message.cmd = CALI_CMD_ADVANCED;
         _cali_cmd_mailbox->push(&cali_message);
     } else if (0 == strncmp(argv[1], "simple", CMD_MAX_LEN))
     {
-        Notify::notify(CALI_COMMAND_EVENT);
+        Utils::Notify::notify(CALI_COMMAND_EVENT);
         cali_message.cmd = CALI_CMD_SIMPLE;
         _cali_cmd_mailbox->push(&cali_message);
     } else if (0 == strncmp(argv[1], "stop", CMD_MAX_LEN))

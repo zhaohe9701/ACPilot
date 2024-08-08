@@ -15,36 +15,38 @@
 
 #define MS5611_ADDR 0xEE // MS5611的地址
 
-class Ms5611 : public Baro
+namespace Component
 {
-public:
-    explicit Ms5611(IoInterface *interface);
+    class Ms5611 : public Framework::Baro
+    {
+    public:
+        explicit Ms5611(Interface::IO *interface);
 
-    AC_RET init() override;
+        AC_RET init() override;
 
-    AC_RET getTemp(TempData &data) override;
+        AC_RET getTemp(Framework::TempData &data) override;
 
-    AC_RET getPressure(AtaData &data) override;
+        AC_RET getPressure(Framework::AtaData &data) override;
 
-    AC_RET getAltitude(AltitudeData &data) override;
+        AC_RET getAltitude(Framework::AltitudeData &data) override;
 
-    AC_RET updateTemp() override;
+        AC_RET updateTemp() override;
 
-    AC_RET updatePressure() override;
+        AC_RET updatePressure() override;
 
-    AC_RET updateAltitude() override;
+        AC_RET updateAltitude() override;
 
-    ~Ms5611() = default;
+        ~Ms5611() = default;
 
-private:
-    uint16_t _calculation[8] = {0};
-    int64_t _dt = 0.0f;
+    private:
+        uint16_t _calculation[8] = {0};
+        int64_t _dt = 0.0f;
 
-    bool _checkCRC();
+        bool _checkCRC();
 
-    void _baroWriteReg(uint8_t address, uint8_t length, uint8_t *value);
+        void _baroWriteReg(uint8_t address, uint8_t length, uint8_t *value);
 
-    void _baroReadReg(uint8_t address, uint8_t length, uint8_t *buf);
-};
-
+        void _baroReadReg(uint8_t address, uint8_t length, uint8_t *buf);
+    };
+}
 #endif

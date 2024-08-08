@@ -12,53 +12,55 @@
 #ifndef IMU_H_
 #define IMU_H_
 
-#include "IO/io_interface.h"
-#include "Mutex/ac_mutex.h"
+#include "IO/io.h"
+#include "Mutex/mutex.h"
 #include "Device/device_data.h"
 #include "Device/Physical/physical_device.h"
 
-
-class Imu : public PhysicalDevice
+namespace Framework
 {
-public:
-    Imu() = default;
 
-    virtual AC_RET init();
+    class Imu : public PhysicalDevice
+    {
+    public:
+        Imu() = default;
 
-    virtual uint8_t getId();
+        virtual AC_RET init();
 
-    virtual AC_RET getTemp(TempData &data);
+        virtual uint8_t getId();
 
-    virtual AC_RET getGyro(GyroData &data);
+        virtual AC_RET getTemp(TempData &data);
 
-    virtual AC_RET getAcc(AccData &data);
+        virtual AC_RET getGyro(GyroData &data);
 
-    virtual AC_RET getMag(MagData &data);
+        virtual AC_RET getAcc(AccData &data);
 
-    virtual AC_RET updateTemp();
+        virtual AC_RET getMag(MagData &data);
 
-    virtual AC_RET updateGyro();
+        virtual AC_RET updateTemp();
 
-    virtual AC_RET updateAcc();
+        virtual AC_RET updateGyro();
 
-    virtual AC_RET updateMag();
+        virtual AC_RET updateAcc();
 
-    AC_RET readAccelerometer(AccData &data) override;
+        virtual AC_RET updateMag();
 
-    AC_RET readGyroscope(GyroData &data) override;
+        AC_RET readAccelerometer(AccData &data) override;
 
-    AC_RET readMagnetometer(MagData &data) override;
+        AC_RET readGyroscope(GyroData &data) override;
 
-    AC_RET readThermometer(TempData &data) override;
+        AC_RET readMagnetometer(MagData &data) override;
 
-protected:
-    uint8_t _id = 0x00;
-    IoInterface *_interface = nullptr;
+        AC_RET readThermometer(TempData &data) override;
 
-    TempData _tmp_data{0};
-    GyroData _gyro_data{0.0f, 0.0f, 0.0f};
-    AccData _acc_data{0.0f, 0.0f, 0.0f};
-    MagData _mag_data{0.0f, 0.0f, 0.0f};
-};
+    protected:
+        uint8_t _id = 0x00;
+        Interface::IO *_interface = nullptr;
 
+        TempData _tmp_data{0};
+        GyroData _gyro_data{0.0f, 0.0f, 0.0f};
+        AccData _acc_data{0.0f, 0.0f, 0.0f};
+        MagData _mag_data{0.0f, 0.0f, 0.0f};
+    };
+}
 #endif

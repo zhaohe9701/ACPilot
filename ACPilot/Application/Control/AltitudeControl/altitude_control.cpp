@@ -9,33 +9,33 @@
 #include "dm_template.h"
 #include "DataModule/data_module.h"
 
-Mailbox<AltitudeData> *AltitudeControl::_baro_mailbox = nullptr;
-AcThread *AltitudeControl::_baro_task = nullptr;
-AltitudeEstimate *AltitudeControl::_estimator = nullptr;
-Vec3 AltitudeControl::_acc_bias{};
+Utils::Mailbox<Framework::AltitudeData> *AltitudeControl::_baro_mailbox = nullptr;
+Osal::AcThread *AltitudeControl::_baro_task = nullptr;
+Component::AltitudeEstimate *AltitudeControl::_estimator = nullptr;
+Common::Vec3 AltitudeControl::_acc_bias{};
 uint64_t AltitudeControl::last_time = 0;
 float AltitudeControl::_height_bias = 0.f;
 float AltitudeControl::_aim_height = 0.f;
 float AltitudeControl::_base_throttle = 30.f;
 bool AltitudeControl::_isTakeOff = false;
-Pid *AltitudeControl::_vel_pid = nullptr;
-Pid *AltitudeControl::_pos_pid = nullptr;
+Component::Pid *AltitudeControl::_vel_pid = nullptr;
+Component::Pid *AltitudeControl::_pos_pid = nullptr;
 
 AC_RET AltitudeControl::init()
 {
-    _baro_mailbox = new Mailbox<AltitudeData>("altitude", 1);
-    _estimator = new AltitudeEstimate();
+    _baro_mailbox = new Utils::Mailbox<Framework::AltitudeData>("altitude", 1);
+    _estimator = new Component::AltitudeEstimate();
     _estimator->init(0.03f, 0.2f, 0.0001, 0.00001, 0.0001);
-    _baro_task = new AcThread("altitude", BARO_TASK_STACK_SIZE, BARO_TASK_PRIO, BARO_TASK_CORE);
+    _baro_task = new Osal::AcThread("altitude", BARO_TASK_STACK_SIZE, BARO_TASK_PRIO, BARO_TASK_CORE);
     _baro_task->run(_altitudeSensorUpdate, nullptr);
 
-    _vel_pid = new Pid();
-    _pos_pid = new Pid();
+    _vel_pid = new Component::Pid();
+    _pos_pid = new Component::Pid();
 
     PidConfig config;
-    RETURN_CHECK(DataModule::read("/controller/pos[2]/1", &config, sizeof(PidConfig)));
+    RETURN_CHECK(Framework::DataModule::read("/controller/pos[2]/1", &config, sizeof(PidConfig)));
     _pos_pid->init(config.kp, config.ki, config.kd, config.out_limit, config.int_limit);
-    RETURN_CHECK(DataModule::read("/controller/pos[2]/2", &config, sizeof(PidConfig)));
+    RETURN_CHECK(Framework::DataModule::read("/controller/pos[2]/2", &config, sizeof(PidConfig)));
     _vel_pid->init(config.kp, config.ki, config.kd, config.out_limit, config.int_limit);
 
     return AC_OK;
@@ -44,22 +44,22 @@ AC_RET AltitudeControl::init()
     return AC_ERROR;
 }
 
-void AltitudeControl::setAccBias(Vec3 &acc_bias)
+void AltitudeControl::setAccBias(Common::Vec3 &acc_bias)
 {
     _acc_bias = acc_bias;
 }
 
-AC_RET AltitudeControl::step(ExpectState &expect_state, AircraftState &state)
+AC_RET AltitudeControl::step(Component::ExpectState &expect_state, AircraftState &state)
 {
     float x[3] = {0.f};
     float aim_vel = 0.f;
-    AltitudeData altitude;
+    Framework::AltitudeData altitude;
     uint64_t current_time = 0;
     uint32_t delta_time = 0;
     /* 获取气压数据 */
     RETURN_CHECK(_baro_mailbox->copy(&altitude, AC_IMMEDIATELY));
 
-    current_time = HardwareTimer::getCurrentTime();
+    current_time = Driver::HardwareTimer::getCurrentTime();
     if (last_time == 0)
     {
         last_time = current_time;
@@ -121,9 +121,9 @@ AC_RET AltitudeControl::step(ExpectState &expect_state, AircraftState &state)
 void AltitudeControl::reset()
 {
     PidConfig config;
-    RETURN_CHECK(DataModule::read("/controller/pos[2]/1", &config, sizeof(PidConfig)));
+    RETURN_CHECK(Framework::DataModule::read("/controller/pos[2]/1", &config, sizeof(PidConfig)));
     _pos_pid->init(config.kp, config.ki, config.kd, config.out_limit, config.int_limit);
-    RETURN_CHECK(DataModule::read("/controller/pos[2]/2", &config, sizeof(PidConfig)));
+    RETURN_CHECK(Framework::DataModule::read("/controller/pos[2]/2", &config, sizeof(PidConfig)));
     _vel_pid->init(config.kp, config.ki, config.kd, config.out_limit, config.int_limit);
     return;
     error:
@@ -138,7 +138,7 @@ void AltitudeControl::clear()
     }
     _vel_pid->clear();
     _pos_pid->clear();
-    AltitudeData altitude;
+    Framework::AltitudeData altitude;
     _baro_mailbox->copy(&altitude, AC_IMMEDIATELY);
     _height_bias = altitude.x;
 
@@ -149,12 +149,13 @@ void AltitudeControl::clear()
 
 void AltitudeControl::_altitudeSensorUpdate(void *param)
 {
-    Altimeter *altimeter = VirtualDevice::find<Altimeter>("altimeter", ALTIMETER_DEV);
-    AltitudeData altitude;
+    Framework::Altimeter *altimeter = Framework::VirtualDevice::find<Framework::Altimeter>("altimeter",
+                                                                                           Framework::ALTIMETER_DEV);
+    Framework::AltitudeData altitude;
     if (altimeter == nullptr)
     {
         BASE_ERROR("altimeter not found");
-        AcThread::killSelf();
+        Osal::AcThread::killSelf();
         return;
     }
 

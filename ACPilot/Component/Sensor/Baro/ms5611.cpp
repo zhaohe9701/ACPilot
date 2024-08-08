@@ -10,7 +10,7 @@
  */
 #include "ms5611.h"
 #include "os.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 #include <math.h>
 #include <string.h>
 
@@ -30,13 +30,15 @@
 #define OSR_4096_D2     0x58
 #define PROM_READ       0xA0 // Prom read command
 
-Ms5611::Ms5611(IoInterface *interface)
+using namespace Component;
+
+Ms5611::Ms5611(Interface::IO *interface)
 {
     _interface = interface;
     strncpy(_name, "MS5611", sizeof(_name));
-    _ability = (1U << BAROMETER_DEV) |
-               (1U << ALTIMETER_DEV) |
-               (1U << THERMOMETER_DEV);
+    _ability = (1U << Framework::BAROMETER_DEV) |
+               (1U << Framework::ALTIMETER_DEV) |
+               (1U << Framework::THERMOMETER_DEV);
 }
 
 AC_RET Ms5611::init()
@@ -58,19 +60,19 @@ AC_RET Ms5611::init()
     return AC_OK;
 }
 
-AC_RET Ms5611::getTemp(TempData &data)
+AC_RET Ms5611::getTemp(Framework::TempData &data)
 {
     data = _temperature_data;
     return AC_OK;
 }
 
-AC_RET Ms5611::getPressure(AtaData &data)
+AC_RET Ms5611::getPressure(Framework::AtaData &data)
 {
     data = _pressure_data;
     return AC_OK;
 }
 
-AC_RET Ms5611::getAltitude(AltitudeData &data)
+AC_RET Ms5611::getAltitude(Framework::AltitudeData &data)
 {
     data = _altitude_data;
     return AC_OK;

@@ -8,13 +8,15 @@
 
 #include "Command/command.h"
 
-class NvsCommand : public Command
+namespace Component
 {
-public:
-    NvsCommand();
+    class NvsCommand : public Service::Command
+    {
+    public:
+        NvsCommand();
 
-    int commandMain(int argc, char *argv[]) override;
-};
-
+        int commandMain(int argc, char *argv[]) override;
+    };
+}
 
 #endif //NVS_COMMAND_H

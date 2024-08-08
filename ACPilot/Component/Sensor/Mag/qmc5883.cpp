@@ -5,7 +5,9 @@
 #include <cstring>
 #include "qmc5883.h"
 #include "os.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
+
+using namespace Component;
 
 #define QMC5883L_DATA_X_LSB			0x00		//X LSB			只读
 #define QMC5883L_DATA_X_MSB			0x01		//X MSB			只读
@@ -21,7 +23,7 @@
 #define QMC5883L_SET_RESET_PERIOD	0x0B		//时间寄存器，设置为0x01
 #define QMC5883L_ID_REG				0x0D		//芯片ID		只读
 
-Qmc5883::Qmc5883(IoInterface *interface)
+Qmc5883::Qmc5883(Interface::IO *interface)
 {
     _interface = interface;
     strncpy(_name, "Qml5883", sizeof(_name));
@@ -61,7 +63,7 @@ AC_RET Qmc5883::updateMag()
     return AC_OK;
 }
 
-AC_RET Qmc5883::getMag(MagData &data)
+AC_RET Qmc5883::getMag(Framework::MagData &data)
 {
     data = _mag_data;
     return AC_OK;

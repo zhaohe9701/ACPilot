@@ -3,9 +3,11 @@
 //
 
 #include "pwm_motor.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 
-PwmMotor::PwmMotor(Pwm *pwm, uint8_t id) : Motor(id)
+using namespace Component;
+
+PwmMotor::PwmMotor(Driver::Pwm *pwm, uint8_t id) : Motor(id)
 {
     if (pwm == nullptr)
     {

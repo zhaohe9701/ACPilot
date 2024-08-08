@@ -14,17 +14,18 @@
 #include <string.h>
 #include "driver/uart.h"
 #include "driver/gpio.h"
-
-struct UartHandle
+namespace Driver
 {
-    UartHandle();
+    struct UartHandle
+    {
+        UartHandle();
 
-    uart_config_t config{};
-    uart_port_t index = UART_NUM_0;
-    gpio_num_t tx = GPIO_NUM_NC;
-    gpio_num_t rx = GPIO_NUM_NC;
-    gpio_num_t cts = GPIO_NUM_NC;
-    gpio_num_t rts = GPIO_NUM_NC;
-};
-
+        uart_config_t config{};
+        uart_port_t index = UART_NUM_0;
+        gpio_num_t tx = GPIO_NUM_NC;
+        gpio_num_t rx = GPIO_NUM_NC;
+        gpio_num_t cts = GPIO_NUM_NC;
+        gpio_num_t rts = GPIO_NUM_NC;
+    };
+}
 #endif

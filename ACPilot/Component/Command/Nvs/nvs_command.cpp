@@ -3,15 +3,17 @@
 //
 
 #include "nvs_command.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 #include "Nvs/nvs_driver.h"
 
 #define MAX_NVS_REPLY_BUF_LEN 128
 
+using namespace Component;
+
 NvsCommand::NvsCommand()
 {
     strncpy(_cmd, "nvs", CMD_MAX_LEN);
-    _pool = MemoryPool::getGeneral(MAX_NVS_REPLY_BUF_LEN);
+    _pool = Utils::MemoryPool::getGeneral(MAX_NVS_REPLY_BUF_LEN);
     if (nullptr == _pool)
     {
         BASE_ERROR("alloc error");
@@ -34,7 +36,7 @@ int NvsCommand::commandMain(int argc, char **argv)
 
     if (0 == strncmp(argv[1], "info", CMD_MAX_LEN))
     {
-        if (AC_OK != Nvs::info(_res_buf, MAX_NVS_REPLY_BUF_LEN))
+        if (AC_OK != Driver::Nvs::info(_res_buf, MAX_NVS_REPLY_BUF_LEN))
         {
             snprintf(_res_buf, MAX_NVS_REPLY_BUF_LEN, "info failed\n");
             return -1;
@@ -46,7 +48,7 @@ int NvsCommand::commandMain(int argc, char **argv)
             snprintf(_res_buf, MAX_NVS_REPLY_BUF_LEN, "illegal param\n");
             return -1;
         }
-        if (AC_OK != Nvs::eraseAll(argv[2]))
+        if (AC_OK != Driver::Nvs::eraseAll(argv[2]))
         {
             snprintf(_res_buf, MAX_NVS_REPLY_BUF_LEN, "erase failed\n");
             return -1;

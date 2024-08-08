@@ -15,25 +15,27 @@
 
 #endif
 
-#include "ac_list.h"
-#include "Semaphore/ac_semaphore.h"
+#include "List/ac_list.h"
+#include "Semaphore/semaphore.h"
 #include "Gpio/gpio_driver.h"
 
-class ExtInterrupt
+namespace Driver
 {
-public:
-    explicit ExtInterrupt(ExtInterruptHandle *handle);
+    class ExtInterrupt
+    {
+    public:
+        explicit ExtInterrupt(ExtInterruptHandle *handle);
 
-    AC_RET init();
+        AC_RET init();
 
-    void notify();
+        void notify();
 
-    AC_RET waitNotify(uint32_t timeout = AC_FOREVER);
+        AC_RET waitNotify(uint32_t timeout = AC_FOREVER);
 
-private:
-    ExtInterruptHandle *_handle = nullptr;
-    AcBinSemaphore sem;
+    private:
+        ExtInterruptHandle *_handle = nullptr;
+        Osal::BinSemaphore sem;
 
-};
-
+    };
+}
 #endif //INTERRUPT_DRIVER_H_

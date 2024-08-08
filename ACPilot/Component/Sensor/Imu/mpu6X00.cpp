@@ -12,6 +12,8 @@
 #include <string.h>
 #include "mpu6X00.h"
 
+using namespace Component;
+
 #define SELF_TESTX_REG          0X0D    //自检寄存器X
 #define SELF_TESTY_REG          0X0E    //自检寄存器Y
 #define SELF_TESTZ_REG          0X0F    //自检寄存器Z
@@ -79,13 +81,13 @@
 #define FIFO_RW_REG             0X74    // FIFO读写寄存器
 #define DEVICE_ID_REG           0X75    //器件ID寄存器,who am i寄存器
 
-Mpu6X00::Mpu6X00(IoInterface *interface)
+Mpu6X00::Mpu6X00(Interface::IO *interface)
 {
     _interface = interface;
     strncpy(_name, "MPU6X00", sizeof(_name));
-    _ability = (1U << ACCELEROMETER_DEV) |
-               (1U << THERMOMETER_DEV) |
-               (1U << GYROSCOPE_DEV);
+    _ability = (1U << Framework::ACCELEROMETER_DEV) |
+               (1U << Framework::THERMOMETER_DEV) |
+               (1U << Framework::GYROSCOPE_DEV);
 }
 
 AC_RET Mpu6X00::init()
@@ -170,19 +172,19 @@ AC_RET Mpu6X00::updateAcc()
     return AC_OK;
 }
 
-AC_RET Mpu6X00::getTemp(TempData &data)
+AC_RET Mpu6X00::getTemp(Framework::TempData &data)
 {
     data = _tmp_data;
     return AC_OK;
 }
 
-AC_RET Mpu6X00::getGyro(GyroData &data)
+AC_RET Mpu6X00::getGyro(Framework::GyroData &data)
 {
     data = _gyro_data;
     return AC_OK;
 }
 
-AC_RET Mpu6X00::getAcc(AccData &data)
+AC_RET Mpu6X00::getAcc(Framework::AccData &data)
 {
     data = _acc_data;
     return AC_OK;

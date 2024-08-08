@@ -13,30 +13,33 @@
 
 
 #include "config.h"
-#include "type.h"
-#include "Com/com_interface.h"
+#include "Type/type.h"
+#include "Com/com.h"
 #include "receive_parser.h"
-#include "Queue/ac_queue.h"
-#include "Mail/mailbox.h"
-#include "ac_list.h"
-#include "Thread/ac_thread.h"
+#include "Queue/queue.h"
+#include "Mailbox/mailbox.h"
+#include "List/ac_list.h"
+#include "Thread/thread.h"
 
-class MessageReceiveServer
+namespace Service
 {
-public:
-    static AC_RET init();
-    static AC_RET start();
-    static void add(MessageReceiveParser *parser);
+    class MessageReceiveServer
+    {
+    public:
+        static AC_RET init();
 
-private:
-    static AC_RET _select(ComMessage *message, uint32_t timeout = AC_FOREVER);
+        static AC_RET start();
 
-    static List<MessageReceiveParser *> _parser_list;
-    static Mailbox<ComMessage> *_mailbox;
-    static AcThread *_receive_task;
-    static void _loop(void *param);
+        static void add(MessageReceiveParser *parser);
 
+    private:
+        static AC_RET _select(ComMessage *message, uint32_t timeout = AC_FOREVER);
 
-};
+        static Common::List<MessageReceiveParser *> _parser_list;
+        static Utils::Mailbox<ComMessage> *_mailbox;
+        static Osal::AcThread *_receive_task;
 
+        static void _loop(void *param);
+    };
+}
 #endif

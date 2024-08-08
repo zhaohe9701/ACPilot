@@ -11,6 +11,8 @@
 #include "icm20948.h"
 #include <string.h>
 
+using namespace Component;
+
 #define READ 0x80
 #define WRITE 0x7f
 
@@ -169,7 +171,7 @@
 
 /***********************************/
 
-Icm20948::Icm20948(IoInterface *interface)
+Icm20948::Icm20948(Interface::IO *interface)
 {
     _interface = interface;
     strncpy(_name, "ICM20602", sizeof(_name));
@@ -177,10 +179,10 @@ Icm20948::Icm20948(IoInterface *interface)
     _WRITE = WRITE;
     _REG_BANK_SEL = REG_BANK_SEL;
     _BANK0 = BANK0;
-    _ability = (1U << ACCELEROMETER_DEV) |
-               (1U << THERMOMETER_DEV) |
-               (1U << GYROSCOPE_DEV) |
-               (1U << MAGNETOMETER_DEV);
+    _ability = (1U << Framework::ACCELEROMETER_DEV) |
+               (1U << Framework::THERMOMETER_DEV) |
+               (1U << Framework::GYROSCOPE_DEV) |
+               (1U << Framework::MAGNETOMETER_DEV);
 
 }
 
@@ -275,19 +277,19 @@ AC_RET Icm20948::updateAcc()
     return AC_OK;
 }
 
-AC_RET Icm20948::getTemp(TempData &data)
+AC_RET Icm20948::getTemp(Framework::TempData &data)
 {
     data = _tmp_data;
     return AC_OK;
 }
 
-AC_RET Icm20948::getGyro(GyroData &data)
+AC_RET Icm20948::getGyro(Framework::GyroData &data)
 {
     data = _gyro_data;
     return AC_OK;
 }
 
-AC_RET Icm20948::getAcc(AccData &data)
+AC_RET Icm20948::getAcc(Framework::AccData &data)
 {
     data = _acc_data;
     return AC_OK;

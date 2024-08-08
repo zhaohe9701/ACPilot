@@ -7,31 +7,33 @@
 
 #include "Command/command.h"
 
-enum CaliCmd
+namespace Component
 {
-    CALI_CMD_ADVANCED,
-    CALI_CMD_SIMPLE,
-    CALI_CMD_SAMPLING,
-    CALI_CMD_SAVE,
-    CALI_CMD_STOP,
-};
+    enum CaliCmd
+    {
+        CALI_CMD_ADVANCED,
+        CALI_CMD_SIMPLE,
+        CALI_CMD_SAMPLING,
+        CALI_CMD_SAVE,
+        CALI_CMD_STOP,
+    };
 
-struct CaliMessage
-{
-    uint8_t port = 0x0;
-    CaliCmd cmd = CALI_CMD_STOP;
-};
+    struct CaliMessage
+    {
+        uint8_t port = 0x0;
+        CaliCmd cmd = CALI_CMD_STOP;
+    };
 
-class CalibrateCommand : public Command
-{
-public:
-    CalibrateCommand();
+    class CalibrateCommand : public Service::Command
+    {
+    public:
+        CalibrateCommand();
 
-    int commandMain(int argc, char *argv[]) override;
+        int commandMain(int argc, char *argv[]) override;
 
-private:
-    Mailbox<CaliMessage> *_cali_cmd_mailbox = nullptr;
-};
-
+    private:
+        Utils::Mailbox<CaliMessage> *_cali_cmd_mailbox = nullptr;
+    };
+}
 
 #endif //CALIBRATE_COMMAND_H_

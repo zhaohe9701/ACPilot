@@ -5,10 +5,10 @@
 #ifndef POSE_CALCULATING_H_
 #define POSE_CALCULATING_H_
 
-#include "type.h"
+#include "Type/type.h"
 #include "AHRS/attitude.h"
-#include "Mail/mailbox.h"
-#include "Thread/ac_thread.h"
+#include "Mailbox/mailbox.h"
+#include "Thread/thread.h"
 #include "Device/Virtual/Accelerometer/accelerometer.h"
 #include "Device/Virtual/Gyroscope/gyroscope.h"
 #include "AircraftState/aircraft_state.h"
@@ -23,10 +23,10 @@ public:
     static volatile bool run;
 private:
 
-    static Mailbox<PoseData> *mailbox;
-    static Accelerometer *acc;
-    static Gyroscope *gyro;
-    static Attitude *attitude;
+    static Utils::Mailbox<Component::PoseData> *mailbox;
+    static Framework::Accelerometer *acc;
+    static Framework::Gyroscope *gyro;
+    static Component::Attitude *attitude;
     static uint64_t last_time;
 };
 

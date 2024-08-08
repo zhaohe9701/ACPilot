@@ -4,7 +4,9 @@
 #include <math.h>
 #include "rotary_trans.h"
 
-void RotaryTrans::cali(Vec3 *data, uint16_t num, DeviceCaliData &result)
+using namespace Component;
+
+void RotaryTrans::cali(Common::Vec3 *data, uint16_t num, Framework::DeviceCaliData &result)
 {
     float absxk;
     float b_y;

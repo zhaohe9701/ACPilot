@@ -3,8 +3,9 @@
 //
 #include "Interrupt/interrupt_driver.h"
 #include "driver/gpio.h"
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 
+using namespace Driver;
 void extInterruptHandle(void *arg)
 {
     ExtInterrupt *interrupt = (ExtInterrupt *) arg;

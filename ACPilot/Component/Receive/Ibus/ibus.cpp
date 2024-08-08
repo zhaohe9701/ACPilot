@@ -12,15 +12,17 @@
 #include <string.h>
 #include "ibus.h"
 #include "config.h"
-#include "Mail/mailbox.h"
+#include "Mailbox/mailbox.h"
 
 
 #define IBUS_HEAD1 0x20
 #define IBUS_HEAD2 0x40
 
+using namespace Component;
+
 IbusParser::IbusParser()
 {
-    _manager = Mailbox<RemoteData>::find("remote");
+    _manager = Utils::Mailbox<RemoteData>::find("remote");
 }
 
 bool IbusParser::match(ComMessage &message)

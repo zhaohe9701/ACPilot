@@ -5,7 +5,7 @@
 #ifndef MESSAGE_H_
 #define MESSAGE_H_
 
-#include "type.h"
+#include "Type/type.h"
 #include "config.h"
 
 #define MAX_ARG_NUM 8

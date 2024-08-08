@@ -5,7 +5,9 @@
 
 #include "bias_detect.h"
 
-void BiasDetect::cali(Vec3 *data, uint16_t num, DeviceCaliData &result)
+using namespace Component;
+
+void BiasDetect::cali(Common::Vec3 *data, uint16_t num, Framework::DeviceCaliData &result)
 {
     for (int i = 0; i < num; i++)
     {

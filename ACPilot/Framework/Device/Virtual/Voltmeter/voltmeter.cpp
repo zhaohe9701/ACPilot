@@ -4,6 +4,8 @@
 
 #include "voltmeter.h"
 
+using namespace Framework;
+
 Voltmeter::Voltmeter(const char *name) : VirtualDevice(name)
 {
     _type = VOLTMETER_DEV;

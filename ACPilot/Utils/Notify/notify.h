@@ -5,10 +5,13 @@
 #ifndef NOTIFY_H_
 #define NOTIFY_H_
 
-#include "type.h"
+#include "Type/type.h"
 #include "event_list.h"
-#include "ac_list.h"
-#include "Semaphore/ac_semaphore.h"
+#include "List/ac_list.h"
+#include "Semaphore/semaphore.h"
+
+namespace Utils
+{
 
 class NotifyToken
 {
@@ -20,7 +23,7 @@ public:
     Event getEvent();
 
 protected:
-    AcBinSemaphore _semaphore;
+    Osal::BinSemaphore _semaphore;
     Event _event = EVENT_NUM;
     TaskFunction _func = nullptr;
     void *_param = nullptr;
@@ -38,8 +41,9 @@ public:
     static void notify(Event event);
 
 private:
-    static List<NotifyToken *> _list[EVENT_NUM];
+    static Common::List<NotifyToken *> _list[EVENT_NUM];
 };
 
+}
 
 #endif //NOTIFY_H_

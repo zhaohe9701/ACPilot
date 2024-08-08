@@ -12,7 +12,7 @@
 #define IBUS_H_
 
 #include "message.h"
-#include "Mail/mailbox.h"
+#include "Mailbox/mailbox.h"
 #include "Receive/receive_parser.h"
 
 #define IBUS_HEAD1          0x20
@@ -26,16 +26,21 @@
 
 #define IBUS_TRANS_CHANNEL_FROM_INT_TO_FLOAT(x) ((float)((x) - 1500) / 1500.0f)
 
-
-
-class IbusParser : virtual public MessageReceiveParser
+namespace Component
 {
-public:
-    IbusParser();
-    bool match(ComMessage &message) override;
-    AC_RET parse(ComMessage &message, bool &free_message) override;
-private:
-    uint16_t _channel_data[IBUS_CHANNEL_NUM] = {0};
-    Mailbox<RemoteData> *_manager = nullptr;
-};
+
+    class IbusParser : virtual public Service::MessageReceiveParser
+    {
+    public:
+        IbusParser();
+
+        bool match(ComMessage &message) override;
+
+        AC_RET parse(ComMessage &message, bool &free_message) override;
+
+    private:
+        uint16_t _channel_data[IBUS_CHANNEL_NUM] = {0};
+        Utils::Mailbox<RemoteData> *_manager = nullptr;
+    };
+}
 #endif

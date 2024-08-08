@@ -9,13 +9,14 @@
  * Copyright (C) 2023 zhaohe. All rights reserved.
  */
 #include "crsf.h"
-#include "type.h"
+#include "Type/type.h"
 #include <string.h>
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 
 
 #ifdef C_ESP32
 
+using namespace Component;
 
 #pragma pack(1)
 struct CrsfPacket
@@ -83,7 +84,7 @@ AC_RET CrsfParser::_decode(const uint8_t *bin, uint16_t *axis, int bit_num, int 
 
 CrsfParser::CrsfParser()
 {
-    _mailbox = Mailbox<RemoteData>::find("remote");
+    _mailbox = Utils::Mailbox<RemoteData>::find("remote");
 }
 
 bool CrsfParser::match(ComMessage &message)

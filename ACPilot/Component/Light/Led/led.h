@@ -5,29 +5,30 @@
 #ifndef LED_H_
 #define LED_H_
 
-
 #include "Light/light.h"
-#include "Thread/ac_thread.h"
+#include "Thread/thread.h"
 #include "Gpio/gpio_driver.h"
 
-class Led : public Light
+namespace Component
 {
-public:
-    Led(Gpio *pin, GpioState on, LightMode mode, uint8_t id);
+    class Led : public Service::Light
+    {
+    public:
+        Led(Driver::Gpio *pin, Driver::GpioState on, Service::LightMode mode, uint8_t id);
 
-    AC_RET setMode(LightMode mode) override;
+        AC_RET setMode(Service::LightMode mode) override;
 
-    void setBright(uint8_t bright, uint16_t time);
+        void setBright(uint8_t bright, uint16_t time);
 
-private:
-    volatile LightMode _mode = LIGHT_KEEP_OFF;
-    AcThread *_thread = nullptr;
-    Gpio *_pin = nullptr;
-    GpioState _on = GPIO_RESET;
-    GpioState _off = GPIO_SET;
+    private:
+        volatile Service::LightMode _mode = Service::LIGHT_KEEP_OFF;
+        Osal::AcThread *_thread = nullptr;
+        Driver::Gpio *_pin = nullptr;
+        Driver::GpioState _on = Driver::GPIO_RESET;
+        Driver::GpioState _off = Driver::GPIO_SET;
 
-    static void _loop(void *param);
-};
-
+        static void _loop(void *param);
+    };
+}
 
 #endif //LED_H_

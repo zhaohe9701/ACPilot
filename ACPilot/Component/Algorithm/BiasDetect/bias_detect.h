@@ -7,10 +7,12 @@
 
 #include "Device/device_cali.h"
 
-class BiasDetect : public DeviceCali
+namespace Component
 {
-    void cali(Vec3 *data, uint16_t num, DeviceCaliData &result) override;
-};
-
+    class BiasDetect : public Framework::DeviceCali
+    {
+        void cali(Common::Vec3 *data, uint16_t num, Framework::DeviceCaliData &result) override;
+    };
+}
 
 #endif //BIAS_DETECT_H_

@@ -1,6 +1,6 @@
 set(COMMON_SOURCES
-        ${CMAKE_CURRENT_SOURCE_DIR}/type.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/default_debug.cpp
+        Type/type.cpp
+        Debug/default_debug.cpp
         )
 if(STM32)
         set(INCLUDES

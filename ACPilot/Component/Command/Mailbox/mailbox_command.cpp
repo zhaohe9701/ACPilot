@@ -4,15 +4,17 @@
 
 #include "mailbox_command.h"
 
-#include "default_debug.h"
+#include "Debug/default_debug.h"
 #include "Mailbox/mailbox_manager.h"
 
 #define MAX_MAILBOX_REPLY_BUF_LEN 1024
 
+using namespace Component;
+
 MailboxCommand::MailboxCommand()
 {
     strncpy(_cmd, "mailbox", CMD_MAX_LEN);
-    _pool = MemoryPool::getGeneral(MAX_MAILBOX_REPLY_BUF_LEN);
+    _pool = Utils::MemoryPool::getGeneral(MAX_MAILBOX_REPLY_BUF_LEN);
     if (nullptr == _pool)
     {
         BASE_ERROR("alloc error");

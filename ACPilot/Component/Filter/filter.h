@@ -11,14 +11,20 @@
 #ifndef FILTER_H_
 #define FILTER_H_
 
-class Filter
+namespace Component
 {
-public:
-    virtual void init(float sample_rate, float cutoff_freq) = 0;
-	virtual float apply(float sample) = 0;
-    virtual void reset() = 0;
-    virtual ~Filter() = default;
-};
 
+    class Filter
+    {
+    public:
+        virtual void init(float sample_rate, float cutoff_freq) = 0;
+
+        virtual float apply(float sample) = 0;
+
+        virtual void reset() = 0;
+
+        virtual ~Filter() = default;
+    };
+}
 
 #endif

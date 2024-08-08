@@ -3,9 +3,11 @@
 //
 #include "attitude_solver.h"
 
-void AttitudeSolver::transformBodyToEarth(Vec3 &vec)
+using namespace Component;
+
+void AttitudeSolver::transformBodyToEarth(Common::Vec3 &vec)
 {
-    Vec3 e;
+    Common::Vec3 e;
     e.x = vec.x * _r_mat[0][0] + vec.y * _r_mat[0][1] + vec.z * _r_mat[0][2];
     e.y = vec.x * _r_mat[1][0] + vec.y * _r_mat[1][1] + vec.z * _r_mat[1][2];
     e.z = vec.x * _r_mat[2][0] + vec.y * _r_mat[2][1] + vec.z * _r_mat[2][2];
@@ -15,9 +17,9 @@ void AttitudeSolver::transformBodyToEarth(Vec3 &vec)
     vec.z = e.z;
 }
 
-void AttitudeSolver::transformEarthToBody(Vec3 &vec)
+void AttitudeSolver::transformEarthToBody(Common::Vec3 &vec)
 {
-    Vec3 b;
+    Common::Vec3 b;
 
     b.x = vec.x * _r_mat[0][0] + vec.y * _r_mat[1][0] + vec.z * _r_mat[2][0];
     b.y = vec.x * _r_mat[0][1] + vec.y * _r_mat[1][1] + vec.z * _r_mat[2][1];

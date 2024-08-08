@@ -5,13 +5,15 @@
 #include "memory_pool.h"
 #include "string.h"
 
-List<MemoryPool *> MemoryPool::_list;
+using namespace Utils;
+
+Common::List<MemoryPool *> MemoryPool::_list;
 MemoryPool *MemoryPool::_general_memory_pool[GENERAL_MEMORY_POOL_NUM] = {nullptr};
 
 
 MemoryPool::MemoryPool(const char *name, uint32_t size, uint32_t num, bool allowed_dynamic)
 {
-    _queue = new AcQueue<uint8_t *>(num);
+    _queue = new Osal::Queue<uint8_t *>(num);
     strncpy(_name, name, BUF_POOL_NAME_LEN);
     uint8_t *buf = nullptr;
 
@@ -108,7 +110,7 @@ void MemoryPool::add(MemoryPool *buf_pool)
 
 MemoryPool *MemoryPool::find(const char *name)
 {
-    for (ListNode<MemoryPool *> *it = _list.begin(); it != _list.end(); it = it->getNext())
+    for (Common::ListNode<MemoryPool *> *it = _list.begin(); it != _list.end(); it = it->getNext())
     {
         if ((**it)->match(name))
         {
@@ -131,7 +133,7 @@ MemoryPool *MemoryPool::getGeneral(uint32_t size)
     return nullptr;
 }
 
-List<MemoryPool *> *MemoryPool::getList()
+Common::List<MemoryPool *> *MemoryPool::getList()
 {
     return &_list;
 }

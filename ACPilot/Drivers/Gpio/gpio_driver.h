@@ -15,27 +15,31 @@
 
 #endif
 
-class Gpio
+namespace Driver
 {
-public:
-    explicit Gpio(GpioHandle *handle);
 
-    AC_RET init();
+    class Gpio
+    {
+    public:
+        explicit Gpio(GpioHandle *handle);
 
-    GpioPort getPort();
+        AC_RET init();
 
-    GpioPin getPin();
+        GpioPort getPort();
 
-    AC_RET toSet();
+        GpioPin getPin();
 
-    AC_RET toReset();
+        AC_RET toSet();
 
-    AC_RET flip();
+        AC_RET toReset();
 
-    AC_RET set(GpioState state);
-private:
-    GpioHandle *_handle = nullptr;
-};
+        AC_RET flip();
 
+        AC_RET set(GpioState state);
+
+    private:
+        GpioHandle *_handle = nullptr;
+    };
+}
 
 #endif //GPIO_DRIVER_H_

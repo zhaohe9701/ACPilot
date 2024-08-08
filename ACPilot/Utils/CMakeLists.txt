@@ -1,10 +1,10 @@
 set(LIBS_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/DataTree/data_tree.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Mail/mailbox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Mailbox/mailbox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/MemoryPool/memory_pool.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Tree/ac_tree.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Json/ac_json.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Url/url.cpp
+        ../Common/Tree/tree.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Json/json.cpp
+        ../Common/Url/url.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Notify/notify.cpp
 )
 if (STM32)

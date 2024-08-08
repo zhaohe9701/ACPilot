@@ -11,6 +11,8 @@
 #include <string.h>
 #include "icm20602.h"
 
+using namespace Component;
+
 #define READ 0x80
 #define WRITE 0x7f
 
@@ -97,15 +99,15 @@
 #define ZA_OFFSET_H         0x7D
 #define ZA_OFFSET_L         0x7E
 
-Icm20602::Icm20602(IoInterface *interface)
+Icm20602::Icm20602(Interface::IO *interface)
 {
     _interface = interface;
     strncpy(_name, "ICM20602", sizeof(_name));
     _READ = READ;
     _WRITE = WRITE;
-    _ability = (1U << ACCELEROMETER_DEV) |
-               (1U << THERMOMETER_DEV) |
-               (1U << GYROSCOPE_DEV);
+    _ability = (1U << Framework::ACCELEROMETER_DEV) |
+               (1U << Framework::THERMOMETER_DEV) |
+               (1U << Framework::GYROSCOPE_DEV);
 }
 
 AC_RET Icm20602::init()
@@ -202,19 +204,19 @@ AC_RET Icm20602::updateAcc()
     return AC_OK;
 }
 
-AC_RET Icm20602::getTemp(TempData &data)
+AC_RET Icm20602::getTemp(Framework::TempData &data)
 {
     data = _tmp_data;
     return AC_OK;
 }
 
-AC_RET Icm20602::getGyro(GyroData &data)
+AC_RET Icm20602::getGyro(Framework::GyroData &data)
 {
     data = _gyro_data;
     return AC_OK;
 }
 
-AC_RET Icm20602::getAcc(AccData &data)
+AC_RET Icm20602::getAcc(Framework::AccData &data)
 {
     data = _acc_data;
     return AC_OK;

@@ -4,6 +4,8 @@
 
 #include "altimeter.h"
 
+using namespace Framework;
+
 Altimeter::Altimeter(const char *name) : VirtualDevice(name)
 {
     _type = ALTIMETER_DEV;

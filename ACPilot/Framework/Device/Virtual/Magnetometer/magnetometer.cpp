@@ -5,6 +5,7 @@
 #include <string.h>
 #include "magnetometer.h"
 
+using namespace Framework;
 Magnetometer::Magnetometer(const char *name) : VirtualDevice(name)
 {
     _type = MAGNETOMETER_DEV;
@@ -29,7 +30,7 @@ AC_RET Magnetometer::read(MagData &data)
     return AC_ERROR;
 }
 
-AC_RET Magnetometer::cali(Vec3 *data, uint16_t num, DeviceCali *cali)
+AC_RET Magnetometer::cali(Common::Vec3 *data, uint16_t num, DeviceCali *cali)
 {
     cali->cali(data, num, _cali_data);
     _cali_data.calcTrans();

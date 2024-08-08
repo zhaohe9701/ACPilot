@@ -14,17 +14,19 @@
 #include "driver/i2c.h"
 #include "string.h"
 
-struct IicBusHandle
+namespace Driver
 {
-    IicBusHandle();
+    struct IicBusHandle
+    {
+        IicBusHandle();
 
-    i2c_config_t config{};
-    i2c_port_t host = I2C_NUM_0;
-};
+        i2c_config_t config{};
+        i2c_port_t host = I2C_NUM_0;
+    };
 
-struct IicHandle
-{
-    uint8_t addr = 0x0;
-};
-
+    struct IicHandle
+    {
+        uint8_t addr = 0x0;
+    };
+}
 #endif

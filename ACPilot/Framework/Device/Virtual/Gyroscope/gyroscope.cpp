@@ -5,6 +5,8 @@
 #include <string.h>
 #include "gyroscope.h"
 
+using namespace Framework;
+
 Gyroscope::Gyroscope(const char *name) : VirtualDevice(name)
 {
     _type = GYROSCOPE_DEV;
@@ -29,7 +31,7 @@ AC_RET Gyroscope::read(GyroData &data)
     return AC_ERROR;
 }
 
-AC_RET Gyroscope::cali(Vec3 *data, uint16_t num, DeviceCali *cali)
+AC_RET Gyroscope::cali(Common::Vec3 *data, uint16_t num, DeviceCali *cali)
 {
     cali->cali(data, num, _cali_data);
     BASE_INFO("Gyro offset:\n%f %f %f", _cali_data.offset.x, _cali_data.offset.y, _cali_data.offset.z);
