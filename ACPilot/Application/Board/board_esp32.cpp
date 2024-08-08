@@ -70,7 +70,7 @@ void pwmHandleInit()
     pwm1_handle.channel_config.speed_mode = LEDC_LOW_SPEED_MODE;
     pwm1_handle.channel_config.channel = LEDC_CHANNEL_1;
     pwm1_handle.channel_config.timer_sel = LEDC_TIMER_0;
-    pwm1_handle.channel_config.gpio_num = GPIO_NUM_18;
+    pwm1_handle.channel_config.gpio_num = GPIO_NUM_33;
 
     pwm2_handle.channel_config.speed_mode = LEDC_LOW_SPEED_MODE;
     pwm2_handle.channel_config.channel = LEDC_CHANNEL_2;
@@ -80,7 +80,7 @@ void pwmHandleInit()
     pwm3_handle.channel_config.speed_mode = LEDC_LOW_SPEED_MODE;
     pwm3_handle.channel_config.channel = LEDC_CHANNEL_3;
     pwm3_handle.channel_config.timer_sel = LEDC_TIMER_0;
-    pwm3_handle.channel_config.gpio_num = GPIO_NUM_33;
+    pwm3_handle.channel_config.gpio_num = GPIO_NUM_18;
 
     pwm_timer_handle.timer_config.speed_mode = LEDC_LOW_SPEED_MODE;
     pwm_timer_handle.timer_config.timer_num = LEDC_TIMER_0;
@@ -98,8 +98,8 @@ void uartHandleInit()
     esp32_mini_uart1_handle.config.stop_bits = UART_STOP_BITS_1;
     esp32_mini_uart1_handle.config.flow_ctrl = UART_HW_FLOWCTRL_DISABLE;
     esp32_mini_uart1_handle.config.source_clk = UART_SCLK_DEFAULT;
-    esp32_mini_uart1_handle.tx = GPIO_NUM_14;
-    esp32_mini_uart1_handle.rx = GPIO_NUM_13;
+    esp32_mini_uart1_handle.tx = GPIO_NUM_37;
+    esp32_mini_uart1_handle.rx = GPIO_NUM_38;
 }
 
 void wlanHandleInit()
@@ -220,12 +220,12 @@ void boardInit()
     Board::pwm2->init();
     Board::pwm3->init();
     BASE_INFO("pwm init finish");
-//    udpHandleInit();
-//    Board::udp = new Udp(&udp_handle, UDP_PORT_ID);
-//    Board::udp->init();
+    udpHandleInit();
+    Board::udp = new Udp(&udp_handle, UDP_PORT_ID);
+    Board::udp->init();
 
-//    wlanHandleInit();
-//    WlanDriver::init(&wlan_handle);
+    wlanHandleInit();
+    WlanDriver::init(&wlan_handle);
     BASE_INFO("BOARD INIT FINISH");
 }
 
